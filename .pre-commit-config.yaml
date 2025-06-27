@@ -1,0 +1,25 @@
+repos:
+  # Code formatting
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      - id: trailing-whitespace
+        exclude: '\.svg$'
+      - id: end-of-file-fixer
+        exclude: '\.svg$'
+      - id: check-yaml
+      - id: check-json
+      - id: check-merge-conflict
+      - id: check-added-large-files
+        args: ['--maxkb=1024']
+      - id: mixed-line-ending
+        args: ['--fix=lf']
+
+# Global exclusions
+exclude: |
+  (?x)^(
+    \.trunk/.*|
+    node_modules/.*|
+    dist/.*|
+    \.git/.*
+  )$

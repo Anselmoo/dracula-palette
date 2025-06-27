@@ -1,0 +1,36 @@
+# Dependencies
+node_modules/
+package-lock.json
+yarn.lock
+
+# Build outputs
+dist/
+build/
+.output/
+
+# Cache and temp files
+.cache/
+.temp/
+.tmp/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE files
+.vscode/
+.idea/
+
+# Git
+.git/
+
+# Trunk
+.trunk/
+
+# SVG files (preserve exact formatting for graphics)
+*.svg
+
+# Generated files
+coverage/
+*.log
+*.tsbuildinfo

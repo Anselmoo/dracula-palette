@@ -1,0 +1,17 @@
+{
+  "extends": "@vue/tsconfig/tsconfig.dom.json",
+  "include": [
+    "src/**/*",
+    "src/**/__tests__/*",
+    "src/**/*.{test,spec}.{js,ts,jsx,tsx}"
+  ],
+  "exclude": [".trunk/**/*", "node_modules/**/*"],
+  "compilerOptions": {
+    "composite": true,
+    "lib": ["ES2017", "DOM", "DOM.Iterable"],
+    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.vitest.tsbuildinfo",
+    "types": ["vitest/globals"],
+    "allowJs": true,
+    "skipLibCheck": true
+  }
+}
