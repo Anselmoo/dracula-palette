@@ -1,6 +1,6 @@
 # Dracula Palette
 
-🧛‍♂️ **Advanced Color Harmony Generator** - Transform any color into comprehensive Dracula-themed palettes using 10 modern color science standards.
+🧛🏻‍♂️ **Advanced Color Harmony Generator** - Transform any color into comprehensive Dracula-themed palettes using 10 modern color science standards.
 
 ![Dracula Color Decomposition](./public/color-decomposition.svg)
 
