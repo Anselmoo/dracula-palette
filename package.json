@@ -50,7 +50,7 @@
     "optimize:svg:check": "svgo --config .trunk/configs/svgo.config.mjs --show-plugins && echo 'SVG optimization config is valid'"
   },
   "dependencies": {
-    "chroma-js": "^2.4.2",
+    "chroma-js": "^3.0.0",
     "color": "^5.0.0",
     "culori": "^4.0.1",
     "hsluv": "^0.1.0",
@@ -58,7 +58,7 @@
   },
   "devDependencies": {
     "@tsconfig/node20": "^20.1.2",
-    "@types/chroma-js": "^2.4.4",
+    "@types/chroma-js": "^3.0.0",
     "@types/color": "^4.0.0",
     "@types/node": "^20.11.0",
     "@typescript-eslint/eslint-plugin": "^6.21.0",
