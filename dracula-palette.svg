@@ -1,57 +1,57 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="800" height="400" viewBox="0 0 800 400"><defs><linearGradient id="a" x1="0%" x2="100%" y1="0%" y2="100%"><stop offset="0%" stop-color="#282A36"/><stop offset="50%" stop-color="#44475A"/><stop offset="100%" stop-color="#282A36"/></linearGradient></defs><g fill="none" fill-rule="evenodd"><path fill="url(#a)" fill-rule="nonzero" d="M0 0h800v400H0z"/><text fill="#F8F8F2" fill-rule="nonzero" font-family="Roboto-Thin, Roboto" font-size="24" font-weight="300">
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="400" viewBox="0 0 800 400"><defs><linearGradient id="a" x1="0%" x2="100%" y1="0%" y2="100%"><stop offset="0%" stop-color="#282A36"/><stop offset="50%" stop-color="#44475A"/><stop offset="100%" stop-color="#282A36"/></linearGradient></defs><g fill="none" fill-rule="evenodd"><path fill="url(#a)" fill-rule="nonzero" d="M0 0h800v400H0z"/><text fill="#F8F8F2" fill-rule="nonzero" font-family="sans-serif" font-size="24" font-weight="300">
                 <tspan x="264" y="40">Dracula Theme Colors</tspan>
-            </text><g fill-rule="nonzero"><text fill="#6272A4" font-family="Roboto-Regular, Roboto" font-size="14" transform="translate(50 67)">
+            </text><g fill-rule="nonzero"><text fill="#6272A4" font-family="sans-serif" font-size="14" transform="translate(50 67)">
                         <tspan x="0" y="13">Background Colors</tspan>
-                    </text><g transform="translate(50 100)"><rect width="40" height="40" fill="#282A36" stroke="#F8F8F2" rx="6"/><text fill="#F8F8F2" font-family="Roboto-Regular, Roboto" font-size="12" transform="translate(50 4)">
+                    </text><g transform="translate(50 100)"><rect width="40" height="40" fill="#282A36" stroke="#F8F8F2" rx="6"/><text fill="#F8F8F2" font-family="sans-serif" font-size="12" transform="translate(50 4)">
                             <tspan x="0" y="11">Background</tspan>
-                        </text><text fill="#6272A4" font-family="Roboto-Regular, Roboto" font-size="11" transform="translate(50 20)">
+                        </text><text fill="#6272A4" font-family="sans-serif" font-size="11" transform="translate(50 20)">
                             <tspan x="0" y="10">#282a36</tspan>
-                        </text></g><g transform="translate(250 100)"><rect width="40" height="40" fill="#44475A" stroke="#F8F8F1" rx="6"/><text fill="#F8F8F2" font-family="Roboto-Regular, Roboto" font-size="12" transform="translate(50 4)">
+                        </text></g><g transform="translate(250 100)"><rect width="40" height="40" fill="#44475A" stroke="#F8F8F1" rx="6"/><text fill="#F8F8F2" font-family="sans-serif" font-size="12" transform="translate(50 4)">
                             <tspan x="0" y="11">Current Line</tspan>
-                        </text><text fill="#6272A4" font-family="Roboto-Regular, Roboto" font-size="11" transform="translate(50 20)">
+                        </text><text fill="#6272A4" font-family="sans-serif" font-size="11" transform="translate(50 20)">
                             <tspan x="0" y="10">#44475a</tspan>
-                        </text></g><g transform="translate(450 100)"><rect width="40" height="40" fill="#6272A4" stroke="#F8F8F2" rx="6"/><text fill="#F8F8F2" font-family="Roboto-Regular, Roboto" font-size="12" transform="translate(50 4)">
+                        </text></g><g transform="translate(450 100)"><rect width="40" height="40" fill="#6272A4" stroke="#F8F8F2" rx="6"/><text fill="#F8F8F2" font-family="sans-serif" font-size="12" transform="translate(50 4)">
                             <tspan x="0" y="11">Selection</tspan>
-                        </text><text fill="#6272A4" font-family="Roboto-Regular, Roboto" font-size="11" transform="translate(50 20)">
+                        </text><text fill="#6272A4" font-family="sans-serif" font-size="11" transform="translate(50 20)">
                             <tspan x="0" y="10">#6272a4</tspan>
-                        </text></g></g><g fill-rule="nonzero"><text fill="#6272A4" font-family="Roboto-Regular, Roboto" font-size="14" transform="translate(50 167)">
+                        </text></g></g><g fill-rule="nonzero"><text fill="#6272A4" font-family="sans-serif" font-size="14" transform="translate(50 167)">
                         <tspan x="0" y="13">Text Colors</tspan>
-                    </text><g transform="translate(50 200)"><rect width="40" height="40" fill="#F8F8F2" stroke="#F8F8F2" rx="6"/><text fill="#F8F8F2" font-family="Roboto-Regular, Roboto" font-size="12" transform="translate(50 4)">
+                    </text><g transform="translate(50 200)"><rect width="40" height="40" fill="#F8F8F2" stroke="#F8F8F2" rx="6"/><text fill="#F8F8F2" font-family="sans-serif" font-size="12" transform="translate(50 4)">
                             <tspan x="0" y="11">Foreground</tspan>
-                        </text><text fill="#6272A4" font-family="Roboto-Regular, Roboto" font-size="11" transform="translate(50 20)">
+                        </text><text fill="#6272A4" font-family="sans-serif" font-size="11" transform="translate(50 20)">
                             <tspan x="0" y="10">#f8f8f2</tspan>
-                        </text></g><g transform="translate(250 200)"><rect width="40" height="40" fill="#6272A4" stroke="#F8F8F2" rx="6"/><text fill="#F8F8F2" font-family="Roboto-Regular, Roboto" font-size="12" transform="translate(50 4)">
+                        </text></g><g transform="translate(250 200)"><rect width="40" height="40" fill="#6272A4" stroke="#F8F8F2" rx="6"/><text fill="#F8F8F2" font-family="sans-serif" font-size="12" transform="translate(50 4)">
                             <tspan x="0" y="11">Comment</tspan>
-                        </text><text fill="#6272A4" font-family="Roboto-Regular, Roboto" font-size="11" transform="translate(50 20)">
+                        </text><text fill="#6272A4" font-family="sans-serif" font-size="11" transform="translate(50 20)">
                             <tspan x="0" y="10">#6272a4</tspan>
-                        </text></g></g><g fill-rule="nonzero"><text fill="#6272A4" font-family="Roboto-Regular, Roboto" font-size="14" transform="translate(50 267)">
+                        </text></g></g><g fill-rule="nonzero"><text fill="#6272A4" font-family="sans-serif" font-size="14" transform="translate(50 267)">
                         <tspan x="0" y="13">Accent Colors</tspan>
-                    </text><g transform="translate(50 300)"><rect width="35" height="35" fill="#8BE9FD" stroke="#F8F8F2" rx="6"/><text fill="#F8F8F2" font-family="Roboto-Regular, Roboto" font-size="11" transform="translate(45 2)">
+                    </text><g transform="translate(50 300)"><rect width="35" height="35" fill="#8BE9FD" stroke="#F8F8F2" rx="6"/><text fill="#F8F8F2" font-family="sans-serif" font-size="11" transform="translate(45 2)">
                             <tspan x="0" y="10">Cyan</tspan>
-                        </text><text fill="#6272A4" font-family="Roboto-Regular, Roboto" font-size="10" transform="translate(45 15)">
+                        </text><text fill="#6272A4" font-family="sans-serif" font-size="10" transform="translate(45 15)">
                             <tspan x="0" y="9">#8be9fd</tspan>
-                        </text></g><g transform="translate(180 300)"><rect width="35" height="35" fill="#50FA7B" stroke="#F8F8F2" rx="6"/><text fill="#F8F8F2" font-family="Roboto-Regular, Roboto" font-size="11" transform="translate(45 2)">
+                        </text></g><g transform="translate(180 300)"><rect width="35" height="35" fill="#50FA7B" stroke="#F8F8F2" rx="6"/><text fill="#F8F8F2" font-family="sans-serif" font-size="11" transform="translate(45 2)">
                             <tspan x="0" y="10">Green</tspan>
-                        </text><text fill="#6272A4" font-family="Roboto-Regular, Roboto" font-size="10" transform="translate(45 15)">
+                        </text><text fill="#6272A4" font-family="sans-serif" font-size="10" transform="translate(45 15)">
                             <tspan x="0" y="9">#50fa7b</tspan>
-                        </text></g><g transform="translate(310 300)"><rect width="35" height="35" fill="#FFB86C" stroke="#F8F8F2" rx="6"/><text fill="#F8F8F2" font-family="Roboto-Regular, Roboto" font-size="11" transform="translate(45 2)">
+                        </text></g><g transform="translate(310 300)"><rect width="35" height="35" fill="#FFB86C" stroke="#F8F8F2" rx="6"/><text fill="#F8F8F2" font-family="sans-serif" font-size="11" transform="translate(45 2)">
                             <tspan x="0" y="10">Orange</tspan>
-                        </text><text fill="#6272A4" font-family="Roboto-Regular, Roboto" font-size="10" transform="translate(45 15)">
+                        </text><text fill="#6272A4" font-family="sans-serif" font-size="10" transform="translate(45 15)">
                             <tspan x="0" y="9">#ffb86c</tspan>
-                        </text></g><g transform="translate(440 300)"><rect width="35" height="35" fill="#FF79C6" stroke="#F8F8F2" rx="6"/><text fill="#F8F8F2" font-family="Roboto-Regular, Roboto" font-size="11" transform="translate(45 2)">
+                        </text></g><g transform="translate(440 300)"><rect width="35" height="35" fill="#FF79C6" stroke="#F8F8F2" rx="6"/><text fill="#F8F8F2" font-family="sans-serif" font-size="11" transform="translate(45 2)">
                             <tspan x="0" y="10">Pink</tspan>
-                        </text><text fill="#6272A4" font-family="Roboto-Regular, Roboto" font-size="10" transform="translate(45 15)">
+                        </text><text fill="#6272A4" font-family="sans-serif" font-size="10" transform="translate(45 15)">
                             <tspan x="0" y="9">#ff79c6</tspan>
-                        </text></g><g transform="translate(50 340)"><rect width="35" height="35" fill="#BD93F9" stroke="#F8F8F2" rx="6"/><text fill="#F8F8F2" font-family="Roboto-Regular, Roboto" font-size="11" transform="translate(45 2)">
+                        </text></g><g transform="translate(50 340)"><rect width="35" height="35" fill="#BD93F9" stroke="#F8F8F2" rx="6"/><text fill="#F8F8F2" font-family="sans-serif" font-size="11" transform="translate(45 2)">
                             <tspan x="0" y="10">Purple</tspan>
-                        </text><text fill="#6272A4" font-family="Roboto-Regular, Roboto" font-size="10" transform="translate(45 15)">
+                        </text><text fill="#6272A4" font-family="sans-serif" font-size="10" transform="translate(45 15)">
                             <tspan x="0" y="9">#bd93f9</tspan>
-                        </text></g><g transform="translate(180 340)"><rect width="35" height="35" fill="#F55" stroke="#F8F8F2" rx="6"/><text fill="#F8F8F2" font-family="Roboto-Regular, Roboto" font-size="11" transform="translate(45 2)">
+                        </text></g><g transform="translate(180 340)"><rect width="35" height="35" fill="#F55" stroke="#F8F8F2" rx="6"/><text fill="#F8F8F2" font-family="sans-serif" font-size="11" transform="translate(45 2)">
                             <tspan x="0" y="10">Red</tspan>
-                        </text><text fill="#6272A4" font-family="Roboto-Regular, Roboto" font-size="10" transform="translate(45 15)">
+                        </text><text fill="#6272A4" font-family="sans-serif" font-size="10" transform="translate(45 15)">
                             <tspan x="0" y="9">#ff5555</tspan>
-                        </text></g><g transform="translate(310 340)"><rect width="35" height="35" fill="#F1FA8C" stroke="#F8F8F2" rx="6"/><text fill="#F8F8F2" font-family="Roboto-Regular, Roboto" font-size="11" transform="translate(45 2)">
+                        </text></g><g transform="translate(310 340)"><rect width="35" height="35" fill="#F1FA8C" stroke="#F8F8F2" rx="6"/><text fill="#F8F8F2" font-family="sans-serif" font-size="11" transform="translate(45 2)">
                             <tspan x="0" y="10">Yellow</tspan>
-                        </text><text fill="#6272A4" font-family="Roboto-Regular, Roboto" font-size="10" transform="translate(45 15)">
+                        </text><text fill="#6272A4" font-family="sans-serif" font-size="10" transform="translate(45 15)">
                             <tspan x="0" y="9">#f1fa8c</tspan>
                         </text></g></g><g transform="translate(240 14)"><path fill="#44475A" fill-rule="nonzero" d="M10.5 1.09Q5.25-2.18 0 4.35q0 4.35 5.25 7.62l5.25-5.44 5.25 5.44Q21 8.7 21 4.35 15.75-2.18 10.5 1.1"/><ellipse cx="10.5" cy="11.97" fill="#F8F8F2" fill-rule="nonzero" rx="8.4" ry="8.71"/><path fill="#282A36" fill-rule="nonzero" d="M2.1 6.53q0-5.44 8.4-3.27 8.4-2.17 8.4 3.27 2.1-2.18 0 5.44-3.15-3.26-8.4-3.26t-8.4 3.26Q0 4.35 2.1 6.53"/><ellipse cx="7.35" cy="10.88" fill="#F55" fill-rule="nonzero" rx="1.57" ry="1.63"/><ellipse cx="13.65" cy="10.88" fill="#F55" fill-rule="nonzero" rx="1.57" ry="1.63"/><circle cx="7.35" cy="10.88" r="1" fill="#FF79C6" fill-rule="nonzero"/><circle cx="13.65" cy="10.88" r="1" fill="#FF79C6" fill-rule="nonzero"/><path fill="#BD93F9" fill-rule="nonzero" d="M8.4 17.2v-2.18h1.05zM12.6 17.2v-2.18h-1.05z"/><path stroke="#BD93F9" stroke-width=".97" d="M7.35 14.15a5.1 5.1 0 0 0 6.3 0"/><rect width="10.5" height="16.32" x="5.25" y="20.68" fill="#282A36" fill-rule="nonzero" rx="2.15"/><path fill="#BD93F9" fill-rule="nonzero" d="M8.4 22.85h4.2v2.18H8.4z"/><path fill="#FF79C6" fill-rule="nonzero" d="M9.98 22.85h1.05v2.18H9.98z"/></g></g></svg>
