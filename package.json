@@ -70,7 +70,7 @@
     "eslint-plugin-vue": "^9.20.0",
     "gh-pages": "^6.3.0",
     "jsdom": "^26.1.0",
-    "npm-run-all2": "^6.1.0",
+    "npm-run-all2": "^8.0.0",
     "prettier": "^3.6.2",
     "sass": "^1.69.0",
     "svgo": "^3.3.2",
