@@ -53,7 +53,7 @@
     "chroma-js": "^2.4.2",
     "color": "^4.2.3",
     "culori": "^4.0.1",
-    "hsluv": "^0.1.0",
+    "hsluv": "^1.0.0",
     "vue": "^3.4.0"
   },
   "devDependencies": {
