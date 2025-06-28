@@ -1,0 +1,389 @@
+
+<svg width="900px" height="700px" viewBox="0 0 900 700" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <defs>
+        <linearGradient x1="0%" y1="-3.71752683e-14%" x2="100%" y2="100%" id="linearGradient-yg-yybe6i5-1">
+            <stop stop-color="#282A36" offset="0%"></stop>
+            <stop stop-color="#44475A" offset="50%"></stop>
+            <stop stop-color="#282A36" offset="100%"></stop>
+        </linearGradient>
+        <pattern id="pattern-yg-yybe6i5-2" width="50" height="50" x="-50" y="-50" patternUnits="userSpaceOnUse">
+            <use xlink:href="#image-yg-yybe6i5-3"></use>
+        </pattern>
+        <image id="image-yg-yybe6i5-3" width="50" height="50" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAABGdBTUEAALGN5fIAKQAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAMqADAAQAAAABAAAAMgAAAAB1y6+rAAABG0lEQVRoBe1XWwrDMAzLUXbLHb+LS1McNwR9GOQODUbjRtiSHw1pR2uftvnZfv9/q+M2Elp7i4htkiViUWNKUihBu/jUuKnOssmh/iRCM5F7PtmQlT/srO0Xhb9fnfsI6A1ib1WrhYl8g4htMSRiUVpKUihBu/jUuKnOssmh/iRCM5H7adfJHjuKPWORz2SzyVn8iVAwIH4QqDsujStNDk2eRIT+NZOSFErQbLESUaWdrj7Wnd0XhN2enstjzSZn8R+k3AuIHwTqTkvjSpNDkycRrnfHkpIUSlC0TVCcRIweck9WUnRnd0U4l6xKjLiRz2QPkD2njWCUxpUm1xMJ8YNAqDMWTiLC3JhJSQolaLZYiajSTlcf/8Wd/Qe3wZ32yy34pgAAAABJRU5ErkJggg=="></image>
+        <radialGradient cx="50%" cy="50%" fx="50%" fy="50%" r="60%" id="radialGradient-yg-yybe6i5-4">
+            <stop stop-color="#BD93F9" stop-opacity="0.1" offset="0%"></stop>
+            <stop stop-color="#BD93F9" stop-opacity="0.6" offset="70%"></stop>
+            <stop stop-color="#BD93F9" stop-opacity="0.9" offset="100%"></stop>
+        </radialGradient>
+        <radialGradient cx="50%" cy="50%" fx="50%" fy="50%" r="50%" id="radialGradient-yg-yybe6i5-5">
+            <stop stop-color="#BD93F9" offset="0%"></stop>
+            <stop stop-color="#BD93F9" offset="100%"></stop>
+        </radialGradient>
+        <linearGradient x1="0%" y1="-5.03502505e-15%" x2="100%" y2="100%" id="linearGradient-yg-yybe6i5-6">
+            <stop stop-color="#44475A" stop-opacity="0.05" offset="0%"></stop>
+            <stop stop-color="#6272A4" stop-opacity="0.1" offset="50%"></stop>
+            <stop stop-color="#6272A4" stop-opacity="0.15" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="0%" y1="-3.04591043e-14%" x2="100%" y2="100%" id="linearGradient-yg-yybe6i5-7">
+            <stop stop-color="#44475A" stop-opacity="0.05" offset="0%"></stop>
+            <stop stop-color="#6272A4" stop-opacity="0.1" offset="50%"></stop>
+            <stop stop-color="#6272A4" stop-opacity="0.15" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="0%" y1="-3.57353036e-14%" x2="100%" y2="100%" id="linearGradient-yg-yybe6i5-8">
+            <stop stop-color="#44475A" stop-opacity="0.05" offset="0%"></stop>
+            <stop stop-color="#6272A4" stop-opacity="0.1" offset="50%"></stop>
+            <stop stop-color="#6272A4" stop-opacity="0.15" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="0%" y1="-3.10307335e-14%" x2="100%" y2="100%" id="linearGradient-yg-yybe6i5-9">
+            <stop stop-color="#44475A" stop-opacity="0.05" offset="0%"></stop>
+            <stop stop-color="#6272A4" stop-opacity="0.1" offset="50%"></stop>
+            <stop stop-color="#6272A4" stop-opacity="0.15" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="color-decomposition">
+            <rect id="Rectangle" fill="url(#linearGradient-yg-yybe6i5-1)" fill-rule="nonzero" x="0" y="0" width="900" height="700"></rect>
+            <rect id="Rectangle" fill="url(#pattern-yg-yybe6i5-2)" fill-rule="nonzero" x="0" y="0" width="900" height="700"></rect>
+            <g id="Group" transform="translate(246.500000, 43.000000)" fill-rule="nonzero">
+                <g id="Dracula-Palette" transform="translate(140.000000, 0.000000)" fill="#F8F8F2" font-family="Roboto-ExtraBold, Roboto" font-size="18" font-weight="700">
+                    <g id="Group">
+                        <text id="Dracula-Palette">
+                            <tspan x="0" y="17">Dracula Palette</tspan>
+                        </text>
+                    </g>
+                </g>
+                <g id="Transform-one-color-into-harmonious-palettes-using-modern-color-standards" opacity="0.9" transform="translate(0.000000, 26.000000)" fill="#6272A4" font-family="Roboto-Regular, Roboto" font-size="12" font-weight="normal">
+                    <g id="Group">
+                        <text id="Transform-one-color-into-harmonious-palettes-using-modern-color-standards">
+                            <tspan x="0" y="11">Transform one color into harmonious palettes using modern color standards</tspan>
+                        </text>
+                    </g>
+                </g>
+                <line x1="83.5" y1="52" x2="323.5" y2="52" id="Path" stroke="#6272A4" fill="#000000" opacity="0.3"></line>
+                <circle id="Oval" fill="#BD93F9" opacity="0.6" cx="203.5" cy="52" r="2"></circle>
+            </g>
+            <g id="Group" transform="translate(400.000000, 130.000000)">
+                <circle id="Oval" fill="url(#radialGradient-yg-yybe6i5-4)" fill-rule="nonzero" opacity="0.4" cx="50" cy="50" r="50"></circle>
+                <circle id="Oval" stroke="#BD93F9" stroke-width="2.5" fill="url(#radialGradient-yg-yybe6i5-5)" fill-rule="nonzero" cx="50" cy="50" r="35"></circle>
+                <g id="dracula-character" transform="translate(31.000000, 28.000000)">
+                    <path d="M19.5,2.08108108 C11.2021277,-2.08108108 4.9787234,-1.3002612e-16 0.829787234,8.32432432 C-0.829787234,20.8108108 -1.56634293e-18,31.2162162 3.31914894,39.5405405 C8.29787234,43.7027027 13.6914894,44.9513514 19.5,43.2864865 C25.3085106,44.9513514 30.7021277,43.7027027 35.6808511,39.5405405 C39,31.2162162 39.8297872,20.8108108 38.1702128,8.32432432 C34.0212766,-1.3002612e-16 27.7978723,-2.08108108 19.5,2.08108108 Z" id="Path" fill="#282A36" fill-rule="nonzero" opacity="0.9"></path>
+                    <path d="M19.5,2.08108108 C15.3510638,-0.416216216 11.2021277,0.832432432 7.05319149,5.82702703 C7.05319149,9.15675676 9.12765957,12.0702703 13.2765957,14.5675676 L19.5,8.32432432 L25.7234043,14.5675676 C29.8723404,12.0702703 31.9468085,9.15675676 31.9468085,5.82702703 C27.7978723,0.832432432 23.6489362,-0.416216216 19.5,2.08108108 Z" id="Path" fill="#44475A" fill-rule="nonzero"></path>
+                    <ellipse id="Oval" fill="#F8F8F2" fill-rule="nonzero" cx="19.5" cy="14.5675676" rx="9.95744681" ry="9.98918919"></ellipse>
+                    <path d="M9.54255319,8.32432432 C9.54255319,4.16216216 12.8617021,2.91351351 19.5,4.57837838 C26.1382979,2.91351351 29.4574468,4.16216216 29.4574468,8.32432432 C31.1170213,6.65945946 31.1170213,8.74054054 29.4574468,14.5675676 C26.9680851,12.0702703 23.6489362,10.8216216 19.5,10.8216216 C15.3510638,10.8216216 12.0319149,12.0702703 9.54255319,14.5675676 C7.88297872,8.74054054 7.88297872,6.65945946 9.54255319,8.32432432 Z" id="Path" fill="#282A36" fill-rule="nonzero"></path>
+                    <ellipse id="Oval" fill="#FF5555" fill-rule="nonzero" cx="15.7659574" cy="13.3189189" rx="1.86702128" ry="1.87297297"></ellipse>
+                    <ellipse id="Oval" fill="#FF5555" fill-rule="nonzero" cx="23.2340426" cy="13.3189189" rx="1.86702128" ry="1.87297297"></ellipse>
+                    <circle id="Oval" fill="#FF79C6" fill-rule="nonzero" cx="15.7659574" cy="13.3189189" r="1"></circle>
+                    <circle id="Oval" fill="#FF79C6" fill-rule="nonzero" cx="23.2340426" cy="13.3189189" r="1"></circle>
+                    <polygon id="Path" fill="#BD93F9" fill-rule="nonzero" transform="translate(17.632979, 19.313514) scale(-1, 1) rotate(-180.000000) translate(-17.632979, -19.313514) " points="17.0106383 18.0648658 17.0106383 20.5621631 18.2553191 20.5621631"></polygon>
+                    <polygon id="Path" fill="#BD93F9" fill-rule="nonzero" transform="translate(21.367021, 19.313514) scale(-1, 1) rotate(-180.000000) translate(-21.367021, -19.313514) " points="21.9893617 18.0648658 21.9893617 20.5621631 20.7446809 20.5621631"></polygon>
+                    <path d="M15.7659574,17.0648649 C18.2553191,18.7297297 20.7446809,18.7297297 23.2340426,17.0648649" id="Path" stroke="#BD93F9" stroke-width="0.624324324"></path>
+                    <rect id="Rectangle" fill="#282A36" fill-rule="nonzero" x="13.2765957" y="24.5567568" width="12.4468085" height="18.7297297" rx="2.4972973"></rect>
+                    <polygon id="Path" fill="#BD93F9" fill-rule="nonzero" points="17.0106383 27.0540541 21.9893617 27.0540541 21.9893617 29.5513514 17.0106383 29.5513514"></polygon>
+                    <rect id="Rectangle" fill="#FF79C6" fill-rule="nonzero" x="18.8776596" y="27.0540541" width="1.24468085" height="2.4972973"></rect>
+                </g>
+                <g id="Group" transform="translate(4.500000, 84.000000)"></g>
+            </g>
+            <g id="Group" transform="translate(330.000000, 285.000000)" fill-rule="nonzero">
+                <rect id="Rectangle" stroke="#8BE9FD" stroke-width="1.5" fill="url(#linearGradient-yg-yybe6i5-6)" opacity="0.8" x="0" y="0" width="240" height="70" rx="12"></rect>
+                <g id="Popular-Standards" transform="translate(83.500000, 15.000000)" fill="#8BE9FD" font-family="Roboto-Bold, Roboto" font-size="10" font-weight="bold">
+                    <g id="Group">
+                        <text id="Popular-Standards">
+                            <tspan x="0" y="9">Popular Standards</tspan>
+                        </text>
+                    </g>
+                </g>
+                <g id="Path" opacity="0.8" transform="translate(70.500000, 16.500000)" fill="#8BE9FD">
+                    <polygon points="3.5 0 4.5 2.5 7 2.5 5.25 4 6 6.5 3.5 5 1 6.5 1.75 4 0 2.5 2.5 2.5"></polygon>
+                </g>
+                <g transform="translate(15.000000, 36.000000)">
+                    <g id="Rectangle" opacity="0.9" transform="translate(25.000000, 0.000000)" fill="#8BE9FD">
+                        <rect opacity="0.3" x="0" y="0" width="20" height="3" rx="1.5"></rect>
+                        <rect opacity="0.5" x="2" y="3" width="16" height="3" rx="1.5"></rect>
+                        <rect opacity="0.7" x="4" y="6" width="12" height="3" rx="1.5"></rect>
+                        <rect x="6" y="9" width="8" height="3" rx="1.5"></rect>
+                    </g>
+                    <g id="Material-Design-3" transform="translate(0.000000, 14.000000)" fill="#6272A4" font-family="Roboto-Regular, Roboto" font-size="9" font-weight="normal">
+                        <g id="Group">
+                            <text id="Material-Design-3">
+                                <tspan x="0" y="8">Material Design 3</tspan>
+                            </text>
+                        </g>
+                    </g>
+                </g>
+                <g transform="translate(107.000000, 37.000000)">
+                    <g id="Oval" opacity="0.9" transform="translate(8.000000, 0.000000)" fill="#50FA7B">
+                        <circle opacity="0.4" cx="2" cy="3" r="2"></circle>
+                        <circle opacity="0.6" cx="5" cy="3" r="2.5"></circle>
+                        <circle opacity="0.8" cx="8" cy="3" r="3"></circle>
+                        <circle cx="11" cy="3" r="2"></circle>
+                    </g>
+                    <g id="HSLuv" transform="translate(0.000000, 8.000000)" fill="#6272A4" font-family="Roboto-Regular, Roboto" font-size="9" font-weight="normal">
+                        <g id="Group">
+                            <text id="HSLuv">
+                                <tspan x="0" y="8">HSLuv</tspan>
+                            </text>
+                        </g>
+                    </g>
+                </g>
+                <g transform="translate(175.500000, 38.000000)">
+                    <g id="Path" opacity="0.9" transform="translate(6.500000, 0.000000)" fill="#FF79C6">
+                        <polygon opacity="0.4" points="0 0 4 8 8 0 12 8 16 0"></polygon>
+                        <polygon opacity="0.7" points="2 2 5 8 8 2 11 8 14 2"></polygon>
+                        <polygon points="5 4 8 8 11 4"></polygon>
+                    </g>
+                    <g id="OKLCH" transform="translate(0.000000, 12.000000)" fill="#6272A4" font-family="Roboto-Regular, Roboto" font-size="9" font-weight="normal">
+                        <g id="Group">
+                            <text id="OKLCH">
+                                <tspan x="0" y="8">OKLCH</tspan>
+                            </text>
+                        </g>
+                    </g>
+                </g>
+            </g>
+            <g id="Group" transform="translate(110.000000, 415.000000)" fill-rule="nonzero">
+                <rect id="Rectangle" stroke="#FFB86C" stroke-width="1.5" fill="url(#linearGradient-yg-yybe6i5-7)" opacity="0.8" x="0" y="0" width="180" height="70" rx="12"></rect>
+                <g id="Scientific-Standards" transform="translate(49.500000, 15.000000)" fill="#8BE9FD" font-family="Roboto-Bold, Roboto" font-size="10" font-weight="bold">
+                    <g id="Group">
+                        <text id="Scientific-Standards">
+                            <tspan x="0" y="9">Scientific Standards</tspan>
+                        </text>
+                    </g>
+                </g>
+                <g opacity="0.8" transform="translate(36.500000, 16.500000)" fill="#FFB86C">
+                    <rect id="Rectangle" x="2" y="0" width="3" height="6" rx="0.5"></rect>
+                    <circle id="Oval" cx="3.5" cy="7" r="1.5"></circle>
+                    <rect id="Rectangle" x="0" y="8" width="7" height="1" rx="0.5"></rect>
+                </g>
+                <g transform="translate(41.000000, 40.000000)">
+                    <g id="Rectangle" opacity="0.9" transform="translate(1.000000, 0.000000)" fill="#FFB86C">
+                        <rect opacity="0.4" x="0" y="0" width="4" height="8" rx="1"></rect>
+                        <rect opacity="0.6" x="5" y="2" width="4" height="6" rx="1"></rect>
+                        <rect opacity="0.8" x="10" y="1" width="4" height="7" rx="1"></rect>
+                        <rect x="15" y="3" width="4" height="5" rx="1"></rect>
+                    </g>
+                    <g id="HCL" transform="translate(0.000000, 10.000000)" fill="#6272A4" font-family="Roboto-Regular, Roboto" font-size="9" font-weight="normal">
+                        <g id="Group">
+                            <text id="HCL">
+                                <tspan x="0" y="8">HCL</tspan>
+                            </text>
+                        </g>
+                    </g>
+                </g>
+                <g transform="translate(105.000000, 41.000000)">
+                    <g id="Oval" opacity="0.9" transform="translate(18.000000, 0.000000)" fill="#FF5555">
+                        <ellipse opacity="0.4" cx="3" cy="3" rx="3" ry="2"></ellipse>
+                        <ellipse opacity="0.6" cx="7" cy="3" rx="3.5" ry="2.5"></ellipse>
+                        <ellipse opacity="0.8" cx="11" cy="3" rx="4" ry="3"></ellipse>
+                    </g>
+                    <g id="CAM16-UCS" transform="translate(0.000000, 9.000000)" fill="#6272A4" font-family="Roboto-Regular, Roboto" font-size="9" font-weight="normal">
+                        <g id="Group">
+                            <text id="CAM16-UCS">
+                                <tspan x="0" y="8">CAM16-UCS</tspan>
+                            </text>
+                        </g>
+                    </g>
+                </g>
+            </g>
+            <g id="Group" transform="translate(610.000000, 415.000000)">
+                <rect id="Rectangle" stroke="#F1FA8C" stroke-width="1.5" fill="url(#linearGradient-yg-yybe6i5-7)" fill-rule="nonzero" opacity="0.8" x="0" y="0" width="180" height="70" rx="12"></rect>
+                <g id="Advanced-Standards" transform="translate(48.500000, 15.000000)" fill="#8BE9FD" fill-rule="nonzero" font-family="Roboto-Bold, Roboto" font-size="10" font-weight="bold">
+                    <g id="Group">
+                        <text id="Advanced-Standards">
+                            <tspan x="0" y="9">Advanced Standards</tspan>
+                        </text>
+                    </g>
+                </g>
+                <g id="Path" opacity="0.8" transform="translate(36.500000, 16.500000)" fill="#F1FA8C" fill-rule="nonzero">
+                    <polygon points="1 0 5 0 2.5 4 4 4 0 9 1.5 5 0 5"></polygon>
+                </g>
+                <g transform="translate(43.000000, 40.000000)">
+                    <g id="Path" opacity="0.9" transform="translate(1.000000, 0.000000)" stroke="#F1FA8C">
+                        <polyline stroke-width="2" opacity="0.6" points="0 0 4 8 8 0 12 8"></polyline>
+                        <polyline stroke-width="2.5" points="2 2 6 8 10 2"></polyline>
+                    </g>
+                    <g id="IPT" transform="translate(0.000000, 10.000000)" fill="#6272A4" fill-rule="nonzero" font-family="Roboto-Regular, Roboto" font-size="9" font-weight="normal">
+                        <g id="Group">
+                            <text id="IPT">
+                                <tspan x="0" y="8">IPT</tspan>
+                            </text>
+                        </g>
+                    </g>
+                </g>
+                <g transform="translate(110.000000, 40.000000)">
+                    <g id="Path" opacity="0.9" transform="translate(14.000000, 0.000000)" stroke="#F1FA8C">
+                        <path d="M0,8 C2,2.66666667 4,1.33333333 6,4 C8,6.66666667 10,5.33333333 12,0" stroke-width="2" opacity="0.6"></path>
+                        <path d="M2,6 C4,3.33333333 6,2.66666667 8,4 C10,5.33333333 11.3333333,4.66666667 12,2" stroke-width="2.5"></path>
+                    </g>
+                    <g id="Cubehelix" transform="translate(0.000000, 10.000000)" fill="#6272A4" fill-rule="nonzero" font-family="Roboto-Regular, Roboto" font-size="9" font-weight="normal">
+                        <g id="Group">
+                            <text id="Cubehelix">
+                                <tspan x="0" y="8">Cubehelix</tspan>
+                            </text>
+                        </g>
+                    </g>
+                </g>
+            </g>
+            <g id="Group" transform="translate(270.000000, 555.000000)">
+                <rect id="Rectangle" stroke="#6272A4" stroke-width="1.5" fill="url(#linearGradient-yg-yybe6i5-8)" fill-rule="nonzero" opacity="0.8" x="0" y="0" width="160" height="50" rx="10"></rect>
+                <g id="Web-Standards" transform="translate(51.000000, 12.000000)" fill="#8BE9FD" fill-rule="nonzero" font-family="Roboto-Bold, Roboto" font-size="10" font-weight="bold">
+                    <g id="Group">
+                        <text id="Web-Standards">
+                            <tspan x="0" y="9">Web Standards</tspan>
+                        </text>
+                    </g>
+                </g>
+                <g opacity="0.8" transform="translate(38.000000, 13.500000)" stroke="#6272A4" stroke-width="0.5">
+                    <circle id="Oval" cx="4" cy="4" r="4"></circle>
+                    <path d="M1,4 C3,2.66666667 5,2.66666667 7,4" id="Path"></path>
+                    <path d="M1,4 C3,5.33333333 5,5.33333333 7,4" id="Path"></path>
+                    <line x1="4" y1="0" x2="4" y2="8" id="Path" fill="#6272A4" fill-rule="nonzero"></line>
+                </g>
+                <g transform="translate(49.000000, 27.000000)" fill="#6272A4" fill-rule="nonzero">
+                    <g id="Rectangle" opacity="0.9" transform="translate(16.000000, 0.000000)">
+                        <rect opacity="0.4" x="0" y="0" width="8" height="2" rx="1"></rect>
+                        <rect opacity="0.6" x="10" y="0" width="8" height="2" rx="1"></rect>
+                        <rect opacity="0.8" x="20" y="0" width="8" height="2" rx="1"></rect>
+                    </g>
+                    <g id="CIE-LAB-Curves" transform="translate(0.000000, 5.000000)" font-family="Roboto-Regular, Roboto" font-size="9" font-weight="normal">
+                        <g id="Group">
+                            <text id="CIE-LAB-Curves">
+                                <tspan x="0" y="8">CIE LAB Curves</tspan>
+                            </text>
+                        </g>
+                    </g>
+                </g>
+            </g>
+            <g id="Group" transform="translate(470.000000, 555.000000)">
+                <rect id="Rectangle" stroke="#FF79C6" stroke-width="1.5" fill="url(#linearGradient-yg-yybe6i5-8)" fill-rule="nonzero" opacity="0.8" x="0" y="0" width="160" height="50" rx="10"></rect>
+                <g id="Artistic-Standards" transform="translate(44.500000, 12.000000)" fill="#8BE9FD" fill-rule="nonzero" font-family="Roboto-Bold, Roboto" font-size="10" font-weight="bold">
+                    <g id="Group">
+                        <text id="Artistic-Standards">
+                            <tspan x="0" y="9">Artistic Standards</tspan>
+                        </text>
+                    </g>
+                </g>
+                <g id="Oval" opacity="0.8" transform="translate(31.500000, 14.500000)">
+                    <ellipse stroke="#FF79C6" stroke-width="0.5" cx="4" cy="3" rx="4" ry="3"></ellipse>
+                    <circle fill="#FF79C6" fill-rule="nonzero" cx="6" cy="1" r="1"></circle>
+                    <circle fill="#50FA7B" fill-rule="nonzero" cx="2" cy="2" r="1"></circle>
+                    <circle fill="#8BE9FD" fill-rule="nonzero" cx="5" cy="4" r="1"></circle>
+                    <circle fill="#F1FA8C" fill-rule="nonzero" cx="2" cy="5" r="1"></circle>
+                </g>
+                <g transform="translate(24.500000, 29.000000)">
+                    <g id="Rings" opacity="0.9" transform="translate(20.500000, 0.000000)" stroke-width="1.18181818">
+                        <circle id="Oval" stroke="#CFD581" cx="2" cy="2" r="1.40909091"></circle>
+                        <circle id="Oval" stroke="#84C5D8" cx="5" cy="2" r="1.40909091"></circle>
+                        <circle id="Oval" stroke="#DA6EAF" cx="8" cy="2" r="1.40909091"></circle>
+                        <circle id="Oval" stroke="#4CD573" cx="11" cy="2" r="1.40909091"></circle>
+                        <circle id="Oval" stroke="#FF5555" cx="14" cy="2" r="1.40909091"></circle>
+                        <circle id="Oval" stroke="#FFB86C" cx="17" cy="2" r="1.40909091"></circle>
+                    </g>
+                    <g id="Color-Harmony" transform="translate(0.000000, 5.000000)" fill="#6272A4" fill-rule="nonzero" font-family="Roboto-Regular, Roboto" font-size="9" font-weight="normal">
+                        <g id="Group">
+                            <text id="Color-Harmony">
+                                <tspan x="0" y="8">Color Harmony</tspan>
+                            </text>
+                        </g>
+                    </g>
+                </g>
+                <g transform="translate(91.500000, 29.000000)" fill-rule="nonzero">
+                    <g id="Rectangle" opacity="0.9" transform="translate(7.500000, 0.000000)" fill="#F8F8F2">
+                        <rect opacity="0.4" x="0" y="0" width="3" height="3" rx="0.5"></rect>
+                        <rect opacity="0.6" x="4" y="0" width="3" height="3" rx="0.5"></rect>
+                        <rect opacity="0.8" x="8" y="0" width="3" height="3" rx="0.5"></rect>
+                        <rect x="12" y="0" width="3" height="3" rx="0.5"></rect>
+                    </g>
+                    <g id="HPLuv" transform="translate(0.000000, 5.000000)" fill="#6272A4" font-family="Roboto-Regular, Roboto" font-size="9" font-weight="normal">
+                        <g id="Group">
+                            <text id="HPLuv">
+                                <tspan x="0" y="8">HPLuv</tspan>
+                            </text>
+                        </g>
+                    </g>
+                </g>
+            </g>
+            <g id="Group" opacity="0.7" transform="translate(199.192955, 219.192572)" fill="#BD93F9" fill-rule="nonzero">
+                <polygon id="Path" points="252.057045 0.807427802 252.057045 49.7514278 259.057045 49.7518722 250.807045 66.7518722 242.557045 49.7518722 249.557045 49.7514278 249.557045 0.807427802"></polygon>
+                <path d="M219.852812,6.55031585e-15 L221.761278,1.6148556 C153.247019,82.586253 84.7169799,144.680831 16.164087,187.894309 L15.1660447,188.519428 L18.8120353,194.517592 L-1.86517468e-14,196.297993 L10.2415726,180.418047 L13.8670447,186.383428 L14.8323154,185.778562 C83.1519848,142.711846 151.494509,80.7870854 219.852812,6.55031585e-15 Z" id="Path"></path>
+                <path d="M281.761278,6.55031585e-15 C350.119581,80.7870854 418.462105,142.711846 486.781774,185.778562 L487.746045,186.383428 L491.372517,180.418047 L501.61409,196.297993 L482.802054,194.517592 L486.447045,188.519428 L485.450003,187.894309 C417.589563,145.117331 349.751519,83.8387624 281.929007,4.06275628 L279.852812,1.6148556 L281.761278,6.55031585e-15 Z" id="Path"></path>
+                <path d="M219.57203,0.614456702 L222.04206,1.0003989 C215.500959,42.8634481 206.726034,84.6326013 190.355375,155.458145 C189.378826,159.683055 188.387768,163.961717 187.024736,169.839791 C168.401576,250.152169 161.548832,281.340325 154.715156,320.183335 L161.608501,321.344651 L150.650222,336.738761 L145.337558,318.604868 L152.250045,319.768428 L152.489552,318.408517 C153.439344,313.034841 154.392008,307.796598 155.378953,302.542015 L155.813026,300.241621 L156.17264,298.351762 C162.075319,267.448617 169.441236,234.601324 184.589354,169.275065 C185.952264,163.397515 186.943205,159.119364 187.919595,154.895137 C204.277325,84.1255325 213.042904,42.4008642 219.57203,0.614456702 Z" id="Path" opacity="0.6"></path>
+                <path d="M282.04206,0.614456702 C288.571186,42.4008642 297.336765,84.1255325 313.694495,154.895137 C314.670885,159.119364 315.661826,163.397515 317.024736,169.275065 C332.172854,234.601324 339.538771,267.448617 345.44145,298.351762 L345.801064,300.241621 L345.801064,300.241621 L346.235137,302.542015 C347.222082,307.796598 348.174746,313.034841 349.124538,318.408517 L349.363045,319.768428 L356.276532,318.604868 L350.963868,336.738761 L340.005589,321.344651 L346.898934,320.183335 C340.065258,281.340325 333.212514,250.152169 314.589354,169.839791 C313.226322,163.961717 312.235264,159.683055 311.258715,155.458145 C295.051762,85.3408567 286.289389,43.7017368 279.768939,2.25629136 L279.57203,1.0003989 L282.04206,0.614456702 Z" id="Path" opacity="0.6"></path>
+            </g>
+            <g id="Group" transform="translate(250.000000, 630.000000)" fill-rule="nonzero">
+                <rect id="Rectangle" stroke="#BD93F9" stroke-width="2" fill="url(#linearGradient-yg-yybe6i5-9)" opacity="0.6" x="0" y="0" width="400" height="40" rx="20"></rect>
+                <g id="1-Dracula-Color-→-10-Standards-→-80+-Harmonious-Colors" transform="translate(54.500000, 4.000000)" fill="#F8F8F2" font-size="11" font-weight="normal">
+                    <g id="1-Dracula-Color" transform="translate(0.000000, 1.000000)" font-family="Roboto-Regular, Roboto">
+                        <text>
+                            <tspan x="0" y="10">1 Dracula Color</tspan>
+                        </text>
+                    </g>
+                    <g id="→" transform="translate(78.208092, 0.000000)" font-family="LucidaGrande, Lucida Grande">
+                        <text>
+                            <tspan x="0" y="11">→</tspan>
+                        </text>
+                    </g>
+                    <g id="10-Standards" transform="translate(89.208092, 1.000000)" font-family="Roboto-Regular, Roboto">
+                        <text>
+                            <tspan x="0" y="10">10 Standards</tspan>
+                        </text>
+                    </g>
+                    <g id="→" transform="translate(160.073345, 0.000000)" font-family="LucidaGrande, Lucida Grande">
+                        <text>
+                            <tspan x="0" y="11">→</tspan>
+                        </text>
+                    </g>
+                    <g id="80+-Harmonious-Colors" transform="translate(171.073345, 1.000000)" font-family="Roboto-Regular, Roboto">
+                        <text>
+                            <tspan x="-2.84217094e-14" y="10">80+ Harmonious Colors</tspan>
+                        </text>
+                    </g>
+                </g>
+                <g opacity="0.8" transform="translate(59.500000, 20.000000)" fill="#6272A4" font-family="Roboto-Regular, Roboto" font-size="9" font-weight="normal">
+                    <g id="Popular:-3">
+                        <text>
+                            <tspan x="0" y="8">Popular: 3</tspan>
+                        </text>
+                    </g>
+                    <g id="Group" transform="translate(77.000000, 0.000000)">
+                        <text id="Scientific:-2">
+                            <tspan x="0" y="8">Scientific: 2</tspan>
+                        </text>
+                    </g>
+                    <g id="Group" transform="translate(155.500000, 0.000000)">
+                        <text id="Advanced:-2">
+                            <tspan x="0" y="8">Advanced: 2</tspan>
+                        </text>
+                    </g>
+                    <g id="Group" transform="translate(239.000000, 0.000000)">
+                        <text id="Web/Art:-3">
+                            <tspan x="0" y="8">Web/Art: 3</tspan>
+                        </text>
+                    </g>
+                </g>
+            </g>
+            <g id="Group" opacity="0.15" transform="translate(57.000000, 57.000000)" fill-rule="nonzero">
+                <circle id="Oval" fill="#BD93F9" cx="3" cy="3" r="3"></circle>
+                <circle id="Oval" fill="#8BE9FD" cx="23" cy="3" r="2"></circle>
+                <circle id="Oval" fill="#FF79C6" cx="38" cy="3" r="1.5"></circle>
+                <circle id="Oval" fill="#50FA7B" cx="48" cy="3" r="1"></circle>
+            </g>
+            <g id="Group" opacity="0.15" transform="translate(792.000000, 637.000000)" fill-rule="nonzero">
+                <circle id="Oval" fill="#50FA7B" cx="48" cy="3" r="1"></circle>
+                <circle id="Oval" fill="#FF79C6" cx="38" cy="3" r="1.5"></circle>
+                <circle id="Oval" fill="#8BE9FD" cx="23" cy="3" r="2"></circle>
+                <circle id="Oval" fill="#BD93F9" cx="3" cy="3" r="3"></circle>
+            </g>
+            <g id="Group" opacity="0.1" transform="translate(50.000000, 645.000000)" stroke="#6272A4">
+                <path d="M0,5 C6.66666667,-1.66666667 13.3333333,-1.66666667 20,5 C26.6666667,11.6666667 33.3333333,11.6666667 40,5" id="Path"></path>
+            </g>
+            <g id="Group" opacity="0.1" transform="translate(810.000000, 45.000000)" stroke="#6272A4">
+                <path d="M40,5 C33.3333333,11.6666667 26.6666667,11.6666667 20,5 C13.3333333,-1.66666667 6.66666667,-1.66666667 0,5" id="Path"></path>
+            </g>
+            <text id="Purple-#bd93f9" font-family="Roboto-Bold, Roboto" font-size="13" font-weight="bold">
+                <tspan x="405" y="125" fill="#F8F8F1">Purple</tspan>
+                <tspan x="443.198356" y="125" fill="#000000"> </tspan>
+                <tspan x="446.431567" y="125" fill="#BD93F9">#bd93f9</tspan>
+            </text>
+        </g>
+    </g>
+</svg>

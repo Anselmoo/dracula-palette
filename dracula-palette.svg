@@ -1,0 +1,156 @@
+
+<svg width="800px" height="400px" viewBox="0 0 800 400" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <defs>
+        <linearGradient x1="0%" y1="0%" x2="100%" y2="100%" id="linearGradient-mmrb8lry3s-1">
+            <stop stop-color="#282A36" offset="0%"></stop>
+            <stop stop-color="#44475A" offset="50%"></stop>
+            <stop stop-color="#282A36" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="dracula-palette">
+            <rect id="Rectangle" fill="url(#linearGradient-mmrb8lry3s-1)" fill-rule="nonzero" x="0" y="0" width="800" height="400"></rect>
+            <text id="Dracula-Theme-Colors" fill="#F8F8F2" fill-rule="nonzero" font-family="Helvetica" font-size="24" font-weight="normal">
+                <tspan x="264" y="40">Dracula Theme Colors</tspan>
+            </text>
+            <g id="background-colors" transform="translate(50.000000, 66.000000)" fill-rule="nonzero">
+                <text id="Background-Colors" fill="#6272A4" font-family="Helvetica" font-size="14" font-weight="normal">
+                    <tspan x="0" y="14">Background Colors</tspan>
+                </text>
+                <g id="Group" transform="translate(0.000000, 34.000000)">
+                    <rect id="Rectangle" stroke="#F8F8F2" fill="#282A36" x="0" y="0" width="40" height="40" rx="6"></rect>
+                    <text id="Background" fill="#F8F8F2" font-family="Helvetica" font-size="12" font-weight="normal">
+                        <tspan x="50" y="15">Background</tspan>
+                    </text>
+                    <text id="#282a36" fill="#6272A4" font-family="Helvetica" font-size="11" font-weight="normal">
+                        <tspan x="50" y="30">#282a36</tspan>
+                    </text>
+                </g>
+                <g id="Group" transform="translate(200.000000, 34.000000)">
+                    <rect id="Rectangle" stroke="#F8F8F1" fill="#44475A" x="0" y="0" width="40" height="40" rx="6"></rect>
+                    <text id="Current-Line" fill="#F8F8F2" font-family="Helvetica" font-size="12" font-weight="normal">
+                        <tspan x="50" y="15">Current Line</tspan>
+                    </text>
+                    <text id="#44475a" fill="#6272A4" font-family="Helvetica" font-size="11" font-weight="normal">
+                        <tspan x="50" y="30">#44475a</tspan>
+                    </text>
+                </g>
+                <g id="Group" transform="translate(400.000000, 34.000000)">
+                    <rect id="Rectangle" stroke="#F8F8F2" fill="#6272A4" x="0" y="0" width="40" height="40" rx="6"></rect>
+                    <text id="Selection" fill="#F8F8F2" font-family="Helvetica" font-size="12" font-weight="normal">
+                        <tspan x="50" y="15">Selection</tspan>
+                    </text>
+                    <text id="#6272a4" fill="#6272A4" font-family="Helvetica" font-size="11" font-weight="normal">
+                        <tspan x="50" y="30">#6272a4</tspan>
+                    </text>
+                </g>
+            </g>
+            <g id="text-colors" transform="translate(50.000000, 166.000000)" fill-rule="nonzero">
+                <text id="Text-Colors" fill="#6272A4" font-family="Helvetica" font-size="14" font-weight="normal">
+                    <tspan x="0" y="14">Text Colors</tspan>
+                </text>
+                <g id="Group" transform="translate(0.000000, 34.000000)">
+                    <rect id="Rectangle" stroke="#F8F8F2" fill="#F8F8F2" x="0" y="0" width="40" height="40" rx="6"></rect>
+                    <text id="Foreground" fill="#F8F8F2" font-family="Helvetica" font-size="12" font-weight="normal">
+                        <tspan x="50" y="15">Foreground</tspan>
+                    </text>
+                    <text id="#f8f8f2" fill="#6272A4" font-family="Helvetica" font-size="11" font-weight="normal">
+                        <tspan x="50" y="30">#f8f8f2</tspan>
+                    </text>
+                </g>
+                <g id="Group" transform="translate(200.000000, 34.000000)">
+                    <rect id="Rectangle" stroke="#F8F8F2" fill="#6272A4" x="0" y="0" width="40" height="40" rx="6"></rect>
+                    <text id="Comment" fill="#F8F8F2" font-family="Helvetica" font-size="12" font-weight="normal">
+                        <tspan x="50" y="15">Comment</tspan>
+                    </text>
+                    <text id="#6272a4" fill="#6272A4" font-family="Helvetica" font-size="11" font-weight="normal">
+                        <tspan x="50" y="30">#6272a4</tspan>
+                    </text>
+                </g>
+            </g>
+            <g id="accent-colors" transform="translate(50.000000, 266.000000)" fill-rule="nonzero">
+                <text id="Accent-Colors" fill="#6272A4" font-family="Helvetica" font-size="14" font-weight="normal">
+                    <tspan x="0" y="14">Accent Colors</tspan>
+                </text>
+                <g id="Group" transform="translate(0.000000, 34.000000)">
+                    <rect id="Rectangle" stroke="#F8F8F2" fill="#8BE9FD" x="0" y="0" width="35" height="35" rx="6"></rect>
+                    <text id="Cyan" fill="#F8F8F2" font-family="Helvetica" font-size="11" font-weight="normal">
+                        <tspan x="45" y="12">Cyan</tspan>
+                    </text>
+                    <text id="#8be9fd" fill="#6272A4" font-family="Helvetica" font-size="10" font-weight="normal">
+                        <tspan x="45" y="24">#8be9fd</tspan>
+                    </text>
+                </g>
+                <g id="Group" transform="translate(130.000000, 34.000000)">
+                    <rect id="Rectangle" stroke="#F8F8F2" fill="#50FA7B" x="0" y="0" width="35" height="35" rx="6"></rect>
+                    <text id="Green" fill="#F8F8F2" font-family="Helvetica" font-size="11" font-weight="normal">
+                        <tspan x="45" y="12">Green</tspan>
+                    </text>
+                    <text id="#50fa7b" fill="#6272A4" font-family="Helvetica" font-size="10" font-weight="normal">
+                        <tspan x="45" y="24">#50fa7b</tspan>
+                    </text>
+                </g>
+                <g id="Group" transform="translate(260.000000, 34.000000)">
+                    <rect id="Rectangle" stroke="#F8F8F2" fill="#FFB86C" x="0" y="0" width="35" height="35" rx="6"></rect>
+                    <text id="Orange" fill="#F8F8F2" font-family="Helvetica" font-size="11" font-weight="normal">
+                        <tspan x="45" y="12">Orange</tspan>
+                    </text>
+                    <text id="#ffb86c" fill="#6272A4" font-family="Helvetica" font-size="10" font-weight="normal">
+                        <tspan x="45" y="24">#ffb86c</tspan>
+                    </text>
+                </g>
+                <g id="Group" transform="translate(390.000000, 34.000000)">
+                    <rect id="Rectangle" stroke="#F8F8F2" fill="#FF79C6" x="0" y="0" width="35" height="35" rx="6"></rect>
+                    <text id="Pink" fill="#F8F8F2" font-family="Helvetica" font-size="11" font-weight="normal">
+                        <tspan x="45" y="12">Pink</tspan>
+                    </text>
+                    <text id="#ff79c6" fill="#6272A4" font-family="Helvetica" font-size="10" font-weight="normal">
+                        <tspan x="45" y="24">#ff79c6</tspan>
+                    </text>
+                </g>
+                <g id="Group" transform="translate(0.000000, 74.000000)">
+                    <rect id="Rectangle" stroke="#F8F8F2" fill="#BD93F9" x="0" y="0" width="35" height="35" rx="6"></rect>
+                    <text id="Purple" fill="#F8F8F2" font-family="Helvetica" font-size="11" font-weight="normal">
+                        <tspan x="45" y="12">Purple</tspan>
+                    </text>
+                    <text id="#bd93f9" fill="#6272A4" font-family="Helvetica" font-size="10" font-weight="normal">
+                        <tspan x="45" y="24">#bd93f9</tspan>
+                    </text>
+                </g>
+                <g id="Group" transform="translate(130.000000, 74.000000)">
+                    <rect id="Rectangle" stroke="#F8F8F2" fill="#FF5555" x="0" y="0" width="35" height="35" rx="6"></rect>
+                    <text id="Red" fill="#F8F8F2" font-family="Helvetica" font-size="11" font-weight="normal">
+                        <tspan x="45" y="12">Red</tspan>
+                    </text>
+                    <text id="#ff5555" fill="#6272A4" font-family="Helvetica" font-size="10" font-weight="normal">
+                        <tspan x="45" y="24">#ff5555</tspan>
+                    </text>
+                </g>
+                <g id="Group" transform="translate(260.000000, 74.000000)">
+                    <rect id="Rectangle" stroke="#F8F8F2" fill="#F1FA8C" x="0" y="0" width="35" height="35" rx="6"></rect>
+                    <text id="Yellow" fill="#F8F8F2" font-family="Helvetica" font-size="11" font-weight="normal">
+                        <tspan x="45" y="12">Yellow</tspan>
+                    </text>
+                    <text id="#f1fa8c" fill="#6272A4" font-family="Helvetica" font-size="10" font-weight="normal">
+                        <tspan x="45" y="24">#f1fa8c</tspan>
+                    </text>
+                </g>
+            </g>
+            <g id="logo" transform="translate(250.000000, 21.000000)">
+                <path d="M6,0.617647059 C4,-0.617647059 2,0 0,2.47058824 C0,4.11764706 1,5.55882355 3,6.79411767 L6,3.70588235 L9,6.79411767 C11,5.55882355 12,4.11764706 12,2.47058824 C10,0 8,-0.617647059 6,0.617647059 Z" id="Path" fill="#44475A" fill-rule="nonzero"></path>
+                <ellipse id="Oval" fill="#F8F8F2" fill-rule="nonzero" cx="6" cy="6.79411767" rx="4.8" ry="4.94117647"></ellipse>
+                <path d="M1.2,3.70588235 C1.2,1.64705882 2.79999999,1.02941176 6,1.85294118 C9.20000002,1.02941176 10.8,1.64705882 10.8,3.70588235 C11.6,2.88235294 11.6,3.9117647 10.8,6.79411767 C9.6,5.55882355 8.00000002,4.94117646 6,4.94117646 C3.99999999,4.94117646 2.4,5.55882355 1.2,6.79411767 C0.399999998,3.9117647 0.399999998,2.88235294 1.2,3.70588235 Z" id="Path" fill="#282A36" fill-rule="nonzero"></path>
+                <ellipse id="Oval" fill="#FF5555" fill-rule="nonzero" cx="4.19999998" cy="6.17647059" rx="1" ry="1"></ellipse>
+                <ellipse id="Oval" fill="#FF5555" fill-rule="nonzero" cx="7.80000002" cy="6.17647059" rx="1" ry="1"></ellipse>
+                <ellipse id="Oval" fill="#FF79C6" fill-rule="nonzero" cx="4.19999998" cy="6.17647059" rx="1" ry="1"></ellipse>
+                <ellipse id="Oval" fill="#FF79C6" fill-rule="nonzero" cx="7.80000002" cy="6.17647059" rx="1" ry="1"></ellipse>
+                <polygon id="Path" fill="#BD93F9" fill-rule="nonzero" transform="translate(5.100000, 9.141712) scale(-1, 1) rotate(-180.000000) translate(-5.100000, -9.141712) " points="4.8 8.52406459 4.8 9.75935871 5.39999998 9.75935871"></polygon>
+                <polygon id="Path" fill="#BD93F9" fill-rule="nonzero" transform="translate(6.900000, 9.141712) scale(-1, 1) rotate(-180.000000) translate(-6.900000, -9.141712) " points="7.2 8.52406459 7.2 9.75935871 6.60000002 9.75935871"></polygon>
+                <path d="M4.19999998,8.02941179 C5.39999998,8.85294117 6.60000002,8.85294117 7.80000002,8.02941179" id="Path" stroke="#BD93F9" stroke-width="0.5"></path>
+                <rect id="Rectangle" fill="#282A36" fill-rule="nonzero" x="2.99999998" y="11.7352941" width="6" height="9.26470586" rx="1.23529412"></rect>
+                <polygon id="Path" fill="#BD93F9" fill-rule="nonzero" points="4.8 12.9705883 7.2 12.9705883 7.2 14.2058824 4.8 14.2058824"></polygon>
+                <rect id="Rectangle" fill="#FF79C6" fill-rule="nonzero" x="5.70000001" y="12.9705883" width="1" height="1.23529412"></rect>
+            </g>
+        </g>
+    </g>
+</svg>

@@ -1,0 +1,19 @@
+<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+   <g id="Page-1" stroke="none" stroke-width="1" fill="none">
+        <g id="dracula-character" transform="scale(0.5) translate(3.5, 0)">
+            <path d="M12.4468085,1.24864865 C8.29787231,-1.24864865 4.14893621,-8.8817842e-16 0,4.9945946 C0,8.32432433 2.07446808,11.2378379 6.22340421,13.7351352 L12.4468085,7.49189189 L18.6702128,13.7351352 C22.8191489,11.2378379 24.893617,8.32432433 24.893617,4.9945946 C20.7446808,-8.8817842e-16 16.5957447,-1.24864865 12.4468085,1.24864865 Z" id="Path" fill="#44475A" fill-rule="nonzero"></path>
+            <ellipse id="Oval" fill="#F8F8F2" fill-rule="nonzero" cx="12.4468085" cy="13.7351352" rx="9.95744681" ry="9.98918919"></ellipse>
+            <path d="M2.4893617,7.49189189 C2.4893617,3.32972973 5.80851061,2.08108108 12.4468085,3.74594595 C19.0851064,2.08108108 22.4042553,3.32972973 22.4042553,7.49189189 C24.0638298,5.82702703 24.0638298,7.90810811 22.4042553,13.7351352 C19.9148936,11.2378379 16.5957447,9.98918917 12.4468085,9.98918917 C8.29787231,9.98918917 4.97872341,11.2378379 2.4893617,13.7351352 C0.82978723,7.90810811 0.82978723,5.82702703 2.4893617,7.49189189 Z" id="Path" fill="#282A36" fill-rule="nonzero"></path>
+            <ellipse id="Oval" fill="#FF5555" fill-rule="nonzero" cx="8.71276591" cy="12.4864865" rx="1.86702128" ry="1.87297297"></ellipse>
+            <ellipse id="Oval" fill="#FF5555" fill-rule="nonzero" cx="16.1808511" cy="12.4864865" rx="1.86702128" ry="1.87297297"></ellipse>
+            <circle id="Oval" fill="#FF79C6" fill-rule="nonzero" cx="8.71276591" cy="12.4864865" r="1"></circle>
+            <circle id="Oval" fill="#FF79C6" fill-rule="nonzero" cx="16.1808511" cy="12.4864865" r="1"></circle>
+            <polygon id="Path" fill="#BD93F9" fill-rule="nonzero" transform="translate(10.579787, 18.481082) scale(-1, 1) rotate(-180.000000) translate(-10.579787, -18.481082) " points="9.95744681 17.2324334 9.95744681 19.7297307 11.2021276 19.7297307"></polygon>
+            <polygon id="Path" fill="#BD93F9" fill-rule="nonzero" transform="translate(14.313830, 18.481082) scale(-1, 1) rotate(-180.000000) translate(-14.313830, -18.481082) " points="14.9361702 17.2324334 14.9361702 19.7297307 13.6914894 19.7297307"></polygon>
+            <path d="M8.71276591,16.2324325 C11.2021276,17.8972973 13.6914894,17.8972973 16.1808511,16.2324325" id="Path" stroke="#BD93F9" stroke-width="0.624324324"></path>
+            <rect id="Rectangle" fill="#282A36" fill-rule="nonzero" x="6.22340421" y="23.7243244" width="12.4468085" height="18.7297297" rx="2.4972973"></rect>
+            <polygon id="Path" fill="#BD93F9" fill-rule="nonzero" points="9.95744681 26.2216217 14.9361702 26.2216217 14.9361702 28.718919 9.95744681 28.718919"></polygon>
+            <rect id="Rectangle" fill="#FF79C6" fill-rule="nonzero" x="11.8244681" y="26.2216217" width="1.24468085" height="2.4972973"></rect>
+        </g>
+    </g>
+</svg>

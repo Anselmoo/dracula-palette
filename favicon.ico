@@ -1,0 +1,38 @@
+<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="32" height="32" rx="6" fill="#282a36"/>
+
+  <!-- Dracula Vampire Favicon -->
+  <g transform="translate(16, 16)" id="dracula-favicon">
+    <!-- Cape background (simplified for small size) -->
+    <path d="M0,-12 Q-6,-10 -7,-4 Q-8,3 -5,8 Q-2,10 0,9 Q2,10 5,8 Q8,3 7,-4 Q6,-10 0,-12 Z" fill="#44475a" opacity="0.9"/>
+
+    <!-- Head -->
+    <circle cx="0" cy="-2" r="5" fill="#f8f8f2"/>
+
+    <!-- Hair (simplified) -->
+    <path d="M-5,-6 Q-5,-9 0,-7 Q5,-9 5,-6 Q6,-7 5,-2 Q3,-4 0,-4 Q-3,-4 -5,-2 Q-6,-7 -5,-6 Z" fill="#282a36"/>
+
+    <!-- Eyes with glow (larger for visibility) -->
+    <circle cx="-2" cy="-3" r="1.5" fill="#ff5555"/>
+    <circle cx="2" cy="-3" r="1.5" fill="#ff5555"/>
+    <circle cx="-2" cy="-3" r="0.8" fill="#ff79c6"/>
+    <circle cx="2" cy="-3" r="0.8" fill="#ff79c6"/>
+
+    <!-- Fangs (slightly larger) -->
+    <path d="M-1.2,0 L-1.2,2 L-0.7,2 Z" fill="#f8f8f2"/>
+    <path d="M1.2,0 L1.2,2 L0.7,2 Z" fill="#f8f8f2"/>
+
+    <!-- Mouth -->
+    <path d="M-1.5,0 Q0,1.5 1.5,0" stroke="#bd93f9" stroke-width="0.5" fill="none"/>
+
+    <!-- Body/Collar (simplified) -->
+    <rect x="-3" y="3" width="6" height="8" rx="1" fill="#282a36"/>
+
+    <!-- Bow tie accent (larger for visibility) -->
+    <path d="M-1.5,4 L1.5,4 L1.5,6 L-1.5,6 Z" fill="#bd93f9"/>
+    <rect x="-0.5" y="4" width="1" height="2" fill="#ff79c6"/>
+
+    <!-- Cape collar detail (simplified) -->
+    <path d="M0,-7 Q-2.5,-8 -3,-5 Q-3,-3 -1.5,-2 L0,-4 L1.5,-2 Q3,-3 3,-5 Q2.5,-8 0,-7 Z" fill="#6272a4"/>
+  </g>
+</svg>
