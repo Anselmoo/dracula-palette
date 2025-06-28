@@ -33,7 +33,7 @@ git pull origin main
 
 # Get current version from package.json
 CURRENT_VERSION=$(node -p "require('./package.json').version")
-echo "📦 Current versio${: $CURRENT_VERS}ION"
+echo "📦 Current version: ${CURRENT_VERSION}" # cspell:ignore versio
 
 # Calculate new version
 case ${BUMP_TYPE} in
@@ -82,11 +82,11 @@ if [[ ${NEW_VERSION} == "Error:"* ]]; then
     esac
 fi
 
-echo "🚀 New versio${: $NEW_VERS}ION"
+echo "🚀 New version: ${NEW_VERSION}" # cspell:ignore versio
 
 # Confirm with user
 echo ""
-read -p "🤔 Create relea${e $NEW_VERS}ION? (y/N): " -n 1 -r
+read -p "🤔 Create release ${NEW_VERSION}? (y/N): " -n 1 -r # cspell:ignore relea
 echo ""
 
 if [[ ! ${REPLY} =~ ^[Yy]$ ]]; then
@@ -114,7 +114,7 @@ git add package.json package-lock.json
 git commit -m "chore: bump version to ${NEW_VERSION}"
 
 # Create and push tag
-echo "🏷️  Creating ${ag v$NEW_VE}RSION..."
+echo "🏷️  Creating tag v${NEW_VERSION}..."
 git tag "v${NEW_VERSION}"
 
 # Push changes and tag
@@ -123,7 +123,7 @@ git push origin main
 git push origin "v${NEW_VERSION}"
 
 echo ""
-echo "✅ Releas${ $NEW_VERSI}ON created successfully!"
+echo "✅ Release ${NEW_VERSION} created successfully!" # cspell:ignore Releas VERSI
 echo ""
 echo "🎯 What happens next:"
 echo "   • GitHub Actions will automatically:"
@@ -134,10 +134,10 @@ echo "     - Build and push Docker image"
 echo "     - Deploy to GitHub Pages"
 echo ""
 echo "🔗 Check the progress at:"
-echo "   https://github.com/${{ github.repository }}/actions"
+echo "   https://github.com/\${{ github.repository }}/actions"
 echo ""
 echo "📦 Once published, you can install with:"
-echo "   npm install @${{ github.repository_owner }}/dracula-palette@${NEW_VERSION}"
+echo "   npm install @\${{ github.repository_owner }}/dracula-palette@${NEW_VERSION}"
 echo ""
 echo "🐳 Or pull the Docker image with:"
-echo "   docker pull ghcr.io/${{ github.repository }}:${NEW_VERSION}"
+echo "   docker pull ghcr.io/\${{ github.repository }}:${NEW_VERSION}"
