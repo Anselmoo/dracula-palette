@@ -60,7 +60,7 @@
     "@tsconfig/node20": "^20.1.2",
     "@types/chroma-js": "^2.4.4",
     "@types/color": "^4.0.0",
-    "@types/node": "^20.11.0",
+    "@types/node": "^22.0.0",
     "@typescript-eslint/eslint-plugin": "^6.21.0",
     "@typescript-eslint/parser": "^6.21.0",
     "@vitejs/plugin-vue": "^5.0.0",
