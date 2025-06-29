@@ -87,8 +87,21 @@ src/
    git checkout -b feature/amazing-feature
    ```
 
-3. **Make your changes** following our coding standards
-4. **Test your changes:**
+3. **Set up pre-commit hooks** (recommended):
+
+   ```bash
+   pip install pre-commit
+   pre-commit install
+   ```
+
+   Pre-commit hooks will automatically run:
+   - Code formatting (Prettier)
+   - Linting (ESLint)
+   - Type checking (TypeScript)
+   - SVG optimization checks
+
+4. **Make your changes** following our coding standards
+5. **Test your changes:**
 
    ```bash
    npm run test:unit
@@ -98,19 +111,21 @@ src/
    npm run build
    ```
 
-5. **Commit your changes** with a descriptive message:
+   Note: If you have pre-commit hooks installed, linting and formatting will run automatically on commit.
+
+6. **Commit your changes** with a descriptive message:
 
    ```bash
    git commit -m 'feat: add amazing feature'
    ```
 
-6. **Push to your fork:**
+7. **Push to your fork:**
 
    ```bash
    git push origin feature/amazing-feature
    ```
 
-7. **Open a Pull Request** against the `main` branch
+8. **Open a Pull Request** against the `main` branch
 
 ### Commit Message Convention
 

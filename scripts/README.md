@@ -6,7 +6,7 @@ This directory contains utility scripts for development and release management.
 
 ### `release.sh`
 
-Automates the process of creating a new release with proper semantic versioning.
+Automates the process of creating a new release using **trunk-based development** with automatic release branch creation and proper semantic versioning.
 
 **Usage:**
 
@@ -24,37 +24,71 @@ Automates the process of creating a new release with proper semantic versioning.
 ./scripts/release.sh
 ```
 
-**What it does:**
+**Trunk-Based Development Workflow:**
 
-1. ✅ Validates you're on the `main` branch
+1. ✅ Validates you're on the `main` branch (trunk)
 2. ✅ Ensures working directory is clean
-3. ✅ Pulls latest changes from origin
+3. ✅ Pulls latest changes from `main` (trunk)
 4. ✅ Calculates new version based on semver
-5. ✅ Updates `package.json` version
-6. ✅ Runs tests and linting
-7. ✅ Builds the project
-8. ✅ Commits version bump
-9. ✅ Creates and pushes Git tag
-10. ✅ Triggers automated GitHub Actions workflows
+5. ✅ **Creates release branch**: `release/v{major}.{minor}.{patch}`
+6. ✅ Updates `package.json` version
+7. ✅ Runs tests and linting
+8. ✅ Builds the project
+9. ✅ Commits version bump to release branch
+10. ✅ Creates and pushes Git tag
+11. ✅ Pushes release branch for PR creation
+12. ✅ Provides next steps for merge workflow
 
 **Prerequisites:**
 
 - Git repository with `main` branch
 - Clean working directory
-- All changes committed
+- All changes committed and pushed to `main`
 - Optional: `semver` npm package for better version calculation
   ```bash
   npm install -g semver
   ```
 
-**After running:**
-The GitHub Actions workflows will automatically:
+**Release Branch Workflow:**
 
-- 🧪 Run tests and quality checks
-- 📦 Publish to GitHub Packages (npm)
-- 🐳 Build and push Docker image to GHCR
-- 🌐 Deploy to GitHub Pages
-- 📋 Create GitHub Release with artifacts
+The script follows trunk-based development best practices:
+
+1. **Start from main**: Always create releases from the stable `main` branch
+2. **Automatic branch creation**: Creates `release/v{version}` branches automatically
+3. **Short-lived branches**: Release branches are temporary for final testing
+4. **PR-based merging**: Release branches merge back to main via Pull Request
+5. **Tag-triggered deployment**: Git tags trigger automated CI/CD workflows
+
+**After running:**
+
+1. **Review the release branch**: `release/v{version}` is created and pushed
+2. **Create Pull Request**: From `release/v{version}` → `main`
+3. **Final review**: Team reviews the release changes
+4. **Merge to main**: Approving the PR merges changes back to trunk
+5. **Automated deployment**: The Git tag triggers GitHub Actions workflows:
+   - 🧪 Run tests and quality checks
+   - 📦 Publish to GitHub Packages (npm)
+   - 🐳 Build and push Docker image to GHCR
+   - 🌐 Deploy to GitHub Pages
+   - 📋 Create GitHub Release with artifacts
+
+**Example Release Flow:**
+
+```bash
+# On main branch
+git checkout main
+git pull origin main
+
+# Create release (e.g., 1.2.3 → 1.2.4)
+./scripts/release.sh patch
+
+# Script creates: release/v1.2.4 branch
+# Creates: v1.2.4 tag
+# Pushes both to origin
+
+# Next: Create PR from release/v1.2.4 → main
+# After merge: GitHub Actions deploys v1.2.4
+```
 
 ## Manual Release Process
 

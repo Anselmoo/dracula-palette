@@ -48,7 +48,7 @@ jobs:
         run: npm run optimize:svg:check
 
       - name: Run type checking
-        run: npm run type-check
+        run: npm run type:check
 
       - name: Run unit tests
         run: npm run test:unit

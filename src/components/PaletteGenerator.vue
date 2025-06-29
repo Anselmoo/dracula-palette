@@ -1,9 +1,7 @@
 <template>
   <div class="palette-generator">
     <div class="generator-header">
-      <h2 class="generator-title">
-        Extended Palette Generator
-      </h2>
+      <h2 class="generator-title">Extended Palette Generator</h2>
       <p class="generator-description">
         Generate comprehensive color palettes using 10 different color standards to expand your
         Dracula theme beyond the basic colors.
@@ -29,9 +27,7 @@
           <p class="standard-description">
             {{ standard.description }}
           </p>
-          <p class="standard-best-for">
-            <strong>Best for:</strong> {{ standard.bestFor }}
-          </p>
+          <p class="standard-best-for"><strong>Best for:</strong> {{ standard.bestFor }}</p>
         </div>
       </div>
     </div>
@@ -48,49 +44,16 @@
       </button>
 
       <div class="quick-actions">
-        <button
-          class="quick-button"
-          @click="selectPopularStandards"
-        >
-          Popular
-        </button>
-        <button
-          class="quick-button"
-          @click="selectScientificStandards"
-        >
-          Scientific
-        </button>
-        <button
-          class="quick-button"
-          @click="selectWebStandards"
-        >
-          Web
-        </button>
-        <button
-          class="quick-button"
-          @click="selectArtisticStandards"
-        >
-          Artistic
-        </button>
-        <button
-          class="quick-button"
-          @click="selectAllStandards"
-        >
-          All
-        </button>
-        <button
-          class="quick-button"
-          @click="clearStandards"
-        >
-          Clear
-        </button>
+        <button class="quick-button" @click="selectPopularStandards">Popular</button>
+        <button class="quick-button" @click="selectScientificStandards">Scientific</button>
+        <button class="quick-button" @click="selectWebStandards">Web</button>
+        <button class="quick-button" @click="selectArtisticStandards">Artistic</button>
+        <button class="quick-button" @click="selectAllStandards">All</button>
+        <button class="quick-button" @click="clearStandards">Clear</button>
       </div>
     </div>
 
-    <div
-      v-if="generatedPalettes.length > 0"
-      class="generated-palettes"
-    >
+    <div v-if="generatedPalettes.length > 0" class="generated-palettes">
       <div class="palettes-header">
         <h3>Generated Palettes</h3>
         <div class="palette-stats">
@@ -101,18 +64,11 @@
       </div>
 
       <div class="palettes-container">
-        <div
-          v-for="palette in generatedPalettes"
-          :key="palette.name"
-          class="palette-section"
-        >
+        <div v-for="palette in generatedPalettes" :key="palette.name" class="palette-section">
           <div class="palette-header">
             <h4>{{ palette.name }}</h4>
             <div class="palette-meta">
-              <span
-                class="accessibility-badge"
-                :class="palette.accessibility.wcagLevel"
-              >
+              <span class="accessibility-badge" :class="palette.accessibility.wcagLevel">
                 {{ palette.accessibility.wcagLevel }}
               </span>
               <span class="color-count">{{ palette.colors.length }} colors</span>
@@ -148,14 +104,7 @@
                     <path
                       d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"
                     />
-                    <rect
-                      x="8"
-                      y="2"
-                      width="8"
-                      height="4"
-                      rx="1"
-                      ry="1"
-                    />
+                    <rect x="8" y="2" width="8" height="4" rx="1" ry="1" />
                   </svg>
                 </button>
               </div>
@@ -171,24 +120,9 @@
             >
               Make Accessible
             </button>
-            <button
-              class="export-button"
-              @click="exportPalette(palette)"
-            >
-              Export CSS
-            </button>
-            <button
-              class="export-button"
-              @click="exportJSON(palette)"
-            >
-              Export JSON
-            </button>
-            <button
-              class="export-button"
-              @click="exportSCSS(palette)"
-            >
-              Export SCSS
-            </button>
+            <button class="export-button" @click="exportPalette(palette)">Export CSS</button>
+            <button class="export-button" @click="exportJSON(palette)">Export JSON</button>
+            <button class="export-button" @click="exportSCSS(palette)">Export SCSS</button>
           </div>
         </div>
       </div>
@@ -221,7 +155,7 @@ import {
   generateJSONExport,
   generateCSSVariables,
   generateSCSSVariables,
-  downloadFile
+  downloadFile,
 } from '../utils/exportUtils';
 import ColorExportModal from './ColorExportModal.vue';
 
@@ -353,8 +287,6 @@ const makeAccessible = (palette: GeneratedPalette) => {
     generatedPalettes.value.push(accessiblePalette);
   }
 };
-
-
 </script>
 
 <style lang="scss" scoped>
