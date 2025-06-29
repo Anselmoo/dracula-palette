@@ -1,14 +1,10 @@
 <template>
   <div class="dracula-palette">
-    <h2 class="palette-title">
-      Dracula Color Palette
-    </h2>
+    <h2 class="palette-title">Dracula Color Palette</h2>
     <div class="palette-sections">
       <!-- Background Colors -->
       <div class="color-section">
-        <h3 class="section-title">
-          Background Colors
-        </h3>
+        <h3 class="section-title">Background Colors</h3>
         <div class="colors-grid">
           <div
             v-for="color in backgroundColors"
@@ -17,10 +13,7 @@
             :class="{ selected: isSelected(color) }"
             @click="handleColorClick(color)"
           >
-            <div
-              class="color-swatch"
-              :style="{ backgroundColor: color.hex }"
-            />
+            <div class="color-swatch" :style="{ backgroundColor: color.hex }" />
             <div class="color-info">
               <span class="color-name">{{ color.name }}</span>
               <span class="color-hex">{{ color.hex }}</span>
@@ -40,14 +33,7 @@
                   <path
                     d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"
                   />
-                  <rect
-                    x="8"
-                    y="2"
-                    width="8"
-                    height="4"
-                    rx="1"
-                    ry="1"
-                  />
+                  <rect x="8" y="2" width="8" height="4" rx="1" ry="1" />
                 </svg>
               </button>
             </div>
@@ -57,9 +43,7 @@
 
       <!-- Accent Colors -->
       <div class="color-section">
-        <h3 class="section-title">
-          Accent Colors
-        </h3>
+        <h3 class="section-title">Accent Colors</h3>
         <div class="colors-grid">
           <div
             v-for="color in accentColors"
@@ -68,10 +52,7 @@
             :class="{ selected: isSelected(color) }"
             @click="handleColorClick(color)"
           >
-            <div
-              class="color-swatch"
-              :style="{ backgroundColor: color.hex }"
-            />
+            <div class="color-swatch" :style="{ backgroundColor: color.hex }" />
             <div class="color-info">
               <span class="color-name">{{ color.name }}</span>
               <span class="color-hex">{{ color.hex }}</span>
@@ -91,22 +72,12 @@
                   <path
                     d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"
                   />
-                  <rect
-                    x="8"
-                    y="2"
-                    width="8"
-                    height="4"
-                    rx="1"
-                    ry="1"
-                  />
+                  <rect x="8" y="2" width="8" height="4" rx="1" ry="1" />
                 </svg>
               </button>
             </div>
             <!-- Color variants preview -->
-            <div
-              v-if="color.variants"
-              class="color-variants"
-            >
+            <div v-if="color.variants" class="color-variants">
               <div
                 v-for="(variant, shade) in getDisplayVariants(color.variants)"
                 :key="shade"
@@ -121,9 +92,7 @@
 
       <!-- Foreground Colors -->
       <div class="color-section">
-        <h3 class="section-title">
-          Text Colors
-        </h3>
+        <h3 class="section-title">Text Colors</h3>
         <div class="colors-grid">
           <div
             v-for="color in foregroundColors"
@@ -132,10 +101,7 @@
             :class="{ selected: isSelected(color) }"
             @click="handleColorClick(color)"
           >
-            <div
-              class="color-swatch"
-              :style="{ backgroundColor: color.hex }"
-            />
+            <div class="color-swatch" :style="{ backgroundColor: color.hex }" />
             <div class="color-info">
               <span class="color-name">{{ color.name }}</span>
               <span class="color-hex">{{ color.hex }}</span>
@@ -155,14 +121,7 @@
                   <path
                     d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"
                   />
-                  <rect
-                    x="8"
-                    y="2"
-                    width="8"
-                    height="4"
-                    rx="1"
-                    ry="1"
-                  />
+                  <rect x="8" y="2" width="8" height="4" rx="1" ry="1" />
                 </svg>
               </button>
             </div>

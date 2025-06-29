@@ -1,28 +1,13 @@
 <template>
-  <div
-    v-if="isOpen"
-    class="modal-overlay"
-    @click="closeModal"
-  >
-    <div
-      class="modal-content"
-      @click.stop
-    >
+  <div v-if="isOpen" class="modal-overlay" @click="closeModal">
+    <div class="modal-content" @click.stop>
       <div class="modal-header">
         <h3>Export Color</h3>
-        <button
-          class="close-button"
-          @click="closeModal"
-        >
-          &times;
-        </button>
+        <button class="close-button" @click="closeModal">&times;</button>
       </div>
 
       <div class="color-preview">
-        <div
-          class="color-swatch"
-          :style="{ backgroundColor: color }"
-        />
+        <div class="color-swatch" :style="{ backgroundColor: color }" />
         <div class="color-info">
           <h4>{{ colorName }}</h4>
           <p class="current-hex">
@@ -55,11 +40,7 @@
         <h4>Preview</h4>
         <div class="preview-code">
           <code>{{ formattedColor }}</code>
-          <button
-            class="copy-preview-btn"
-            :class="{ copied: previewCopied }"
-            @click="copyPreview"
-          >
+          <button class="copy-preview-btn" :class="{ copied: previewCopied }" @click="copyPreview">
             <svg
               v-if="!previewCopied"
               width="16"
@@ -69,14 +50,7 @@
               stroke="currentColor"
               stroke-width="2"
             >
-              <rect
-                x="9"
-                y="9"
-                width="13"
-                height="13"
-                rx="2"
-                ry="2"
-              />
+              <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
               <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
             </svg>
             <svg
@@ -95,18 +69,8 @@
       </div>
 
       <div class="modal-actions">
-        <button
-          class="primary-button"
-          @click="copyAndClose"
-        >
-          Copy & Close
-        </button>
-        <button
-          class="secondary-button"
-          @click="closeModal"
-        >
-          Cancel
-        </button>
+        <button class="primary-button" @click="copyAndClose">Copy & Close</button>
+        <button class="secondary-button" @click="closeModal">Cancel</button>
       </div>
     </div>
   </div>

@@ -2,18 +2,10 @@
   <header class="header">
     <div class="header-content">
       <div class="logo">
-        <img
-          src="/logo.svg"
-          alt="Dracula Logo"
-          class="logo-image"
-        >
-        <h1 class="title">
-          Dracula Palette
-        </h1>
+        <img src="/logo.svg" alt="Dracula Logo" class="logo-image" />
+        <h1 class="title">Dracula Palette</h1>
       </div>
-      <p class="subtitle">
-        Advanced color harmony generator for Dracula-themed palettes
-      </p>
+      <p class="subtitle">Advanced color harmony generator for Dracula-themed palettes</p>
     </div>
   </header>
 </template>

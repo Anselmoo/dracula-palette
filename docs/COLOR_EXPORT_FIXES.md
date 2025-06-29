@@ -5,56 +5,70 @@ This document summarizes the fixes made to address color export accuracy, color 
 ## Issues Fixed
 
 ### 1. HSL Export Accuracy
+
 **Problem**: HSL exports didn't always match the HEX color representation due to inconsistent rounding and NaN handling.
 
 **Solution**:
+
 - Fixed HSL rounding logic in `exportUtils.ts` to handle NaN values properly
 - Ensured consistent rounding for H, S, and L values
 - Added proper NaN handling for hue values (set to 0 when NaN)
 
 **Files Changed**:
+
 - `src/utils/exportUtils.ts`: Updated `formatColor()` function for HSL and HSLA formats
 
 ### 2. JSON Export RGB Inclusion
+
 **Problem**: RGB values were always included but with potential rounding inconsistencies.
 
 **Solution**:
+
 - Ensured RGB values are always present in JSON exports
 - Fixed HSL rounding in JSON exports to match single color exports
 - Added proper NaN handling for hue values in JSON exports
 
 **Files Changed**:
+
 - `src/utils/exportUtils.ts`: Updated `generateJSONExport()` function
 
 ### 3. UI Text Contrast Improvements
+
 **Problem**: Several UI text elements had poor contrast using `--dracula-comment` color.
 
 **Solution**:
+
 - Changed header subtitle to use `--dracula-foreground` with 80% opacity
 - Updated "Supported formats:" text to use `--dracula-foreground` with 80% opacity
 - Changed palette generator description to use `--dracula-foreground` with 80% opacity
 
 **Files Changed**:
+
 - `src/components/Header.vue`: Updated `.subtitle` class
 - `src/components/ColorInput.vue`: Updated `.examples-title` class
 - `src/components/PaletteGenerator.vue`: Updated `.generator-description` class
 
 ### 4. Color Bar Visualization Enhancement
+
 **Problem**: Color variant bars could be improved to better show relationship to base color.
 
 **Solution**:
+
 - Added "Variants" label to color variant bars
 - Enhanced hover effects with better scaling and border highlighting
 - Improved visual hierarchy with rounded corners for first/last variants
 - Added z-index handling for proper hover layering
 
 **Files Changed**:
+
 - `src/components/DraculaPalette.vue`: Enhanced `.color-variants` and `.variant-swatch` styles
 
 ## Testing
 
 ### Added Comprehensive Tests
+
 Created `src/__tests__/exportUtils.test.ts` with tests for:
+
 - HEX, RGB, HSL, OKLCH format accuracy
 - Edge cases (achromatic colors, NaN handling)
 - JSON export completeness (RGB always included)
@@ -62,6 +76,7 @@ Created `src/__tests__/exportUtils.test.ts` with tests for:
 - Metadata preservation
 
 ### Test Results
+
 - All new tests pass (9/9)
 - All existing tests continue to pass (12/12)
 - No linting errors introduced
@@ -69,6 +84,7 @@ Created `src/__tests__/exportUtils.test.ts` with tests for:
 ## Technical Details
 
 ### HSL Conversion Fix
+
 ```typescript
 // Before
 return `hsl(${Math.round(hsl[0] || 0)}, ${Math.round((hsl[1] || 0) * 100)}%, ${Math.round((hsl[2] || 0) * 100)}%)`;
@@ -81,6 +97,7 @@ return `hsl(${h}, ${s}%, ${l}%)`;
 ```
 
 ### Contrast Improvements
+
 ```scss
 // Before
 color: var(--dracula-comment); // #6272a4 - poor contrast
@@ -93,18 +110,21 @@ opacity: 0.8; // Subtle opacity for hierarchy
 ## Impact
 
 ### User Experience
+
 - ✅ Color exports now match visual representation exactly
 - ✅ Improved readability for descriptive text elements
 - ✅ Better visual feedback for color variant interactions
 - ✅ Consistent color format handling across all export types
 
 ### Developer Experience
+
 - ✅ Comprehensive test coverage for export functions
 - ✅ Type-safe color format handling
 - ✅ Clear documentation of fix approach
 - ✅ No breaking changes to existing API
 
 ### Accessibility
+
 - ✅ Improved text contrast ratios throughout the UI
 - ✅ Better visual hierarchy with opacity usage
 - ✅ Enhanced focus and hover states for interactive elements

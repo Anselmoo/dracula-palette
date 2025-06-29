@@ -3,12 +3,7 @@
     <div class="footer-content">
       <p class="created-by">
         Created with ♡ by
-        <a
-          href="https://github.com/Anselmoo"
-          target="_blank"
-          rel="noopener"
-          class="author-link"
-        >
+        <a href="https://github.com/Anselmoo" target="_blank" rel="noopener" class="author-link">
           Anselmoo
         </a>
       </p>
