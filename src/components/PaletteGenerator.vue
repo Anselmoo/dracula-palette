@@ -741,7 +741,8 @@ const makeAccessible = (palette: GeneratedPalette) => {
     gap: 0.75rem;
   }
 
-  .export-button, .accessibility-button {
+  .export-button,
+  .accessibility-button {
     min-height: 44px;
     padding: 0.75rem 1rem;
     font-size: 0.9rem;

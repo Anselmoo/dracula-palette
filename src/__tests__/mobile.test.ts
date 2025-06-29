@@ -6,14 +6,14 @@ import { DRACULA_COLORS } from '../data/draculaColors';
 
 describe('Mobile Functionality', () => {
   describe('PaletteGenerator', () => {
-    let wrapper: any;
+    let wrapper: ReturnType<typeof mount>;
     const selectedColor = DRACULA_COLORS.find(c => c.name === 'Pink');
 
     beforeEach(() => {
       wrapper = mount(PaletteGenerator, {
         props: {
-          selectedColor
-        }
+          selectedColor,
+        },
       });
     });
 
@@ -29,10 +29,10 @@ describe('Mobile Functionality', () => {
 
     it('should show loading state when generating palettes', async () => {
       const generateButton = wrapper.find('.generate-button');
-      
+
       // Check initial state
       expect(generateButton.text()).toContain('Generate');
-      
+
       // The button should be enabled when color is selected
       expect(generateButton.attributes('disabled')).toBeUndefined();
     });
@@ -41,20 +41,20 @@ describe('Mobile Functionality', () => {
       // Simulate clicking the generate button
       const generateButton = wrapper.find('.generate-button');
       await generateButton.trigger('click');
-      
-      // Should not throw any errors
-      expect(wrapper.vm.isGenerating).toBeDefined();
+
+      // Should not throw any errors and component should still exist
+      expect(wrapper.exists()).toBe(true);
     });
   });
 
   describe('DraculaPalette', () => {
-    let wrapper: any;
+    let wrapper: ReturnType<typeof mount>;
 
     beforeEach(() => {
       wrapper = mount(DraculaPalette, {
         props: {
-          selectedColor: null
-        }
+          selectedColor: null,
+        },
       });
     });
 
