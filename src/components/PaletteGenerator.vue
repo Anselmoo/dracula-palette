@@ -35,12 +35,15 @@
     <div class="generation-controls">
       <button
         class="generate-button"
-        :disabled="!selectedColor || selectedStandards.length === 0"
+        :disabled="!selectedColor || selectedStandards.length === 0 || isGenerating"
         @click="generatePalettes"
       >
-        Generate {{ selectedStandards.length }} Palette{{
-          selectedStandards.length !== 1 ? 's' : ''
-        }}
+        <span v-if="isGenerating">Generating...</span>
+        <span v-else>
+          Generate {{ selectedStandards.length }} Palette{{
+            selectedStandards.length !== 1 ? 's' : ''
+          }}
+        </span>
       </button>
 
       <div class="quick-actions">
@@ -241,15 +244,36 @@ const clearStandards = () => {
 };
 
 const generatePalettes = async () => {
-  if (!props.selectedColor) return;
+  if (!props.selectedColor) {
+    emit('notification', 'Please select a Dracula color first', 'error');
+    return;
+  }
+
+  if (selectedStandards.value.length === 0) {
+    emit('notification', 'Please select at least one color standard', 'error');
+    return;
+  }
 
   isGenerating.value = true;
 
   try {
-    const result = generatePalettesForColor(props.selectedColor, selectedStandards.value);
-    generatedPalettes.value = result.palettes;
+    // Use requestIdleCallback for better mobile performance
+    const generateFn = () => {
+      const result = generatePalettesForColor(props.selectedColor!, selectedStandards.value);
+      generatedPalettes.value = result.palettes;
+      emit('notification', `Generated ${result.palettes.length} palettes successfully!`, 'success');
+    };
+
+    if ('requestIdleCallback' in window) {
+      requestIdleCallback(generateFn, { timeout: 5000 });
+    } else {
+      // Fallback for browsers without requestIdleCallback
+      setTimeout(generateFn, 10);
+    }
   } catch (error) {
     console.error('Failed to generate palettes:', error);
+    emit('notification', 'Failed to generate palettes. Please try again.', 'error');
+    generatedPalettes.value = [];
   } finally {
     isGenerating.value = false;
   }
@@ -346,9 +370,11 @@ const makeAccessible = (palette: GeneratedPalette) => {
   cursor: pointer;
   transition: all 0.3s ease;
 
-  &:hover {
-    border-color: var(--dracula-pink);
-    transform: translateY(-2px);
+  @media (hover: hover) {
+    &:hover {
+      border-color: var(--dracula-pink);
+      transform: translateY(-2px);
+    }
   }
 
   &.selected {
@@ -410,9 +436,11 @@ const makeAccessible = (palette: GeneratedPalette) => {
   cursor: pointer;
   transition: all 0.3s ease;
 
-  &:hover:not(:disabled) {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(255, 121, 198, 0.3);
+  @media (hover: hover) {
+    &:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(255, 121, 198, 0.3);
+    }
   }
 
   &:disabled {
@@ -436,9 +464,11 @@ const makeAccessible = (palette: GeneratedPalette) => {
   cursor: pointer;
   transition: all 0.3s ease;
 
-  &:hover {
-    background: var(--dracula-comment);
-    color: var(--dracula-background);
+  @media (hover: hover) {
+    &:hover {
+      background: var(--dracula-comment);
+      color: var(--dracula-background);
+    }
   }
 }
 
@@ -549,8 +579,10 @@ const makeAccessible = (palette: GeneratedPalette) => {
   overflow: hidden;
   transition: transform 0.2s ease;
 
-  &:hover {
-    transform: scale(1.05);
+  @media (hover: hover) {
+    &:hover {
+      transform: scale(1.05);
+    }
   }
 }
 
@@ -589,10 +621,12 @@ const makeAccessible = (palette: GeneratedPalette) => {
   align-items: center;
   justify-content: center;
 
-  &:hover {
-    background: var(--dracula-purple);
-    border-color: var(--dracula-purple);
-    transform: scale(1.1);
+  @media (hover: hover) {
+    &:hover {
+      background: var(--dracula-purple);
+      border-color: var(--dracula-purple);
+      transform: scale(1.1);
+    }
   }
 
   .color-overlay:hover & {
@@ -633,9 +667,11 @@ const makeAccessible = (palette: GeneratedPalette) => {
   cursor: pointer;
   transition: all 0.3s ease;
 
-  &:hover {
-    background: var(--dracula-green);
-    transform: translateY(-1px);
+  @media (hover: hover) {
+    &:hover {
+      background: var(--dracula-green);
+      transform: translateY(-1px);
+    }
   }
 }
 
@@ -650,9 +686,11 @@ const makeAccessible = (palette: GeneratedPalette) => {
   cursor: pointer;
   transition: all 0.3s ease;
 
-  &:hover {
-    background: var(--dracula-yellow);
-    transform: translateY(-1px);
+  @media (hover: hover) {
+    &:hover {
+      background: var(--dracula-yellow);
+      transform: translateY(-1px);
+    }
   }
 }
 
@@ -670,8 +708,23 @@ const makeAccessible = (palette: GeneratedPalette) => {
     gap: 1rem;
   }
 
+  .generate-button {
+    min-height: 44px;
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+  }
+
   .quick-actions {
     justify-content: center;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  .quick-button {
+    min-height: 44px;
+    min-width: 44px;
+    padding: 0.75rem 1rem;
+    font-size: 0.9rem;
   }
 
   .palettes-header {
@@ -685,6 +738,19 @@ const makeAccessible = (palette: GeneratedPalette) => {
 
   .palette-actions {
     flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  .export-button, .accessibility-button {
+    min-height: 44px;
+    padding: 0.75rem 1rem;
+    font-size: 0.9rem;
+  }
+
+  .color-export-btn {
+    min-height: 44px;
+    min-width: 44px;
+    padding: 0.75rem;
   }
 }
 </style>

@@ -99,4 +99,10 @@ handleColorChange(inputColor.value);
   margin: 0 auto;
   width: 100%;
 }
+
+@media (max-width: 768px) {
+  .main-content {
+    padding: 1rem;
+  }
+}
 </style>

@@ -287,10 +287,12 @@ const getDisplayVariants = (variants: DraculaColor['variants']) => {
   transition: all 0.3s ease;
   position: relative;
 
-  &:hover {
-    transform: translateY(-2px);
-    border-color: var(--dracula-pink);
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+  @media (hover: hover) {
+    &:hover {
+      transform: translateY(-2px);
+      border-color: var(--dracula-pink);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+    }
   }
 
   &.selected {
@@ -360,11 +362,13 @@ const getDisplayVariants = (variants: DraculaColor['variants']) => {
   align-items: center;
   justify-content: center;
 
-  &:hover {
-    background: var(--dracula-purple);
-    color: var(--dracula-background);
-    border-color: var(--dracula-purple);
-    transform: scale(1.1);
+  @media (hover: hover) {
+    &:hover {
+      background: var(--dracula-purple);
+      color: var(--dracula-background);
+      border-color: var(--dracula-purple);
+      transform: scale(1.1);
+    }
   }
 
   svg {
@@ -376,11 +380,19 @@ const getDisplayVariants = (variants: DraculaColor['variants']) => {
   opacity: 1;
 }
 
+@media (hover: hover) {
+  .color-item:hover .copy-button {
+    opacity: 1;
+  }
+}
+
 .color-hex {
-  &:hover {
-    background: var(--dracula-selection);
-    padding: 0.1rem 0.3rem;
-    border-radius: 3px;
+  @media (hover: hover) {
+    &:hover {
+      background: var(--dracula-selection);
+      padding: 0.1rem 0.3rem;
+      border-radius: 3px;
+    }
   }
 }
 
@@ -412,11 +424,13 @@ const getDisplayVariants = (variants: DraculaColor['variants']) => {
   transition: transform 0.2s ease;
   border: 1px solid transparent;
 
-  &:hover {
-    transform: scale(1.2);
-    border-color: var(--dracula-pink);
-    z-index: 1;
-    position: relative;
+  @media (hover: hover) {
+    &:hover {
+      transform: scale(1.2);
+      border-color: var(--dracula-pink);
+      z-index: 1;
+      position: relative;
+    }
   }
 
   &:first-child {
@@ -437,6 +451,17 @@ const getDisplayVariants = (variants: DraculaColor['variants']) => {
 
   .color-section {
     padding: 1.5rem;
+  }
+
+  .copy-button {
+    min-height: 44px;
+    min-width: 44px;
+    padding: 0.75rem;
+  }
+
+  .color-variant {
+    min-height: 44px;
+    min-width: 44px;
   }
 }
 </style>
