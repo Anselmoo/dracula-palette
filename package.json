@@ -50,7 +50,7 @@
     "optimize:svg:check": "echo 'Checking SVG files...' && ls public/*.svg 2>/dev/null && echo 'SVG files found. Consider running npm run optimize:svg' || echo 'No SVG files found.'"
   },
   "dependencies": {
-    "chroma-js": "^2.4.2",
+    "chroma-js": "^3.0.0",
     "color": "^5.0.0",
     "culori": "^4.0.1",
     "hsluv": "^1.0.0",
@@ -58,7 +58,7 @@
   },
   "devDependencies": {
     "@tsconfig/node20": "^20.1.2",
-    "@types/chroma-js": "^2.4.4",
+    "@types/chroma-js": "^3.0.0",
     "@types/color": "^4.0.0",
     "@types/node": "^22.0.0",
     "@typescript-eslint/eslint-plugin": "^6.21.0",
