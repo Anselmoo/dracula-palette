@@ -1,7 +1,10 @@
 <template>
   <div class="color-input-container">
     <div class="input-section">
-      <label for="color-input" class="input-label"> Enter a CSS color: </label>
+      <label
+        for="color-input"
+        class="input-label"
+      > Enter a CSS color: </label>
       <div class="input-wrapper">
         <input
           id="color-input"
@@ -12,14 +15,22 @@
           :class="{ error: hasError }"
           @input="handleInput"
           @blur="handleBlur"
+        >
+        <div
+          class="color-preview"
+          :style="{ backgroundColor: previewColor }"
         />
-        <div class="color-preview" :style="{ backgroundColor: previewColor }" />
       </div>
-      <p v-if="hasError" class="error-message">
+      <p
+        v-if="hasError"
+        class="error-message"
+      >
         Invalid color format. Please enter a valid CSS color (hex, rgb, hsl, or color name).
       </p>
       <div class="format-examples">
-        <p class="examples-title">Supported formats:</p>
+        <p class="examples-title">
+          Supported formats:
+        </p>
         <div class="examples-grid">
           <span class="example">#ff79c6</span>
           <span class="example">rgb(255, 121, 198)</span>
@@ -165,9 +176,10 @@ watch(
 }
 
 .examples-title {
-  color: var(--dracula-comment);
+  color: var(--dracula-foreground);
   font-size: 0.9rem;
   margin-bottom: 1rem;
+  opacity: 0.8;
 }
 
 .examples-grid {

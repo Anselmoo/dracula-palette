@@ -21,11 +21,19 @@ export function formatColor(hex: string, format: ColorFormat): string {
     }
     case 'hsl': {
       const hsl = color.hsl();
-      return `hsl(${Math.round(hsl[0] || 0)}, ${Math.round((hsl[1] || 0) * 100)}%, ${Math.round((hsl[2] || 0) * 100)}%)`;
+      // Ensure consistent rounding for better color matching
+      const h = isNaN(hsl[0]) ? 0 : Math.round(hsl[0]);
+      const s = Math.round((hsl[1] || 0) * 100);
+      const l = Math.round((hsl[2] || 0) * 100);
+      return `hsl(${h}, ${s}%, ${l}%)`;
     }
     case 'hsla': {
       const hsla = color.hsl();
-      return `hsla(${Math.round(hsla[0] || 0)}, ${Math.round((hsla[1] || 0) * 100)}%, ${Math.round((hsla[2] || 0) * 100)}%, 1)`;
+      // Ensure consistent rounding for better color matching
+      const h = isNaN(hsla[0]) ? 0 : Math.round(hsla[0]);
+      const s = Math.round((hsla[1] || 0) * 100);
+      const l = Math.round((hsla[2] || 0) * 100);
+      return `hsla(${h}, ${s}%, ${l}%, 1)`;
     }
     case 'oklch': {
       const oklch = color.oklch();
@@ -123,16 +131,38 @@ export function generateJSONExport(palette: GeneratedPalette): string {
   const exportData = {
     name: palette.name,
     standard: palette.standard,
-    baseColor: palette.baseColor.name,
-    accessibility: palette.accessibility,
-    colors: palette.colors.map(color => ({
-      name: color.name,
-      hex: color.hex,
-      usage: color.usage,
-      lightness: Math.round(color.lightness * 100),
-      ...(color.chroma && { chroma: Math.round(color.chroma * 100) }),
-      ...(color.hue && { hue: Math.round(color.hue) }),
-    })),
+    baseColor: {
+      name: palette.baseColor.name,
+      hex: palette.baseColor.hex,
+    },
+    accessibility: {
+      wcagLevel: palette.accessibility.wcagLevel,
+      // Don't include the verbose contrast ratios object
+    },
+    colors: palette.colors.map(color => {
+      const chromaColor = chroma(color.hex);
+      const [h, s, l] = chromaColor.hsl();
+      const [r, g, b] = chromaColor.rgb();
+
+      return {
+        name: color.name,
+        hex: color.hex.toUpperCase(),
+        rgb: {
+          r: Math.round(r),
+          g: Math.round(g),
+          b: Math.round(b),
+        },
+        hsl: {
+          h: isNaN(h) ? 0 : Math.round(h),
+          s: Math.round((s || 0) * 100),
+          l: Math.round(l * 100),
+        },
+        usage: color.usage,
+        lightness: Math.round(color.lightness * 100),
+        ...(color.chroma && { chroma: Math.round(color.chroma * 100) }),
+        ...(color.hue !== undefined && { hue: Math.round(color.hue) }),
+      };
+    }),
     totalColors: palette.colors.length,
     generatedAt: new Date().toISOString(),
   };

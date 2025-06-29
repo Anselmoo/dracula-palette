@@ -1,6 +1,11 @@
 <template>
-  <div v-if="suggestions.length > 0" class="color-suggestions">
-    <h2 class="suggestions-title">Closest Dracula Colors</h2>
+  <div
+    v-if="suggestions.length > 0"
+    class="color-suggestions"
+  >
+    <h2 class="suggestions-title">
+      Closest Dracula Colors
+    </h2>
     <div class="suggestions-grid">
       <div
         v-for="(suggestion, index) in suggestions"
@@ -10,7 +15,10 @@
         @click="handleSuggestionClick(suggestion)"
       >
         <div class="suggestion-header">
-          <div class="color-swatch" :style="{ backgroundColor: suggestion.draculaColor.hex }" />
+          <div
+            class="color-swatch"
+            :style="{ backgroundColor: suggestion.draculaColor.hex }"
+          />
           <div class="suggestion-info">
             <h3 class="color-name">
               {{ suggestion.draculaColor.name }}
@@ -32,7 +40,10 @@
         <p class="color-description">
           {{ suggestion.draculaColor.description }}
         </p>
-        <div v-if="index < 3" class="rank-badge">
+        <div
+          v-if="index < 3"
+          class="rank-badge"
+        >
           {{ index + 1 }}
         </div>
       </div>
