@@ -42,7 +42,7 @@ npm run dev
 - `npm run lint` - Lint and fix code style issues
 - `npm run format` - Format code with Prettier
 - `npm run format:check` - Check code formatting without fixing
-- `npm run type-check` - TypeScript type checking
+- `npm run type:check` - TypeScript type checking
 - `npm run optimize:svg:check` - Optimization of SVGs
 
 ## 📁 Project Structure

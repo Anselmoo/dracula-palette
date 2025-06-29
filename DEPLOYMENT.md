@@ -67,7 +67,7 @@ docker-compose --profile dev up
 ```bash
 # Test
 npm run lint
-npm run type-check
+npm run type:check
 npm run test:unit
 
 # Build
