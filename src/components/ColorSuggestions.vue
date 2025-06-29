@@ -90,36 +90,44 @@ const handleSuggestionClick = (suggestion: ColorSuggestion) => {
   position: relative;
   overflow: hidden;
 
-  &:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-    border-color: var(--dracula-pink);
+  @media (hover: hover) {
+    &:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      border-color: var(--dracula-pink);
+    }
   }
 
   &.rank-1 {
     border-color: var(--dracula-green);
 
-    &:hover {
-      border-color: var(--dracula-green);
-      box-shadow: 0 8px 32px rgba(80, 250, 123, 0.2);
+    @media (hover: hover) {
+      &:hover {
+        border-color: var(--dracula-green);
+        box-shadow: 0 8px 32px rgba(80, 250, 123, 0.2);
+      }
     }
   }
 
   &.rank-2 {
     border-color: var(--dracula-yellow);
 
-    &:hover {
-      border-color: var(--dracula-yellow);
-      box-shadow: 0 8px 32px rgba(241, 250, 140, 0.2);
+    @media (hover: hover) {
+      &:hover {
+        border-color: var(--dracula-yellow);
+        box-shadow: 0 8px 32px rgba(241, 250, 140, 0.2);
+      }
     }
   }
 
   &.rank-3 {
     border-color: var(--dracula-orange);
 
-    &:hover {
-      border-color: var(--dracula-orange);
-      box-shadow: 0 8px 32px rgba(255, 184, 108, 0.2);
+    @media (hover: hover) {
+      &:hover {
+        border-color: var(--dracula-orange);
+        box-shadow: 0 8px 32px rgba(255, 184, 108, 0.2);
+      }
     }
   }
 }
