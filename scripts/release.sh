@@ -115,8 +115,9 @@ npm version "$NEW_VERSION" --no-git-tag-version
 echo "🧪 Running tests..."
 npm run test:unit
 npm run lint
-npm run format
-npm run type-check
+npm run format:check
+npm run type:check
+npm run optimize:svg:check
 
 # Build the project
 echo "🔨 Building project..."
