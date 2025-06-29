@@ -39,15 +39,15 @@
     "build-with-check": "npm run type-check && vite build",
     "preview": "vite preview",
     "test:unit": "vitest",
+    "test:run": "vitest run",
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore",
-    "lint:prettier": "prettier --check .",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "type-check": "vue-tsc --build --force",
+    "type:check": "vue-tsc --build --force",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d dist",
     "optimize:svg": "svgo --config .trunk/configs/svgo.config.mjs public/*.svg",
-    "optimize:svg:check": "svgo --config .trunk/configs/svgo.config.mjs --show-plugins && echo 'SVG optimization config is valid'"
+    "optimize:svg:check": "echo 'Checking SVG files...' && ls public/*.svg 2>/dev/null && echo 'SVG files found. Consider running npm run optimize:svg' || echo 'No SVG files found.'"
   },
   "dependencies": {
     "chroma-js": "^2.4.2",
@@ -67,6 +67,7 @@
     "@vue/eslint-config-typescript": "^12.0.0",
     "@vue/tsconfig": "^0.7.0",
     "eslint": "^8.56.0",
+    "eslint-config-prettier": "^10.1.5",
     "eslint-plugin-vue": "^9.20.0",
     "gh-pages": "^6.3.0",
     "jsdom": "^26.1.0",

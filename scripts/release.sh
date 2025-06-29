@@ -11,11 +11,16 @@ BUMP_TYPE=${1:-patch}
 echo "🎨 Dracula Palette Release Script"
 echo "================================="
 
-# Check if we're on main branch
+# Check if we're on main branch (trunk-based development)
 CURRENT_BRANCH=$(git branch --show-current)
 if [[ "${CURRENT_BRANCH}" != "main" ]]; then
-    echo "❌ Error: Must be on main branch to create a release"
+    echo "❌ Error: Must be on main branch to create a release (trunk-based development)"
     echo "   Current branch: ${CURRENT_BRANCH}"
+    echo ""
+    echo "💡 Switch to main branch first:"
+    echo "   git checkout main"
+    echo "   git pull origin main"
+    echo "   ./scripts/release.sh [patch|minor|major]"
     exit 1
 fi
 
@@ -26,8 +31,8 @@ if ! git diff-index --quiet HEAD --; then
     exit 1
 fi
 
-# Ensure we're up to date
-echo "📡 Fetching latest changes..."
+# Ensure we're up to date with main (trunk)
+echo "📡 Fetching latest changes from main..."
 git fetch origin main
 git pull origin main
 
@@ -82,17 +87,25 @@ if [[ ${NEW_VERSION} == "Error:"* ]]; then
     esac
 fi
 
-echo "🚀 New version: ${NEW_VERSION}" # cspell:ignore versio
+echo "🚀 New version: ${NEW_VERSION}"
+
+# Create release branch name following semantic versioning
+RELEASE_BRANCH="release/v${NEW_VERSION}"
+echo "🌿 Release branch: ${RELEASE_BRANCH}"
 
 # Confirm with user
 echo ""
-read -p "🤔 Create release ${NEW_VERSION}? (y/N): " -n 1 -r # cspell:ignore relea
+read -p "🤔 Create release ${NEW_VERSION} on branch ${RELEASE_BRANCH}? (y/N): " -n 1 -r
 echo ""
 
 if [[ ! ${REPLY} =~ ^[Yy]$ ]]; then
     echo "❌ Release cancelled"
     exit 1
 fi
+
+# Create and checkout release branch from main
+echo "🌿 Creating release branch ${RELEASE_BRANCH} from main..."
+git checkout -b "${RELEASE_BRANCH}"
 
 # Update package.json version
 echo "📝 Updating package.json version..."
@@ -119,12 +132,18 @@ echo "🏷️  Creating tag v${NEW_VERSION}..."
 git tag "v${NEW_VERSION}"
 
 # Push changes and tag
-echo "📤 Pushing changes and tag..."
-git push origin main
+echo "📤 Pushing release branch and tag..."
+git push origin "${RELEASE_BRANCH}"
 git push origin "v${NEW_VERSION}"
 
 echo ""
-echo "✅ Release ${NEW_VERSION} created successfully!" # cspell:ignore Releas VERSI
+echo "🔀 Next steps for release branch workflow:"
+echo "   1. Create a Pull Request from ${RELEASE_BRANCH} to main"
+echo "   2. Review and merge the PR"
+echo "   3. The tag v${NEW_VERSION} will trigger the release workflow"
+
+echo ""
+echo "✅ Release ${NEW_VERSION} created successfully!"
 echo ""
 echo "🎯 What happens next:"
 echo "   • GitHub Actions will automatically:"
@@ -135,10 +154,10 @@ echo "     - Build and push Docker image"
 echo "     - Deploy to GitHub Pages"
 echo ""
 echo "🔗 Check the progress at:"
-echo "   https://github.com/\${{ github.repository }}/actions"
+echo "   https://github.com/anselmoo/dracula-palette/actions"
 echo ""
 echo "📦 Once published, you can install with:"
-echo "   npm install @\${{ github.repository_owner }}/dracula-palette@${NEW_VERSION}"
+echo "   npm install @anselmoo/dracula-palette@${NEW_VERSION}"
 echo ""
 echo "🐳 Or pull the Docker image with:"
-echo "   docker pull ghcr.io/\${{ github.repository }}:${NEW_VERSION}"
+echo "   docker pull ghcr.io/anselmoo/dracula-palette:${NEW_VERSION}"

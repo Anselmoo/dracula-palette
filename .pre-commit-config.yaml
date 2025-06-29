@@ -1,5 +1,5 @@
 repos:
-  # Code formatting
+  # Code formatting and basic checks
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v5.0.0
     hooks:
@@ -14,6 +14,41 @@ repos:
         args: ['--maxkb=1024']
       - id: mixed-line-ending
         args: ['--fix=lf']
+
+  # Local hooks using npm scripts
+  - repo: local
+    hooks:
+      # Prettier formatting (run first to format code)
+      - id: prettier-format
+        name: Prettier Format
+        entry: npm run format
+        language: system
+        files: '\.(vue|js|jsx|ts|tsx|json|md|yaml|yml|scss|css)$'
+        pass_filenames: false
+
+      # ESLint (run after formatting)
+      - id: eslint
+        name: ESLint
+        entry: npm run lint
+        language: system
+        files: '\.(vue|js|jsx|cjs|mjs|ts|tsx|cts|mts)$'
+        pass_filenames: false
+
+      # TypeScript type checking
+      - id: type-check
+        name: TypeScript Type Check
+        entry: npm run type:check
+        language: system
+        files: '\.(vue|ts|tsx)$'
+        pass_filenames: false
+
+      # SVG optimization check
+      - id: svg-optimization-check
+        name: SVG Optimization Check
+        entry: npm run optimize:svg:check
+        language: system
+        files: '\.svg$'
+        pass_filenames: false
 
 # Global exclusions
 exclude: |

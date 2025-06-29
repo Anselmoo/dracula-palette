@@ -9,6 +9,8 @@ module.exports = {
     'eslint:recommended',
     '@vue/eslint-config-typescript/recommended',
     'plugin:vue/vue3-recommended',
+    // Prettier must be last to override other configs
+    'prettier',
   ],
   parser: 'vue-eslint-parser',
   parserOptions: {
