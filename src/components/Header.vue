@@ -2,10 +2,18 @@
   <header class="header">
     <div class="header-content">
       <div class="logo">
-        <img src="/logo.svg" alt="Dracula Logo" class="logo-image" />
-        <h1 class="title">Dracula Palette</h1>
+        <img
+          src="/logo.svg"
+          alt="Dracula Logo"
+          class="logo-image"
+        >
+        <h1 class="title">
+          Dracula Palette
+        </h1>
       </div>
-      <p class="subtitle">Advanced color harmony generator for Dracula-themed palettes</p>
+      <p class="subtitle">
+        Advanced color harmony generator for Dracula-themed palettes
+      </p>
     </div>
   </header>
 </template>
@@ -50,10 +58,11 @@
 }
 
 .subtitle {
-  color: var(--dracula-comment);
+  color: var(--dracula-foreground);
   font-size: 1.2rem;
   margin: 0;
   font-weight: 400;
+  opacity: 0.8;
 }
 
 @media (max-width: 768px) {

@@ -1,5 +1,9 @@
 <template>
-  <div v-if="show" class="notification" :class="type">
+  <div
+    v-if="show"
+    class="notification"
+    :class="type"
+  >
     {{ message }}
   </div>
 </template>

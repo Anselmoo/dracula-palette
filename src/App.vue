@@ -2,7 +2,10 @@
   <div id="app">
     <Header />
     <main class="main-content">
-      <ColorInput v-model="inputColor" @color-change="handleColorChange" />
+      <ColorInput
+        v-model="inputColor"
+        @color-change="handleColorChange"
+      />
       <ColorSuggestions
         v-if="suggestions.length > 0"
         :suggestions="suggestions"
@@ -13,7 +16,10 @@
         @color-select="handlePaletteColorSelect"
         @notification="showNotification"
       />
-      <PaletteGenerator :selected-color="selectedColor" @notification="showNotification" />
+      <PaletteGenerator
+        :selected-color="selectedColor"
+        @notification="showNotification"
+      />
     </main>
 
     <!-- Notification Component -->
