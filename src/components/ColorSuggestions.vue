@@ -48,7 +48,7 @@ interface Props {
 }
 
 interface Emits {
-  (e: 'color-select', suggestion: ColorSuggestion): void;
+  (_e: 'color-select', _suggestion: ColorSuggestion): void;
 }
 
 defineProps<Props>();

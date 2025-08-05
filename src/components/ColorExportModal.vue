@@ -87,8 +87,8 @@ interface Props {
 }
 
 interface Emits {
-  (e: 'close'): void;
-  (e: 'copy', color: string, format: ColorFormat): void;
+  (_e: 'close'): void;
+  (_e: 'copy', _color: string, _format: ColorFormat): void;
 }
 
 const props = defineProps<Props>();

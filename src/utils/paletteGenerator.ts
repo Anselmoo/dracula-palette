@@ -125,7 +125,7 @@ function cam16Lightness(baseColor: string, targetLightness: number): string {
     const adjustedSaturation = (s || 0.5) * chromaMultiplier;
 
     return chroma.hsl(h || 0, adjustedSaturation, scaledLightness).hex();
-  } catch (error) {
+  } catch (_error) {
     return chroma.hsl(0, 0.5, targetLightness).hex();
   }
 }
@@ -248,7 +248,7 @@ function calculateAccessibility(colors: Array<{ hex: string; name: string }>): {
       if (bestContrast >= 7) {
         aaaCount++;
       }
-    } catch (error) {
+    } catch (_error) {
       contrastRatios[`${index}-error`] = 1;
     }
   });
@@ -677,7 +677,7 @@ export function generateHPLuvPalette(
         hue: h || 0,
         usage: getUsageForLightness(lightness),
       });
-    } catch (error) {
+    } catch (_error) {
       // Fallback to HSL if LAB conversion fails
       const saturation = Math.min((s || 0.5) * 0.4, 0.3); // Reduced saturation for pastel effect
       const color = chroma.hsl(h || 0, saturation, lightness);

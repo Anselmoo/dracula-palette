@@ -65,7 +65,7 @@ export function isValidColor(color: string): boolean {
     // Use chroma-js to validate the color
     chroma(color);
     return true;
-  } catch (error) {
+  } catch (_error) {
     return false;
   }
 }

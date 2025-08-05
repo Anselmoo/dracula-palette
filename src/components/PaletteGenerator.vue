@@ -167,7 +167,7 @@ interface Props {
 }
 
 interface Emits {
-  (e: 'notification', message: string, type: 'success' | 'error'): void;
+  (_e: 'notification', _message: string, _type: 'success' | 'error'): void;
 }
 
 const props = defineProps<Props>();
@@ -196,7 +196,7 @@ async function handleColorExport(color: string, format: ColorFormat) {
   try {
     await copyColorToClipboardUtil(color, format);
     emit('notification', `${format.toUpperCase()} color copied to clipboard!`, 'success');
-  } catch (error) {
+  } catch (_error) {
     emit('notification', 'Failed to copy color to clipboard', 'error');
   }
 }
