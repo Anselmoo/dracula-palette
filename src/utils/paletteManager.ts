@@ -123,7 +123,7 @@ export const STANDARD_CATEGORIES = {
 } as const;
 
 // Default configurations for each standard
-export const DEFAULT_CONFIGS: { [K in PaletteStandard]: PaletteConfig } = {
+export const DEFAULT_CONFIGS: { [_K in PaletteStandard]: PaletteConfig } = {
   material: {
     standard: 'material',
     steps: 11,

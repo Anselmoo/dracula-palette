@@ -40,8 +40,8 @@ interface Props {
 }
 
 interface Emits {
-  (e: 'update:modelValue', value: string): void;
-  (e: 'color-change', value: string): void;
+  (_e: 'update:modelValue', _value: string): void;
+  (_e: 'color-change', _value: string): void;
 }
 
 const props = defineProps<Props>();

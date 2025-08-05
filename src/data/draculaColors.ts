@@ -128,8 +128,6 @@ export function generateColorVariants(baseColor: DraculaColor): DraculaColor['va
   });
 
   return variants as DraculaColor['variants'];
-
-  return variants;
 }
 
 // Convert OKLCH to hex color

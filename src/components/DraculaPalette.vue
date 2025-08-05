@@ -154,8 +154,8 @@ interface Props {
 }
 
 interface Emits {
-  (e: 'color-select', color: DraculaColor): void;
-  (e: 'notification', message: string, type: 'success' | 'error'): void;
+  (_e: 'color-select', _color: DraculaColor): void;
+  (_e: 'notification', _message: string, _type: 'success' | 'error'): void;
 }
 
 const props = defineProps<Props>();
@@ -184,7 +184,7 @@ async function handleColorExport(color: string, format: ColorFormat) {
   try {
     await copyColorToClipboard(color, format);
     emit('notification', `${format.toUpperCase()} color copied to clipboard!`, 'success');
-  } catch (error) {
+  } catch (_error) {
     emit('notification', 'Failed to copy color to clipboard', 'error');
   }
 }
