@@ -8,7 +8,9 @@ const themeMode = ref<ThemeMode>('dark');
 
 // Initialize theme from localStorage or system preference
 function initializeTheme() {
-  const stored = localStorage.getItem(THEME_STORAGE_KEY) as ThemeMode | null;
+  if (typeof window === 'undefined') return;
+  
+  const stored = window.localStorage.getItem(THEME_STORAGE_KEY) as ThemeMode | null;
   
   if (stored && (stored === 'dark' || stored === 'light')) {
     themeMode.value = stored;
@@ -23,12 +25,14 @@ function initializeTheme() {
 
 // Apply theme to document
 function applyTheme(theme: ThemeMode) {
+  if (typeof document === 'undefined') return;
   document.documentElement.setAttribute('data-theme', theme);
 }
 
 // Watch for theme changes and persist
 watch(themeMode, (newTheme) => {
-  localStorage.setItem(THEME_STORAGE_KEY, newTheme);
+  if (typeof window === 'undefined') return;
+  window.localStorage.setItem(THEME_STORAGE_KEY, newTheme);
   applyTheme(newTheme);
 });
 
