@@ -1,22 +1,23 @@
 // Dracula Theme CSS Variables
 // Based on the official Dracula theme specification
+// Reference: https://draculatheme.com/spec
 
 :root {
-  // Core Dracula Colors
+  // Core Dracula Colors - Dark Mode (default)
   --dracula-background: #282a36;
   --dracula-current-line: #44475a;
-  --dracula-selection: #6272a4;
+  --dracula-selection: #44475a;
   --dracula-foreground: #f8f8f2;
   --dracula-comment: #6272a4;
 
-  // Accent Colors
-  --dracula-cyan: #8be9fd;
-  --dracula-green: #50fa7b;
-  --dracula-orange: #ffb86c;
-  --dracula-pink: #ff79c6;
-  --dracula-purple: #bd93f9;
+  // Accent Colors - Dark Mode
   --dracula-red: #ff5555;
+  --dracula-orange: #ffb86c;
   --dracula-yellow: #f1fa8c;
+  --dracula-green: #50fa7b;
+  --dracula-cyan: #8be9fd;
+  --dracula-purple: #bd93f9;
+  --dracula-pink: #ff79c6;
 
   // Extended Colors with Opacity Variants
   --dracula-cyan-10: rgba(139, 233, 253, 0.1);
@@ -79,3 +80,58 @@
   --transition-normal: 0.3s ease;
   --transition-slow: 0.5s ease;
 }
+
+// Light Mode Theme
+[data-theme='light'] {
+  // Core Dracula Colors - Light Mode
+  --dracula-background: #fffbeb;
+  --dracula-current-line: #6c664b;
+  --dracula-selection: #cfcfde;
+  --dracula-foreground: #1f1f1f;
+  --dracula-comment: #6c664b;
+
+  // Accent Colors - Light Mode
+  --dracula-red: #cb3a2a;
+  --dracula-orange: #a34d14;
+  --dracula-yellow: #846e15;
+  --dracula-green: #14710a;
+  --dracula-cyan: #036a96;
+  --dracula-purple: #644ac9;
+  --dracula-pink: #a3144d;
+
+  // Extended Colors with Opacity Variants - Light Mode
+  --dracula-cyan-10: rgba(3, 106, 150, 0.1);
+  --dracula-cyan-20: rgba(3, 106, 150, 0.2);
+  --dracula-cyan-30: rgba(3, 106, 150, 0.3);
+
+  --dracula-green-10: rgba(20, 113, 10, 0.1);
+  --dracula-green-20: rgba(20, 113, 10, 0.2);
+  --dracula-green-30: rgba(20, 113, 10, 0.3);
+
+  --dracula-orange-10: rgba(163, 77, 20, 0.1);
+  --dracula-orange-20: rgba(163, 77, 20, 0.2);
+  --dracula-orange-30: rgba(163, 77, 20, 0.3);
+
+  --dracula-pink-10: rgba(163, 20, 77, 0.1);
+  --dracula-pink-20: rgba(163, 20, 77, 0.2);
+  --dracula-pink-30: rgba(163, 20, 77, 0.3);
+
+  --dracula-purple-10: rgba(100, 74, 201, 0.1);
+  --dracula-purple-20: rgba(100, 74, 201, 0.2);
+  --dracula-purple-30: rgba(100, 74, 201, 0.3);
+
+  --dracula-red-10: rgba(203, 58, 42, 0.1);
+  --dracula-red-20: rgba(203, 58, 42, 0.2);
+  --dracula-red-30: rgba(203, 58, 42, 0.3);
+
+  --dracula-yellow-10: rgba(132, 110, 21, 0.1);
+  --dracula-yellow-20: rgba(132, 110, 21, 0.2);
+  --dracula-yellow-30: rgba(132, 110, 21, 0.3);
+
+  // Light mode specific shadows
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+  --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.12);
+}
+

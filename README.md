@@ -8,6 +8,7 @@
 
 ### 🎯 Core Features (✅ Live)
 
+- **🌓 Light & Dark Mode**: Full support for both Dracula light and dark color palettes as per the [official spec](https://draculatheme.com/spec)
 - **🎨 Color Harmony Generation**: Transform any CSS color (hex, rgb, hsl, color names) into comprehensive Dracula-themed color harmonies
 - **🌈 Advanced Palette System**: Generate extensive color palettes using 10 different color science standards
 - **🎯 Intelligent Color Matching**: Find the 5 closest Dracula colors with precise similarity percentages
@@ -33,6 +34,22 @@
 5. **Export** - Download your palettes in various formats (CSS, SCSS, JSON)
 
 ## 🎯 Usage Guide
+
+### Theme Switching
+
+The application supports both **light** and **dark** color modes based on the [official Dracula Theme specification](https://draculatheme.com/spec):
+
+1. **Toggle themes** - Click the theme toggle button in the header to switch between light and dark modes
+2. **Persistent preference** - Your theme choice is saved and will be remembered on future visits
+3. **System preference** - On first visit, the app respects your system's color scheme preference
+
+**Dark Mode Colors:**
+- Background: `#282a36` | Foreground: `#f8f8f2`
+- Accent colors optimized for dark backgrounds
+
+**Light Mode Colors:**
+- Background: `#fffbeb` | Foreground: `#1f1f1f`
+- Accent colors adjusted for light backgrounds with maintained contrast
 
 ### Basic Color Harmony Matching
 
@@ -164,6 +181,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## 🔗 Links
 
 - [Dracula Theme Official Site](https://draculatheme.com/)
+- [Dracula Theme Specification](https://draculatheme.com/spec)
 - [Contribute to Dracula](https://draculatheme.com/contribute)
 - [OKLCH Color Picker](https://oklch.com/)
 - [Material Color Converter](https://github.com/PKief/material-color-converter)

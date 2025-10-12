@@ -1,5 +1,7 @@
 // Dracula color palette based on the official specification
-// https://draculatheme.com/contribute
+// https://draculatheme.com/spec
+
+export type ThemeMode = 'dark' | 'light';
 
 export interface DraculaColor {
   name: string;
@@ -8,6 +10,7 @@ export interface DraculaColor {
   oklch: [number, number, number]; // [lightness, chroma, hue]
   description: string;
   category: 'background' | 'foreground' | 'accent' | 'ansi';
+  usage?: string; // Usage description from the spec
   variants?: {
     50?: string;
     100?: string;

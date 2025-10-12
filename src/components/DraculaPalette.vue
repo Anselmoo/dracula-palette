@@ -143,7 +143,8 @@
 
 <script setup lang="ts">
 import { computed, ref } from 'vue';
-import { DRACULA_COLORS, generateColorVariants } from '../data/draculaColors';
+import { getDraculaColors, generateColorVariants } from '../data/draculaColors';
+import { useTheme } from '../composables/useTheme';
 import type { DraculaColor } from '../types/color';
 import type { ColorFormat } from '../utils/exportUtils';
 import { copyColorToClipboard } from '../utils/exportUtils';
@@ -160,6 +161,8 @@ interface Emits {
 
 const props = defineProps<Props>();
 const emit = defineEmits<Emits>();
+
+const { themeMode } = useTheme();
 
 // Export modal state
 const exportModal = ref({
@@ -189,12 +192,15 @@ async function handleColorExport(color: string, format: ColorFormat) {
   }
 }
 
+// Use theme-aware colors
+const currentColors = computed(() => getDraculaColors(themeMode.value));
+
 const backgroundColors = computed(() =>
-  DRACULA_COLORS.filter(color => color.category === 'background')
+  currentColors.value.filter(color => color.category === 'background')
 );
 
 const accentColors = computed(() => {
-  const colors = DRACULA_COLORS.filter(color => color.category === 'accent');
+  const colors = currentColors.value.filter(color => color.category === 'accent');
   // Generate variants for accent colors
   return colors.map(color => ({
     ...color,
@@ -203,7 +209,7 @@ const accentColors = computed(() => {
 });
 
 const foregroundColors = computed(() =>
-  DRACULA_COLORS.filter(color => color.category === 'foreground')
+  currentColors.value.filter(color => color.category === 'foreground')
 );
 
 const isSelected = (color: DraculaColor): boolean => {

@@ -1,14 +1,21 @@
 <template>
   <header class="header">
     <div class="header-content">
-      <div class="logo">
-        <img src="/logo.svg" alt="Dracula Logo" class="logo-image" />
-        <h1 class="title">Dracula Palette</h1>
+      <div class="header-top">
+        <div class="logo">
+          <img src="/logo.svg" alt="Dracula Logo" class="logo-image" />
+          <h1 class="title">Dracula Palette</h1>
+        </div>
+        <ThemeToggle />
       </div>
       <p class="subtitle">Advanced color harmony generator for Dracula-themed palettes</p>
     </div>
   </header>
 </template>
+
+<script setup lang="ts">
+import ThemeToggle from './ThemeToggle.vue';
+</script>
 
 <style lang="scss" scoped>
 .header {
@@ -24,12 +31,24 @@
   padding: 0 2rem;
 }
 
+.header-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  gap: 1rem;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    gap: 1rem;
+  }
+}
+
 .logo {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 1rem;
-  margin-bottom: 1rem;
 }
 
 .logo-image {

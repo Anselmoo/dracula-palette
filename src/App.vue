@@ -29,7 +29,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import Header from './components/Header.vue';
 import Footer from './components/Footer.vue';
 import ColorInput from './components/ColorInput.vue';
@@ -38,6 +38,7 @@ import DraculaPalette from './components/DraculaPalette.vue';
 import PaletteGenerator from './components/PaletteGenerator.vue';
 import Notification from './components/Notification.vue';
 import { findClosestDraculaColors } from './utils/colorMatcher';
+import { useTheme } from './composables/useTheme';
 import type { DraculaColor, ColorSuggestion } from './types/color';
 
 const inputColor = ref('#ff79c6');
@@ -48,6 +49,8 @@ const notification = ref({
   message: '',
   type: 'success' as 'success' | 'error',
 });
+
+const { initializeTheme } = useTheme();
 
 function showNotification(message: string, type: 'success' | 'error') {
   notification.value = {
@@ -79,8 +82,11 @@ const handlePaletteColorSelect = (color: DraculaColor) => {
   selectedColor.value = color;
 };
 
-// Initialize with default color
-handleColorChange(inputColor.value);
+// Initialize theme and default color
+onMounted(() => {
+  initializeTheme();
+  handleColorChange(inputColor.value);
+});
 </script>
 
 <style lang="scss">
