@@ -206,6 +206,22 @@ defineExpose({
   transition: all 0.3s ease;
   flex-shrink: 0;
   cursor: pointer;
+
+  &:hover {
+    transform: scale(1.05);
+    border-color: var(--dracula-pink);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  }
+
+  &:focus {
+    outline: none;
+    border-color: var(--dracula-pink);
+    box-shadow: 0 0 0 3px rgba(255, 121, 198, 0.3);
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
 }
 
 .error-message {
