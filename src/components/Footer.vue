@@ -40,7 +40,7 @@
 <style lang="scss" scoped>
 .footer {
   background: var(--header-footer-bg);
-  border-top: 1px solid var(--dracula-selection);
+  border-top: 1px solid var(--header-footer-border);
   padding: 2rem 0;
   margin-top: 4rem;
 }

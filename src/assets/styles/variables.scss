@@ -86,6 +86,7 @@
 
   // Header/Footer defaults (dark)
   --header-footer-bg: var(--dracula-current-line);
+  --header-footer-border: var(--dracula-selection);
   --header-subtitle-color: var(--dracula-comment);
   --footer-text-color: var(--dracula-comment);
   --footer-link-color: var(--dracula-cyan);
@@ -186,6 +187,7 @@
 
   // Header/Footer adjustments (light)
   --header-footer-bg: #cfcfde;
+  --header-footer-border: var(--dracula-comment); /* #6c664b for visibility on light bg */
   --header-subtitle-color: var(--dracula-foreground); /* dark text for readability */
   --footer-text-color: var(--dracula-foreground); /* dark text for readability */
   --footer-link-color: var(--dracula-purple); /* better contrast than cyan on olive */
