@@ -39,7 +39,7 @@
 
 <style lang="scss" scoped>
 .footer {
-  background: var(--dracula-current-line);
+  background: var(--header-footer-bg);
   border-top: 1px solid var(--dracula-selection);
   padding: 2rem 0;
   margin-top: 4rem;

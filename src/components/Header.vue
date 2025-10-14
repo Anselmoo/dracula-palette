@@ -39,7 +39,7 @@ const { isDarkMode } = useTheme();
   position: sticky;
   top: 0;
   z-index: 100;
-  background: var(--dracula-current-line);
+  background: var(--header-footer-bg);
   border-bottom: 1px solid var(--dracula-selection);
   padding: 2rem 0;
   text-align: center;
@@ -95,6 +95,7 @@ const { isDarkMode } = useTheme();
 
 .subnav {
   display: flex;
+  justify-content: center;
   gap: 1.25rem;
   padding: 0.5rem 1rem 0.8rem;
   border-top: 1px solid var(--dracula-selection);
