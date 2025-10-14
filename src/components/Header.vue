@@ -1,27 +1,63 @@
 <template>
   <header class="header">
     <div class="header-content">
-      <div class="logo">
-        <img src="/logo.svg" alt="Dracula Logo" class="logo-image" />
-        <h1 class="title">Dracula Palette</h1>
+      <div class="header-top">
+        <div class="logo">
+          <img src="/logo.svg" alt="Dracula Logo" class="logo-image" />
+          <h1 class="title">{{ isDarkMode ? 'Dracula' : 'Alucard' }} Palette</h1>
+        </div>
+        <ThemeToggle />
       </div>
-      <p class="subtitle">Advanced color harmony generator for Dracula-themed palettes</p>
+      <p class="subtitle">
+        Advanced color harmony generator for {{ isDarkMode ? 'Dracula' : 'Alucard' }}-themed
+        palettes - Dark and Light
+      </p>
+      <nav class="subnav" aria-label="Section navigation">
+        <a href="#section-start" class="subnav-link">Start</a>
+        <a href="#section-suggestions" class="subnav-link"
+          >Closest {{ isDarkMode ? 'Dracula' : 'Alucard' }} Colors</a
+        >
+        <a href="#section-palette" class="subnav-link"
+          >{{ isDarkMode ? 'Dracula' : 'Alucard' }} Color Palette</a
+        >
+        <a href="#section-generator" class="subnav-link">Extended Palette Generator</a>
+        <a href="#section-analysis" class="subnav-link">Scientific Color Analysis</a>
+      </nav>
     </div>
   </header>
 </template>
 
+<script setup lang="ts">
+import ThemeToggle from './ThemeToggle.vue';
+import { useTheme } from '../composables/useTheme';
+
+const { isDarkMode } = useTheme();
+</script>
+
 <style lang="scss" scoped>
 .header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
   background: var(--dracula-current-line);
   border-bottom: 1px solid var(--dracula-selection);
   padding: 2rem 0;
   text-align: center;
+  backdrop-filter: blur(8px);
 }
 
 .header-content {
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 2rem;
+}
+
+.header-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+  gap: 1rem;
 }
 
 .logo {
@@ -50,11 +86,44 @@
 }
 
 .subtitle {
-  color: var(--dracula-foreground);
+  color: var(--header-subtitle-color);
   font-size: 1.2rem;
   margin: 0;
   font-weight: 400;
+  opacity: 0.9;
+}
+
+.subnav {
+  display: flex;
+  gap: 1.25rem;
+  padding: 0.5rem 1rem 0.8rem;
+  border-top: 1px solid var(--dracula-selection);
+  overflow-x: auto;
+}
+
+.subnav-link {
+  color: var(--dracula-comment);
+  text-decoration: none;
+  white-space: nowrap;
+  padding: 0.25rem 0.25rem;
+  border-radius: 6px;
+  font-weight: 500;
+}
+
+.subnav-link:hover {
+  color: var(--dracula-foreground);
+  background: var(--dracula-selection);
+}
+
+/* Better visibility in Alucard theme */
+.theme-alucard .subnav-link {
+  color: var(--dracula-foreground);
   opacity: 0.8;
+}
+
+.theme-alucard .subnav-link:hover {
+  opacity: 1;
+  background: var(--dracula-selection);
 }
 
 @media (max-width: 768px) {

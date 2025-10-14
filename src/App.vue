@@ -2,18 +2,39 @@
   <div id="app">
     <Header />
     <main class="main-content">
-      <ColorInput v-model="inputColor" @color-change="handleColorChange" />
-      <ColorSuggestions
-        v-if="suggestions.length > 0"
-        :suggestions="suggestions"
-        @color-select="handleColorSelect"
-      />
-      <DraculaPalette
-        :selected-color="selectedColor"
-        @color-select="handlePaletteColorSelect"
-        @notification="showNotification"
-      />
-      <PaletteGenerator :selected-color="selectedColor" @notification="showNotification" />
+      <section id="section-start">
+        <ColorInput v-model="inputColor" @color-change="handleColorChange" />
+      </section>
+      <section id="section-suggestions">
+        <ColorSuggestions
+          v-if="suggestions.length > 0"
+          :suggestions="suggestions"
+          @color-select="handleColorSelect"
+        />
+      </section>
+      <section id="section-palette">
+        <DraculaPalette
+          :selected-color="selectedColor"
+          :selected-colors="selectedColors"
+          selection-mode="multiple"
+          @color-select="handlePaletteColorSelect"
+          @toggle-color="handlePaletteColorToggle"
+          @notification="showNotification"
+        />
+      </section>
+      <section id="section-generator">
+        <PaletteGenerator
+          :selected-color="selectedColor"
+          :selected-colors="selectedColors"
+          @notification="showNotification"
+          @palettes-update="handlePalettesUpdate"
+        />
+      </section>
+
+      <!-- Scientific Analysis Section (moved below Extended Palette Generator) -->
+      <section id="section-analysis">
+        <ScientificAnalysis :analysis="paletteAnalysis" @notification="showNotification" />
+      </section>
     </main>
 
     <!-- Notification Component -->
@@ -29,25 +50,33 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 import Header from './components/Header.vue';
 import Footer from './components/Footer.vue';
 import ColorInput from './components/ColorInput.vue';
 import ColorSuggestions from './components/ColorSuggestions.vue';
 import DraculaPalette from './components/DraculaPalette.vue';
 import PaletteGenerator from './components/PaletteGenerator.vue';
+import ScientificAnalysis from './components/ScientificAnalysis.vue';
 import Notification from './components/Notification.vue';
 import { findClosestDraculaColors } from './utils/colorMatcher';
+import { useTheme } from './composables/useTheme';
 import type { DraculaColor, ColorSuggestion } from './types/color';
+import type { PaletteAnalysisPayload } from './types/palette';
 
-const inputColor = ref('#ff79c6');
+// Initialize theme
+const { currentTheme } = useTheme();
+
+const inputColor = ref('#bd93f9'); // Purple - better starting color than Pink
 const selectedColor = ref<DraculaColor | null>(null);
+const selectedColors = ref<DraculaColor[]>([]);
 const suggestions = ref<ColorSuggestion[]>([]);
 const notification = ref({
   show: false,
   message: '',
   type: 'success' as 'success' | 'error',
 });
+const paletteAnalysis = ref<PaletteAnalysisPayload | null>(null);
 
 function showNotification(message: string, type: 'success' | 'error') {
   notification.value = {
@@ -68,19 +97,65 @@ function hideNotification() {
 
 const handleColorChange = (color: string) => {
   inputColor.value = color;
-  suggestions.value = findClosestDraculaColors(color);
+  suggestions.value = findClosestDraculaColors(color, currentTheme.value);
 };
 
 const handleColorSelect = (suggestion: ColorSuggestion) => {
   selectedColor.value = suggestion.draculaColor;
 };
 
+const normalizeColorIdentifier = (color: DraculaColor) => `${color.category}:${color.name}`;
+
+const handlePaletteColorToggle = (color: DraculaColor) => {
+  const targetId = normalizeColorIdentifier(color);
+  const index = selectedColors.value.findIndex(
+    selected => normalizeColorIdentifier(selected) === targetId
+  );
+
+  if (index === -1) {
+    selectedColors.value.push(color);
+    selectedColor.value = color;
+  } else {
+    selectedColors.value.splice(index, 1);
+    if (selectedColor.value && normalizeColorIdentifier(selectedColor.value) === targetId) {
+      selectedColor.value = selectedColors.value[selectedColors.value.length - 1] ?? null;
+    }
+  }
+};
+
 const handlePaletteColorSelect = (color: DraculaColor) => {
   selectedColor.value = color;
 };
 
+const handlePalettesUpdate = (payload: PaletteAnalysisPayload) => {
+  paletteAnalysis.value = payload;
+};
+
 // Initialize with default color
 handleColorChange(inputColor.value);
+
+watch(currentTheme, () => {
+  selectedColors.value = [];
+  selectedColor.value = null;
+});
+
+void {
+  Header,
+  Footer,
+  ColorInput,
+  ColorSuggestions,
+  DraculaPalette,
+  PaletteGenerator,
+  ScientificAnalysis,
+  Notification,
+  showNotification,
+  hideNotification,
+  handleColorChange,
+  handleColorSelect,
+  handlePaletteColorSelect,
+  handlePaletteColorToggle,
+  handlePalettesUpdate,
+};
 </script>
 
 <style lang="scss">

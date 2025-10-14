@@ -4,8 +4,133 @@
       <h2 class="generator-title">Extended Palette Generator</h2>
       <p class="generator-description">
         Generate comprehensive color palettes using 10 different color standards to expand your
-        Dracula theme beyond the basic colors.
+        Dracula theme beyond the basic colors. Select one or multiple base colors.
       </p>
+    </div>
+
+    <!-- Quick Preset Buttons -->
+    <div class="preset-section">
+      <h3>Quick Color Combinations</h3>
+      <div class="preset-buttons">
+        <button class="preset-btn" @click="generatePreset('red-green')" :disabled="isGenerating">
+          <div class="preset-colors">
+            <div class="preset-color" style="background-color: #ff5555"></div>
+            <div class="preset-color" style="background-color: #50fa7b"></div>
+          </div>
+          <span>Red & Green</span>
+        </button>
+
+        <button class="preset-btn" @click="generatePreset('purple-cyan')" :disabled="isGenerating">
+          <div class="preset-colors">
+            <div class="preset-color" style="background-color: #bd93f9"></div>
+            <div class="preset-color" style="background-color: #8be9fd"></div>
+          </div>
+          <span>Purple & Cyan</span>
+        </button>
+
+        <button class="preset-btn" @click="generatePreset('pink-yellow')" :disabled="isGenerating">
+          <div class="preset-colors">
+            <div class="preset-color" style="background-color: #ff79c6"></div>
+            <div class="preset-color" style="background-color: #f1fa8c"></div>
+          </div>
+          <span>Pink & Yellow</span>
+        </button>
+
+        <button
+          class="preset-btn"
+          @click="generatePreset('orange-purple')"
+          :disabled="isGenerating"
+        >
+          <div class="preset-colors">
+            <div class="preset-color" style="background-color: #ffb86c"></div>
+            <div class="preset-color" style="background-color: #bd93f9"></div>
+          </div>
+          <span>Orange & Purple</span>
+        </button>
+
+        <button class="preset-btn" @click="generatePreset('all-accents')" :disabled="isGenerating">
+          <div class="preset-colors">
+            <div class="preset-color" style="background-color: #ff5555"></div>
+            <div class="preset-color" style="background-color: #50fa7b"></div>
+            <div class="preset-color" style="background-color: #bd93f9"></div>
+            <div class="preset-color" style="background-color: #ff79c6"></div>
+          </div>
+          <span>All Accents</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Multi-Color Input Section -->
+    <div class="multi-color-input">
+      <h3>Base Colors</h3>
+      <div class="color-inputs-container">
+        <div class="official-base-colors">
+          <label>Selected Official Colors:</label>
+          <div v-if="officialBaseColors.length" class="selected-colors-grid">
+            <div v-for="color in officialBaseColors" :key="color.name" class="selected-color-card">
+              <div class="color-swatch" :style="{ backgroundColor: color.hex }"></div>
+              <div class="color-meta">
+                <span class="color-name">{{ color.name }}</span>
+                <span class="color-hex">{{ color.hex }}</span>
+              </div>
+            </div>
+          </div>
+          <p v-else class="no-selection">
+            Select one or more official colors from the palette above to use as base inputs.
+          </p>
+        </div>
+
+        <div v-if="baseColorSummary" class="base-summary">
+          <span class="summary-label">Base selection:</span>
+          <span class="summary-value">{{ baseColorSummary }}</span>
+        </div>
+
+        <div v-if="selectedColor" class="last-picked-hint">
+          <span class="hint-label">Last picked:</span>
+          <span class="hint-value">{{ selectedColor.name }} · {{ selectedColor.hex }}</span>
+        </div>
+
+        <div class="additional-colors">
+          <label>Additional Custom Colors (optional):</label>
+          <div class="additional-color-inputs">
+            <div
+              v-for="(color, index) in additionalColors"
+              :key="index"
+              class="additional-color-item"
+            >
+              <input
+                v-model="color.value"
+                type="text"
+                :placeholder="customColorPlaceholder(index)"
+                class="additional-color-input"
+                @input="validateAdditionalColor(index)"
+              />
+              <div
+                class="additional-color-preview"
+                :style="{
+                  backgroundColor:
+                    color.valid && color.normalized ? color.normalized : 'transparent',
+                }"
+                :class="{ invalid: !color.valid && color.value }"
+              ></div>
+              <button
+                class="remove-color-btn"
+                @click="removeAdditionalColor(index)"
+                :disabled="additionalColors.length <= 1"
+              >
+                ×
+              </button>
+            </div>
+          </div>
+          <button
+            class="add-color-btn"
+            @click="addAdditionalColor"
+            :disabled="additionalColors.length >= 5"
+          >
+            + Add Color
+          </button>
+        </div>
+      </div>
     </div>
 
     <div class="standard-selector">
@@ -35,14 +160,17 @@
     <div class="generation-controls">
       <button
         class="generate-button"
-        :disabled="!selectedColor || selectedStandards.length === 0 || isGenerating"
+        :disabled="
+          getAllValidColors().length === 0 || selectedStandards.length === 0 || isGenerating
+        "
         @click="generatePalettes"
       >
         <span v-if="isGenerating">Generating...</span>
         <span v-else>
-          Generate {{ selectedStandards.length }} Palette{{
-            selectedStandards.length !== 1 ? 's' : ''
+          Generate from {{ getAllValidColors().length }} Color{{
+            getAllValidColors().length !== 1 ? 's' : ''
           }}
+          ({{ selectedStandards.length }} Standard{{ selectedStandards.length !== 1 ? 's' : '' }})
         </span>
       </button>
 
@@ -62,7 +190,7 @@
         <div class="palette-stats">
           <span class="stat">{{ generatedPalettes.length }} standards</span>
           <span class="stat">{{ totalColors }} total colors</span>
-          <span class="stat">Based on {{ selectedColor?.name }}</span>
+          <span class="stat">Base colors: {{ baseColorSummary || 'Custom selection' }}</span>
         </div>
       </div>
 
@@ -144,6 +272,7 @@
 
 <script setup lang="ts">
 import { ref, computed } from 'vue';
+import chroma from 'chroma-js';
 import {
   PALETTE_STANDARDS,
   generatePalettesForColor,
@@ -151,7 +280,13 @@ import {
   STANDARD_CATEGORIES,
 } from '../utils/paletteManager';
 import type { DraculaColor } from '../types/color';
-import type { PaletteStandard, GeneratedPalette } from '../types/palette';
+import type {
+  PaletteStandard,
+  GeneratedPalette,
+  PaletteSourceColor,
+  PaletteAnalysisPayload,
+  PaletteSourceOrigin,
+} from '../types/palette';
 import type { ColorFormat } from '../utils/exportUtils';
 import {
   copyColorToClipboard as copyColorToClipboardUtil,
@@ -160,17 +295,22 @@ import {
   generateSCSSVariables,
   downloadFile,
 } from '../utils/exportUtils';
+import { hexToRgb } from '../utils/contrast';
 import ColorExportModal from './ColorExportModal.vue';
 
 interface Props {
   selectedColor?: DraculaColor | null;
+  selectedColors?: DraculaColor[];
 }
 
 interface Emits {
   (_e: 'notification', _message: string, _type: 'success' | 'error'): void;
+  (_e: 'palettes-update', _payload: PaletteAnalysisPayload): void;
 }
 
-const props = defineProps<Props>();
+const props = withDefaults(defineProps<Props>(), {
+  selectedColors: () => [],
+});
 const emit = defineEmits<Emits>();
 
 // Export modal state
@@ -205,6 +345,276 @@ const availableStandards = PALETTE_STANDARDS;
 const selectedStandards = ref<PaletteStandard[]>(['material', 'hsluv', 'oklch']);
 const generatedPalettes = ref<GeneratedPalette[]>([]);
 const isGenerating = ref(false);
+const lastSources = ref<PaletteSourceColor[]>([]);
+
+const officialBaseColors = computed<DraculaColor[]>(() => {
+  if (props.selectedColors?.length) {
+    return props.selectedColors;
+  }
+  return props.selectedColor ? [props.selectedColor] : [];
+});
+
+interface AdditionalColor {
+  value: string;
+  valid: boolean;
+  normalized?: string;
+}
+
+const additionalColors = ref<AdditionalColor[]>([
+  { value: '', valid: false, normalized: undefined },
+]);
+
+const customColorPlaceholder = (index: number) => {
+  const samples = ['#ff79c6', '#50fa7b', '#bd93f9', '#8be9fd', '#ff5555'];
+  return samples[index] ?? '#ffffff';
+};
+
+const validateAdditionalColor = (index: number) => {
+  const entry = additionalColors.value[index];
+  if (!entry) return;
+
+  const raw = entry.value.trim();
+  if (!raw) {
+    entry.valid = false;
+    entry.normalized = undefined;
+    return;
+  }
+
+  try {
+    const normalized = chroma(raw).hex();
+    entry.valid = true;
+    entry.normalized = normalized;
+  } catch {
+    entry.valid = false;
+    entry.normalized = undefined;
+  }
+};
+
+const addAdditionalColor = () => {
+  if (additionalColors.value.length < 5) {
+    additionalColors.value.push({ value: '', valid: false, normalized: undefined });
+  }
+};
+
+const removeAdditionalColor = (index: number) => {
+  if (additionalColors.value.length > 1) {
+    additionalColors.value.splice(index, 1);
+  }
+};
+
+const createSourceSummary = (
+  color: DraculaColor,
+  origin: PaletteSourceOrigin
+): PaletteSourceColor => ({
+  hex: color.hex,
+  name: color.name,
+  origin,
+  category: color.category,
+});
+
+const createCustomSourceSummary = (hex: string, name: string): PaletteSourceColor => ({
+  hex,
+  name,
+  origin: 'custom',
+});
+
+const createCustomColor = (hex: string, index: number): DraculaColor | null => {
+  try {
+    const normalized = chroma(hex).hex();
+    const { r, g, b } = hexToRgb(normalized);
+    const [l, c, h] = chroma(normalized).oklch();
+    return {
+      name: `Custom ${index + 1}`,
+      hex: normalized,
+      rgb: [r, g, b],
+      oklch: [Number.isFinite(l) ? l : 0, Number.isFinite(c) ? c : 0, Number.isFinite(h) ? h : 0],
+      description: 'Custom color input',
+      category: 'accent',
+    };
+  } catch (error) {
+    console.warn('Failed to normalize custom color', hex, error);
+    return null;
+  }
+};
+
+const getAllValidColors = () => {
+  const colors: DraculaColor[] = [...officialBaseColors.value];
+
+  additionalColors.value.forEach((color, index) => {
+    if (color.valid && color.normalized) {
+      const custom = createCustomColor(color.normalized, index);
+      if (custom) {
+        colors.push(custom);
+      }
+    }
+  });
+
+  return colors;
+};
+
+const customColorCount = computed(
+  () => additionalColors.value.filter(color => color.valid && color.normalized).length
+);
+
+const baseColorSummary = computed(() => {
+  const officialNames = officialBaseColors.value.map(color => color.name);
+  const officialSummary = officialNames.length
+    ? officialNames.length <= 3
+      ? officialNames.join(', ')
+      : `${officialNames.length} official colors`
+    : '';
+
+  const customSummary = customColorCount.value
+    ? `${customColorCount.value} custom ${customColorCount.value === 1 ? 'color' : 'colors'}`
+    : '';
+
+  return [officialSummary, customSummary].filter(Boolean).join(' + ');
+});
+
+const collectBaseSources = (): PaletteSourceColor[] => {
+  const sources: PaletteSourceColor[] = [];
+  const manualSelectionActive = (props.selectedColors?.length ?? 0) > 0;
+
+  officialBaseColors.value.forEach(color => {
+    sources.push(createSourceSummary(color, manualSelectionActive ? 'manual' : 'input'));
+  });
+
+  additionalColors.value.forEach((color, index) => {
+    if (color.valid && color.normalized) {
+      sources.push(createCustomSourceSummary(color.normalized, `Custom ${index + 1}`));
+    }
+  });
+
+  return sources;
+};
+
+const emitPaletteUpdate = (sources: PaletteSourceColor[], standards: PaletteStandard[]) => {
+  lastSources.value = sources;
+  const uniqueStandards = Array.from(new Set(standards));
+  emit('palettes-update', {
+    palettes: [...generatedPalettes.value],
+    sources,
+    standards: uniqueStandards,
+  });
+};
+
+// Official color mappings for presets
+const officialColors: Record<string, DraculaColor> = {
+  red: {
+    name: 'Red',
+    hex: '#ff5555',
+    rgb: [255, 85, 85],
+    oklch: [0.67, 0.17, 27],
+    description: 'Red accent color',
+    category: 'accent',
+  },
+  green: {
+    name: 'Green',
+    hex: '#50fa7b',
+    rgb: [80, 250, 123],
+    oklch: [0.85, 0.15, 141],
+    description: 'Green accent color',
+    category: 'accent',
+  },
+  purple: {
+    name: 'Purple',
+    hex: '#bd93f9',
+    rgb: [189, 147, 249],
+    oklch: [0.72, 0.12, 293],
+    description: 'Purple accent color',
+    category: 'accent',
+  },
+  cyan: {
+    name: 'Cyan',
+    hex: '#8be9fd',
+    rgb: [139, 233, 253],
+    oklch: [0.87, 0.08, 199],
+    description: 'Cyan accent color',
+    category: 'accent',
+  },
+  pink: {
+    name: 'Pink',
+    hex: '#ff79c6',
+    rgb: [255, 121, 198],
+    oklch: [0.74, 0.15, 334],
+    description: 'Pink accent color',
+    category: 'accent',
+  },
+  yellow: {
+    name: 'Yellow',
+    hex: '#f1fa8c',
+    rgb: [241, 250, 140],
+    oklch: [0.92, 0.08, 102],
+    description: 'Yellow accent color',
+    category: 'accent',
+  },
+  orange: {
+    name: 'Orange',
+    hex: '#ffb86c',
+    rgb: [255, 184, 108],
+    oklch: [0.79, 0.1, 71],
+    description: 'Orange accent color',
+    category: 'accent',
+  },
+};
+
+// Generate preset combinations
+const generatePreset = async (presetType: string) => {
+  const presetConfigs: Record<string, DraculaColor[]> = {
+    'red-green': [officialColors.red, officialColors.green],
+    'purple-cyan': [officialColors.purple, officialColors.cyan],
+    'pink-yellow': [officialColors.pink, officialColors.yellow],
+    'orange-purple': [officialColors.orange, officialColors.purple],
+    'all-accents': [
+      officialColors.red,
+      officialColors.green,
+      officialColors.purple,
+      officialColors.cyan,
+      officialColors.pink,
+      officialColors.yellow,
+      officialColors.orange,
+    ],
+  };
+
+  const colorsToGenerate = presetConfigs[presetType];
+  if (!colorsToGenerate) return;
+
+  // Set popular standards for presets
+  selectedStandards.value = ['material', 'hsluv', 'oklch'];
+
+  isGenerating.value = true;
+
+  try {
+    generatedPalettes.value = [];
+    const sourceSummaries = colorsToGenerate.map(color => createSourceSummary(color, 'preset'));
+
+    // Generate palettes for each color in the preset
+    for (const color of colorsToGenerate) {
+      const result = generatePalettesForColor(color, selectedStandards.value);
+
+      // Add source color identifier to each palette
+      result.palettes.forEach(palette => {
+        palette.name = `${palette.name} (${color.name})`;
+      });
+
+      generatedPalettes.value.push(...result.palettes);
+    }
+    emitPaletteUpdate(sourceSummaries, selectedStandards.value);
+
+    const totalColors = generatedPalettes.value.reduce((sum, p) => sum + p.colors.length, 0);
+    emit(
+      'notification',
+      `Generated ${generatedPalettes.value.length} palettes with ${totalColors} colors from ${colorsToGenerate.length} preset colors`,
+      'success'
+    );
+  } catch (error) {
+    console.error('Failed to generate preset palettes:', error);
+    emit('notification', 'Failed to generate preset palettes. Please try again.', 'error');
+    generatedPalettes.value = [];
+  } finally {
+    isGenerating.value = false;
+  }
+};
 
 const totalColors = computed(() =>
   generatedPalettes.value.reduce((sum, palette) => sum + palette.colors.length, 0)
@@ -244,8 +654,9 @@ const clearStandards = () => {
 };
 
 const generatePalettes = async () => {
-  if (!props.selectedColor) {
-    emit('notification', 'Please select a Dracula color first', 'error');
+  const allColors = getAllValidColors();
+  if (allColors.length === 0) {
+    emit('notification', 'Please select at least one color to generate palettes', 'error');
     return;
   }
 
@@ -257,11 +668,31 @@ const generatePalettes = async () => {
   isGenerating.value = true;
 
   try {
+    const baseSources = collectBaseSources();
+    const usedStandards = [...selectedStandards.value];
     // Use requestIdleCallback for better mobile performance
     const generateFn = () => {
-      const result = generatePalettesForColor(props.selectedColor!, selectedStandards.value);
-      generatedPalettes.value = result.palettes;
-      emit('notification', `Generated ${result.palettes.length} palettes successfully!`, 'success');
+      generatedPalettes.value = [];
+
+      // Generate palettes for each color
+      for (const color of allColors) {
+        const result = generatePalettesForColor(color, selectedStandards.value);
+
+        // Add source color identifier to each palette
+        result.palettes.forEach(palette => {
+          palette.name = `${palette.name} (${color.name})`;
+        });
+
+        generatedPalettes.value.push(...result.palettes);
+      }
+      emitPaletteUpdate(baseSources.length ? baseSources : lastSources.value, usedStandards);
+
+      const totalColors = generatedPalettes.value.reduce((sum, p) => sum + p.colors.length, 0);
+      emit(
+        'notification',
+        `Generated ${generatedPalettes.value.length} palettes with ${totalColors} colors from ${allColors.length} base color${allColors.length > 1 ? 's' : ''}`,
+        'success'
+      );
     };
 
     if ('requestIdleCallback' in window) {
@@ -311,15 +742,43 @@ const makeAccessible = (palette: GeneratedPalette) => {
     generatedPalettes.value.push(accessiblePalette);
   }
 };
+
+void {
+  openExportModal,
+  closeExportModal,
+  handleColorExport,
+  baseColorSummary,
+  totalColors,
+  customColorPlaceholder,
+  validateAdditionalColor,
+  addAdditionalColor,
+  removeAdditionalColor,
+  generatePreset,
+  toggleStandard,
+  selectPopularStandards,
+  selectScientificStandards,
+  selectWebStandards,
+  selectArtisticStandards,
+  selectAllStandards,
+  clearStandards,
+  generatePalettes,
+  copyTooltip,
+  exportPalette,
+  exportJSON,
+  exportSCSS,
+  makeAccessible,
+  ColorExportModal,
+};
 </script>
 
 <style lang="scss" scoped>
 .palette-generator {
   margin-top: 3rem;
   padding: 2rem;
-  background: var(--dracula-current-line);
+  background: var(--surface-primary);
   border-radius: 12px;
-  border: 1px solid var(--dracula-selection);
+  border: 1px solid var(--surface-border);
+  box-shadow: 0 12px 24px var(--surface-shadow);
 }
 
 .generator-header {
@@ -332,7 +791,11 @@ const makeAccessible = (palette: GeneratedPalette) => {
   font-size: 2rem;
   font-weight: 600;
   margin-bottom: 1rem;
-  background: linear-gradient(135deg, var(--dracula-cyan), var(--dracula-purple));
+  background: linear-gradient(
+    135deg,
+    var(--heading-gradient-start, var(--dracula-cyan)),
+    var(--heading-gradient-end, var(--dracula-purple))
+  );
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -344,6 +807,69 @@ const makeAccessible = (palette: GeneratedPalette) => {
   max-width: 800px;
   margin: 0 auto;
   opacity: 0.8;
+}
+
+.preset-section {
+  margin-bottom: 3rem;
+  text-align: center;
+}
+
+.preset-section h3 {
+  color: var(--dracula-foreground);
+  font-size: 1.4rem;
+  margin-bottom: 1.5rem;
+}
+
+.preset-buttons {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1rem;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.preset-btn {
+  background: var(--surface-secondary);
+  border: 2px solid var(--surface-border);
+  border-radius: 12px;
+  padding: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  color: var(--dracula-foreground);
+  font-weight: 500;
+
+  &:hover:not(:disabled) {
+    border-color: var(--dracula-purple);
+    background: var(--surface-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px var(--surface-shadow);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  span {
+    font-size: 0.9rem;
+  }
+}
+
+.preset-colors {
+  display: flex;
+  gap: 4px;
+  justify-content: center;
+}
+
+.preset-color {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.2);
 }
 
 .standard-selector {
@@ -363,8 +889,8 @@ const makeAccessible = (palette: GeneratedPalette) => {
 }
 
 .standard-card {
-  background: var(--dracula-background);
-  border: 2px solid var(--dracula-selection);
+  background: var(--surface-secondary);
+  border: 2px solid var(--surface-border);
   border-radius: 8px;
   padding: 1.5rem;
   cursor: pointer;
@@ -752,6 +1278,243 @@ const makeAccessible = (palette: GeneratedPalette) => {
     min-height: 44px;
     min-width: 44px;
     padding: 0.75rem;
+  }
+}
+
+/* Multi-Color Input Styles */
+.multi-color-input {
+  background: var(--surface-primary);
+  border: 1px solid var(--surface-border);
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.multi-color-input h3 {
+  color: var(--dracula-foreground);
+  margin: 0 0 1rem 0;
+  font-size: 1.2rem;
+}
+
+.color-inputs-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.official-base-colors label {
+  display: block;
+  color: var(--dracula-foreground);
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.selected-colors-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1rem;
+}
+
+.selected-color-card {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--surface-border);
+  border-radius: 10px;
+  background: var(--surface-secondary);
+  box-shadow: 0 4px 16px var(--surface-shadow);
+  transition: transform 0.2s ease;
+}
+
+.selected-color-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--dracula-purple);
+}
+
+.selected-color-card .color-swatch {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 2px solid var(--surface-border);
+}
+
+.selected-color-card .color-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.selected-color-card .color-name {
+  color: var(--dracula-foreground);
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.selected-color-card .color-hex {
+  color: var(--text-secondary);
+  font-family: var(--font-family-mono);
+  font-size: 0.8rem;
+}
+
+.base-summary {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  background: var(--surface-tertiary);
+  border-left: 4px solid var(--dracula-purple);
+  border-radius: 8px;
+  color: var(--dracula-foreground);
+}
+
+.summary-label {
+  font-weight: 600;
+}
+
+.summary-value {
+  font-family: var(--font-family-mono);
+  color: var(--text-secondary);
+}
+
+.last-picked-hint {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  background: var(--surface-secondary);
+  border: 1px solid var(--surface-border);
+  color: var(--dracula-foreground);
+}
+
+.hint-label {
+  font-weight: 600;
+}
+
+.hint-value {
+  font-family: var(--font-family-mono);
+  color: var(--text-secondary);
+}
+
+.no-selection {
+  color: var(--dracula-comment);
+  font-style: italic;
+  margin: 0;
+}
+
+.additional-colors label {
+  display: block;
+  color: var(--dracula-foreground);
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+}
+
+.additional-color-inputs {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.additional-color-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.additional-color-input {
+  flex: 1;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--surface-border);
+  border-radius: 6px;
+  background: var(--surface-secondary);
+  color: var(--dracula-foreground);
+  font-family: var(--font-family-mono);
+}
+
+.additional-color-input:focus {
+  outline: none;
+  border-color: var(--dracula-purple);
+  box-shadow: 0 0 0 2px rgba(189, 147, 249, 0.2);
+}
+
+.additional-color-preview {
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  border: 1px solid var(--surface-border);
+  flex-shrink: 0;
+}
+
+.additional-color-preview.invalid {
+  background: repeating-linear-gradient(
+    45deg,
+    transparent,
+    transparent 4px,
+    var(--dracula-red) 4px,
+    var(--dracula-red) 8px
+  );
+}
+
+.remove-color-btn {
+  width: 32px;
+  height: 32px;
+  border: 1px solid var(--surface-border);
+  background: var(--surface-secondary);
+  color: var(--dracula-red);
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  font-weight: bold;
+  transition: var(--transition-fast);
+}
+
+.remove-color-btn:hover:not(:disabled) {
+  background: var(--dracula-red);
+  color: var(--dracula-background);
+}
+
+.remove-color-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.add-color-btn {
+  background: var(--dracula-purple);
+  color: var(--dracula-background);
+  border: none;
+  border-radius: 6px;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  font-weight: 500;
+  transition: var(--transition-fast);
+}
+
+.add-color-btn:hover:not(:disabled) {
+  background: var(--dracula-pink);
+}
+
+.add-color-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background: var(--dracula-comment);
+}
+
+@media (max-width: 768px) {
+  .multi-color-input {
+    padding: 1rem;
+  }
+
+  .additional-color-item {
+    flex-wrap: wrap;
+  }
+
+  .additional-color-input {
+    min-width: 200px;
   }
 }
 </style>

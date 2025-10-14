@@ -1,9 +1,11 @@
 <template>
   <div class="dracula-palette">
-    <h2 class="palette-title">Dracula Color Palette</h2>
+    <h2 class="palette-title">
+      {{ currentTheme === 'dracula' ? 'Dracula' : 'Alucard' }} Color Palette
+    </h2>
     <div class="palette-sections">
       <!-- Background Colors -->
-      <div class="color-section">
+      <div class="color-section" id="section-backgrounds">
         <h3 class="section-title">Background Colors</h3>
         <div class="colors-grid">
           <div
@@ -42,7 +44,7 @@
       </div>
 
       <!-- Accent Colors -->
-      <div class="color-section">
+      <div class="color-section" id="section-accents">
         <h3 class="section-title">Accent Colors</h3>
         <div class="colors-grid">
           <div
@@ -91,7 +93,7 @@
       </div>
 
       <!-- Foreground Colors -->
-      <div class="color-section">
+      <div class="color-section" id="section-foregrounds">
         <h3 class="section-title">Text Colors</h3>
         <div class="colors-grid">
           <div
@@ -143,7 +145,8 @@
 
 <script setup lang="ts">
 import { computed, ref } from 'vue';
-import { DRACULA_COLORS, generateColorVariants } from '../data/draculaColors';
+import { generateColorVariants } from '../data/draculaColors';
+import { useTheme } from '../composables/useTheme';
 import type { DraculaColor } from '../types/color';
 import type { ColorFormat } from '../utils/exportUtils';
 import { copyColorToClipboard } from '../utils/exportUtils';
@@ -151,15 +154,24 @@ import ColorExportModal from './ColorExportModal.vue';
 
 interface Props {
   selectedColor?: DraculaColor | null;
+  selectedColors?: DraculaColor[];
+  selectionMode?: 'single' | 'multiple';
 }
 
 interface Emits {
   (_e: 'color-select', _color: DraculaColor): void;
+  (_e: 'toggle-color', _color: DraculaColor): void;
   (_e: 'notification', _message: string, _type: 'success' | 'error'): void;
 }
 
-const props = defineProps<Props>();
+const props = withDefaults(defineProps<Props>(), {
+  selectedColors: () => [],
+  selectionMode: 'single',
+});
 const emit = defineEmits<Emits>();
+
+// Get theme-aware colors
+const { currentColors, currentTheme } = useTheme();
 
 // Export modal state
 const exportModal = ref({
@@ -190,11 +202,11 @@ async function handleColorExport(color: string, format: ColorFormat) {
 }
 
 const backgroundColors = computed(() =>
-  DRACULA_COLORS.filter(color => color.category === 'background')
+  currentColors.value.filter(color => color.category === 'background')
 );
 
 const accentColors = computed(() => {
-  const colors = DRACULA_COLORS.filter(color => color.category === 'accent');
+  const colors = currentColors.value.filter(color => color.category === 'accent');
   // Generate variants for accent colors
   return colors.map(color => ({
     ...color,
@@ -203,15 +215,25 @@ const accentColors = computed(() => {
 });
 
 const foregroundColors = computed(() =>
-  DRACULA_COLORS.filter(color => color.category === 'foreground')
+  currentColors.value.filter(color => color.category === 'foreground')
 );
 
+const normalizeColorIdentifier = (color: DraculaColor) => `${color.category}:${color.name}`;
+
 const isSelected = (color: DraculaColor): boolean => {
+  if (props.selectionMode === 'multiple') {
+    return props.selectedColors.some(
+      selected => normalizeColorIdentifier(selected) === normalizeColorIdentifier(color)
+    );
+  }
   return props.selectedColor?.name === color.name;
 };
 
 const handleColorClick = (color: DraculaColor) => {
   emit('color-select', color);
+  if (props.selectionMode === 'multiple') {
+    emit('toggle-color', color);
+  }
 };
 
 const getDisplayVariants = (variants: DraculaColor['variants']) => {
@@ -226,6 +248,24 @@ const getDisplayVariants = (variants: DraculaColor['variants']) => {
     900: variants[900],
   };
 };
+
+// Mark component imports as used for TypeScript analysis that doesn't see template usage
+void ColorExportModal;
+
+// Expose to satisfy analyzers that don't link template to script
+defineExpose({
+  currentTheme,
+  backgroundColors,
+  accentColors,
+  foregroundColors,
+  normalizeColorIdentifier,
+  openExportModal,
+  closeExportModal,
+  handleColorExport,
+  isSelected,
+  handleColorClick,
+  getDisplayVariants,
+});
 </script>
 
 <style lang="scss" scoped>
@@ -239,6 +279,14 @@ const getDisplayVariants = (variants: DraculaColor['variants']) => {
   font-weight: 600;
   margin-bottom: 2rem;
   text-align: center;
+  background: linear-gradient(
+    135deg,
+    var(--heading-gradient-start, var(--dracula-cyan)),
+    var(--heading-gradient-end, var(--dracula-purple))
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .palette-sections {
@@ -248,10 +296,11 @@ const getDisplayVariants = (variants: DraculaColor['variants']) => {
 }
 
 .color-section {
-  background: var(--dracula-current-line);
+  background: var(--surface-primary);
   border-radius: 12px;
   padding: 2rem;
-  border: 1px solid var(--dracula-selection);
+  border: 1px solid var(--surface-border);
+  box-shadow: 0 12px 24px var(--surface-shadow);
 }
 
 .section-title {
@@ -279,8 +328,8 @@ const getDisplayVariants = (variants: DraculaColor['variants']) => {
 }
 
 .color-item {
-  background: var(--dracula-background);
-  border: 2px solid var(--dracula-selection);
+  background: var(--surface-secondary);
+  border: 2px solid var(--surface-border);
   border-radius: 8px;
   padding: 1rem;
   cursor: pointer;
@@ -291,7 +340,7 @@ const getDisplayVariants = (variants: DraculaColor['variants']) => {
     &:hover {
       transform: translateY(-2px);
       border-color: var(--dracula-pink);
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+      box-shadow: 0 4px 16px var(--surface-shadow);
     }
   }
 
@@ -323,7 +372,7 @@ const getDisplayVariants = (variants: DraculaColor['variants']) => {
   height: 60px;
   border-radius: 6px;
   margin-bottom: 1rem;
-  border: 1px solid var(--dracula-selection);
+  border: 1px solid var(--surface-border);
 }
 
 .color-info {
@@ -401,7 +450,7 @@ const getDisplayVariants = (variants: DraculaColor['variants']) => {
   gap: 2px;
   margin-top: 0.75rem;
   padding-top: 0.75rem;
-  border-top: 1px solid var(--dracula-selection);
+  border-top: 1px solid var(--dracula-comment);
   position: relative;
 }
 
@@ -410,7 +459,7 @@ const getDisplayVariants = (variants: DraculaColor['variants']) => {
   position: absolute;
   top: -8px;
   left: 0;
-  background: var(--dracula-current-line);
+  background: var(--surface-primary);
   color: var(--dracula-comment);
   font-size: 0.7rem;
   padding: 0 0.5rem;

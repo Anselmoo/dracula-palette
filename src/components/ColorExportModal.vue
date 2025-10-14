@@ -132,6 +132,16 @@ async function copyAndClose() {
   emit('copy', props.color, selectedFormat.value);
   closeModal();
 }
+
+// Expose to satisfy analyzers linking template usage to script-setup
+defineExpose({
+  selectedFormat,
+  previewCopied,
+  formattedColor,
+  copyPreview,
+  copyAndClose,
+  formatOptions,
+});
 </script>
 
 <style scoped lang="scss">
@@ -151,16 +161,15 @@ async function copyAndClose() {
 }
 
 .modal-content {
-  background: var(--dracula-background);
-  background-color: #282a36; /* Fallback */
+  background: var(--overlay-surface, var(--surface-primary));
   border-radius: 12px;
   padding: 1.5rem;
   max-width: 500px;
   width: 100%;
   max-height: 90vh;
   overflow-y: auto;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
-  border: 1px solid var(--dracula-selection, #44475a);
+  box-shadow: 0 20px 60px var(--surface-shadow);
+  border: 1px solid var(--overlay-border, var(--surface-border));
 }
 
 .modal-header {
@@ -179,15 +188,15 @@ async function copyAndClose() {
     background: none;
     border: none;
     font-size: 1.5rem;
-    color: var(--dracula-comment, #6272a4);
+    color: var(--dracula-comment);
     cursor: pointer;
     padding: 0.25rem;
     border-radius: 4px;
     transition: all 0.2s ease;
 
     &:hover {
-      background: var(--dracula-selection, #44475a);
-      color: var(--dracula-foreground, #f8f8f2);
+      background: var(--dracula-selection);
+      color: var(--dracula-foreground);
     }
   }
 }
@@ -198,27 +207,27 @@ async function copyAndClose() {
   gap: 1rem;
   margin-bottom: 1.5rem;
   padding: 1rem;
-  background: var(--dracula-selection, #44475a);
+  background: var(--surface-secondary);
   border-radius: 8px;
 
   .color-swatch {
     width: 60px;
     height: 60px;
     border-radius: 8px;
-    border: 2px solid var(--dracula-comment, #6272a4);
+    border: 2px solid var(--surface-border);
     flex-shrink: 0;
   }
 
   .color-info {
     h4 {
       margin: 0 0 0.25rem 0;
-      color: var(--dracula-foreground, #f8f8f2);
+      color: var(--dracula-foreground);
       font-size: 1rem;
     }
 
     .current-hex {
       margin: 0;
-      color: var(--dracula-comment, #6272a4);
+      color: var(--dracula-comment);
       font-family: 'Courier New', monospace;
       font-size: 0.9rem;
     }
@@ -230,7 +239,7 @@ async function copyAndClose() {
 
   h4 {
     margin: 0 0 1rem 0;
-    color: var(--foreground);
+    color: var(--dracula-foreground);
     font-size: 1rem;
   }
 
@@ -241,8 +250,8 @@ async function copyAndClose() {
   }
 
   .format-button {
-    background: var(--dracula-selection, #44475a);
-    border: 1px solid var(--dracula-comment, #6272a4);
+    background: var(--surface-secondary);
+    border: 1px solid var(--surface-border);
     border-radius: 6px;
     padding: 0.75rem 0.5rem;
     cursor: pointer;
@@ -250,24 +259,24 @@ async function copyAndClose() {
     text-align: center;
 
     &:hover {
-      background: var(--dracula-current-line, #44475a);
-      border-color: var(--dracula-purple, #bd93f9);
+      background: var(--dracula-selection);
+      border-color: var(--dracula-purple);
     }
 
     &.active {
-      background: var(--dracula-purple, #bd93f9);
-      border-color: var(--dracula-purple, #bd93f9);
-      color: var(--dracula-background, #282a36);
+      background: var(--dracula-purple);
+      border-color: var(--dracula-purple);
+      color: var(--dracula-background);
 
       .format-example {
-        color: var(--dracula-background, #282a36);
+        color: var(--dracula-background);
         opacity: 0.8;
       }
     }
 
     .format-label {
       font-weight: 600;
-      color: var(--dracula-foreground, #f8f8f2);
+      color: var(--dracula-foreground);
       margin-bottom: 0.25rem;
       font-size: 0.9rem;
     }
@@ -275,12 +284,12 @@ async function copyAndClose() {
     .format-example {
       font-family: 'Courier New', monospace;
       font-size: 0.7rem;
-      color: var(--dracula-comment, #6272a4);
+      color: var(--dracula-comment);
       line-height: 1.2;
     }
 
     &.active .format-label {
-      color: var(--dracula-background, #282a36);
+      color: var(--dracula-background);
     }
   }
 }
@@ -290,7 +299,7 @@ async function copyAndClose() {
 
   h4 {
     margin: 0 0 0.75rem 0;
-    color: var(--foreground);
+    color: var(--dracula-foreground);
     font-size: 1rem;
   }
 
@@ -298,15 +307,15 @@ async function copyAndClose() {
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    background: var(--current-line);
-    border: 1px solid var(--comment);
+    background: var(--surface-secondary);
+    border: 1px solid var(--surface-border);
     border-radius: 6px;
     padding: 0.75rem;
 
     code {
       flex: 1;
       font-family: 'Courier New', monospace;
-      color: var(--foreground);
+      color: var(--dracula-foreground);
       background: none;
       font-size: 0.9rem;
     }
@@ -314,7 +323,7 @@ async function copyAndClose() {
     .copy-preview-btn {
       background: none;
       border: none;
-      color: var(--comment);
+      color: var(--dracula-comment);
       cursor: pointer;
       padding: 0.25rem;
       border-radius: 4px;
@@ -324,12 +333,12 @@ async function copyAndClose() {
       justify-content: center;
 
       &:hover {
-        color: var(--foreground);
-        background: var(--selection);
+        color: var(--dracula-foreground);
+        background: var(--dracula-selection);
       }
 
       &.copied {
-        color: var(--green);
+        color: var(--dracula-green);
       }
     }
   }
@@ -350,23 +359,23 @@ async function copyAndClose() {
   }
 
   .primary-button {
-    background: var(--dracula-purple, #bd93f9);
-    color: var(--dracula-background, #282a36);
+    background: var(--dracula-purple);
+    color: var(--dracula-background);
     border: none;
 
     &:hover {
-      background: var(--dracula-pink, #ff79c6);
+      background: var(--dracula-pink);
     }
   }
 
   .secondary-button {
-    background: var(--dracula-selection, #44475a);
-    color: var(--dracula-foreground, #f8f8f2);
-    border: 1px solid var(--dracula-comment, #6272a4);
+    background: var(--surface-secondary);
+    color: var(--dracula-foreground);
+    border: 1px solid var(--surface-border);
 
     &:hover {
-      background: var(--dracula-current-line, #44475a);
-      border-color: var(--dracula-purple, #bd93f9);
+      background: var(--dracula-selection);
+      border-color: var(--dracula-purple);
     }
   }
 }

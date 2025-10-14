@@ -1,0 +1,328 @@
+// Analysis Component Design System
+// Reusable mixins for scientific analysis tools following Dracula/Alucard spec
+
+// =============================================================================
+// Panel Styles - Base container for analysis sections
+// =============================================================================
+
+@mixin analysis-panel {
+  padding: var(--spacing-lg);
+  background: var(--analysis-panel-bg);
+  border: 1px solid var(--analysis-panel-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--analysis-panel-shadow);
+  color: var(--dracula-foreground);
+  transition: box-shadow var(--transition-normal);
+
+  &:hover {
+    box-shadow: var(--analysis-panel-shadow-hover);
+  }
+}
+
+@mixin analysis-panel-accent($accent-color: var(--dracula-purple)) {
+  @include analysis-panel;
+  border-left: 3px solid $accent-color;
+}
+
+@mixin analysis-panel-glass {
+  @include analysis-panel;
+  background: var(--analysis-glass-bg);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+
+  // Remove backdrop-filter for Alucard theme (performance & unnecessary)
+  .theme-alucard & {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    background: var(--analysis-panel-bg);
+  }
+}
+
+// =============================================================================
+// Typography - Headings and text styles
+// =============================================================================
+
+@mixin analysis-heading {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  margin: 0 0 var(--spacing-md);
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--dracula-foreground);
+  line-height: 1.4;
+}
+
+@mixin analysis-subheading {
+  margin: var(--spacing-md) 0 var(--spacing-sm);
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--dracula-foreground);
+}
+
+@mixin analysis-description {
+  margin-bottom: var(--spacing-md);
+  color: var(--dracula-comment);
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+// =============================================================================
+// Controls - Form elements and interactive components
+// =============================================================================
+
+@mixin analysis-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-md);
+  align-items: center;
+  margin-bottom: var(--spacing-md);
+  color: var(--dracula-comment);
+
+  label {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: color var(--transition-fast);
+
+    &:hover {
+      color: var(--dracula-foreground);
+    }
+  }
+
+  select,
+  input[type='range'],
+  input[type='number'] {
+    padding: var(--spacing-xs) var(--spacing-sm);
+    background: var(--analysis-input-bg);
+    border: 1px solid var(--analysis-input-border);
+    border-radius: var(--radius-sm);
+    color: var(--dracula-foreground);
+    font-size: 0.9rem;
+    transition: border-color var(--transition-fast);
+
+    &:focus {
+      outline: none;
+      border-color: var(--dracula-purple);
+    }
+
+    &:hover:not(:disabled) {
+      border-color: var(--analysis-input-border-hover);
+    }
+  }
+
+  input[type='checkbox'] {
+    accent-color: var(--dracula-purple);
+    cursor: pointer;
+  }
+}
+
+// =============================================================================
+// Cards - Individual items within panels
+// =============================================================================
+
+@mixin analysis-card {
+  padding: var(--spacing-md);
+  background: var(--analysis-card-bg);
+  border: 1px solid var(--analysis-card-border);
+  border-radius: var(--radius-md);
+  transition: all var(--transition-fast);
+
+  &:hover {
+    border-color: var(--analysis-card-border-hover);
+    box-shadow: var(--shadow-sm);
+  }
+}
+
+@mixin analysis-card-interactive {
+  @include analysis-card;
+  cursor: pointer;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+}
+
+// =============================================================================
+// Visualizations - SVG and graphic elements
+// =============================================================================
+
+@mixin analysis-svg-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: var(--spacing-md);
+
+  svg {
+    max-width: 100%;
+    height: auto;
+  }
+}
+
+@mixin analysis-svg-interactive {
+  cursor: pointer;
+  transition: opacity var(--transition-fast);
+
+  &:hover {
+    opacity: 0.85;
+  }
+
+  title {
+    // Ensure tooltips are accessible
+    pointer-events: none;
+  }
+}
+
+// =============================================================================
+// Color Swatches - Display color samples
+// =============================================================================
+
+@mixin analysis-swatch {
+  display: inline-flex;
+  width: 24px;
+  height: 24px;
+  border: 1px solid var(--analysis-swatch-border);
+  border-radius: var(--radius-sm);
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.1);
+  transition: transform var(--transition-fast);
+
+  &:hover {
+    transform: scale(1.1);
+  }
+}
+
+@mixin analysis-swatch-large {
+  @include analysis-swatch;
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-md);
+}
+
+@mixin analysis-swatch-with-label {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+
+  .swatch {
+    @include analysis-swatch;
+  }
+
+  .label {
+    font-size: 0.85rem;
+    font-family: var(--font-family-mono);
+    color: var(--dracula-foreground);
+  }
+}
+
+// =============================================================================
+// Layout Utilities
+// =============================================================================
+
+@mixin analysis-grid-auto($min-width: 200px) {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax($min-width, 1fr));
+  gap: var(--spacing-md);
+}
+
+@mixin analysis-flex-row {
+  display: flex;
+  gap: var(--spacing-md);
+  flex-wrap: wrap;
+}
+
+@mixin analysis-flex-column {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+// =============================================================================
+// Animations - Accessible motion
+// =============================================================================
+
+@mixin analysis-animation-pulse($duration: 2s) {
+  animation: analysis-pulse $duration ease-in-out infinite;
+
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+  }
+}
+
+@mixin analysis-animation-fade-in {
+  animation: analysis-fade-in 0.3s ease-out;
+
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+    opacity: 1;
+  }
+}
+
+// Keyframes
+@keyframes analysis-pulse {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+  50% {
+    transform: scale(1.05);
+    opacity: 1;
+  }
+}
+
+@keyframes analysis-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// =============================================================================
+// Responsive Utilities
+// =============================================================================
+
+@mixin analysis-responsive {
+  @media (max-width: 768px) {
+    padding: var(--spacing-md);
+
+    .controls {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  }
+}
+
+// =============================================================================
+// State Indicators - Success, warning, error states
+// =============================================================================
+
+@mixin analysis-state-success {
+  color: var(--dracula-green);
+  font-weight: 600;
+}
+
+@mixin analysis-state-warning {
+  color: var(--dracula-yellow);
+  font-weight: 600;
+}
+
+@mixin analysis-state-error {
+  color: var(--dracula-red);
+  font-weight: 600;
+}
+
+@mixin analysis-state-info {
+  color: var(--dracula-cyan);
+  font-weight: 600;
+}

@@ -1,5 +1,6 @@
-import { DRACULA_COLORS } from '../data/draculaColors';
+import { DRACULA_COLORS, ALUCARD_COLORS } from '../data/draculaColors';
 import type { ColorSuggestion } from '../types/color';
+import type { ThemeMode } from '../types/theme';
 import chroma from 'chroma-js';
 
 // Convert any color string to OKLCH using chroma-js
@@ -36,12 +37,17 @@ function calculateColorDistance(color1: string, color2: string): number {
 }
 
 // Find the closest Dracula colors to the input color
-export function findClosestDraculaColors(inputColor: string): ColorSuggestion[] {
+export function findClosestDraculaColors(
+  inputColor: string,
+  theme: ThemeMode = 'dracula'
+): ColorSuggestion[] {
   if (!isValidColor(inputColor)) {
     return [];
   }
 
-  const suggestions: ColorSuggestion[] = DRACULA_COLORS.map(draculaColor => {
+  const colors = theme === 'dracula' ? DRACULA_COLORS : ALUCARD_COLORS;
+
+  const suggestions: ColorSuggestion[] = colors.map(draculaColor => {
     const distance = calculateColorDistance(inputColor, draculaColor.hex);
 
     // Convert Delta E to similarity percentage (Delta E < 2 is imperceptible)

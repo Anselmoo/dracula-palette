@@ -1,7 +1,18 @@
 <template>
   <div class="color-input-container">
     <div class="input-section">
-      <label for="color-input" class="input-label"> Enter a CSS color: </label>
+      <label
+        for="color-input"
+        class="input-label"
+        @click.prevent="openPicker"
+        role="button"
+        tabindex="0"
+        @keydown.enter.prevent="openPicker"
+        @keydown.space.prevent="openPicker"
+        aria-controls="native-color-picker"
+      >
+        Enter a CSS color:
+      </label>
       <div class="input-wrapper">
         <input
           id="color-input"
@@ -13,7 +24,21 @@
           @input="handleInput"
           @blur="handleBlur"
         />
-        <div class="color-preview" :style="{ backgroundColor: previewColor }" />
+        <button
+          class="color-preview"
+          type="button"
+          :style="{ backgroundColor: previewColor }"
+          @click="openPicker"
+          :aria-label="`Pick color, current ${inputValue}`"
+        ></button>
+        <input
+          ref="hiddenPicker"
+          type="color"
+          class="native-picker"
+          id="native-color-picker"
+          :value="pickerValue"
+          @input="onPick"
+        />
       </div>
       <p v-if="hasError" class="error-message">
         Invalid color format. Please enter a valid CSS color (hex, rgb, hsl, or color name).
@@ -49,6 +74,8 @@ const emit = defineEmits<Emits>();
 
 const inputValue = ref(props.modelValue);
 const hasError = ref(false);
+const hiddenPicker = ref<HTMLInputElement | null>(null);
+const pickerValue = computed(() => (hasError.value ? '#000000' : inputValue.value || '#ff79c6'));
 
 const previewColor = computed(() => {
   if (hasError.value) {
@@ -82,12 +109,40 @@ const handleBlur = () => {
   }
 };
 
+function openPicker() {
+  hiddenPicker.value?.click();
+}
+
+function onPick(e: Event) {
+  const value = (e.target as HTMLInputElement).value;
+  if (isValidColor(value)) {
+    hasError.value = false;
+    const normalizedColor = normalizeColorToHex(value);
+    inputValue.value = normalizedColor;
+    emit('update:modelValue', normalizedColor);
+    emit('color-change', normalizedColor);
+  }
+}
+
 watch(
   () => props.modelValue,
   newValue => {
     inputValue.value = newValue;
   }
 );
+
+// Expose to satisfy some analyzers that don't link template usage to script-setup vars
+defineExpose({
+  inputValue,
+  hasError,
+  hiddenPicker,
+  pickerValue,
+  previewColor,
+  handleInput,
+  handleBlur,
+  openPicker,
+  onPick,
+});
 </script>
 
 <style lang="scss" scoped>
@@ -121,8 +176,8 @@ watch(
   flex: 1;
   padding: 1rem 1.5rem;
   font-size: 1.1rem;
-  background: var(--dracula-current-line);
-  border: 2px solid var(--dracula-selection);
+  background: var(--surface-primary);
+  border: 2px solid var(--surface-border);
   border-radius: 8px;
   color: var(--dracula-foreground);
   transition: all 0.3s ease;
@@ -150,6 +205,7 @@ watch(
   border: 2px solid var(--dracula-selection);
   transition: all 0.3s ease;
   flex-shrink: 0;
+  cursor: pointer;
 }
 
 .error-message {
@@ -178,13 +234,21 @@ watch(
 }
 
 .example {
-  background: var(--dracula-current-line);
+  background: var(--surface-primary);
   color: var(--dracula-cyan);
   padding: 0.5rem 1rem;
   border-radius: 4px;
   font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
   font-size: 0.85rem;
-  border: 1px solid var(--dracula-selection);
+  border: 1px solid var(--surface-border);
+}
+
+.native-picker {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
 }
 
 @media (max-width: 768px) {
