@@ -4,12 +4,6 @@
       <label
         for="color-input"
         class="input-label"
-        @click.prevent="openPicker"
-        role="button"
-        tabindex="0"
-        @keydown.enter.prevent="openPicker"
-        @keydown.space.prevent="openPicker"
-        aria-controls="native-color-picker"
       >
         Enter a CSS color:
       </label>
@@ -24,20 +18,14 @@
           @input="handleInput"
           @blur="handleBlur"
         />
-        <button
-          class="color-preview"
-          type="button"
-          :style="{ backgroundColor: previewColor }"
-          @click="openPicker"
-          :aria-label="`Pick color, current ${inputValue}`"
-        ></button>
         <input
-          ref="hiddenPicker"
+          ref="colorPicker"
           type="color"
-          class="native-picker"
+          class="color-picker"
           id="native-color-picker"
           :value="pickerValue"
           @input="onPick"
+          :aria-label="`Pick color, current ${inputValue}`"
         />
       </div>
       <p v-if="hasError" class="error-message">
@@ -74,7 +62,7 @@ const emit = defineEmits<Emits>();
 
 const inputValue = ref(props.modelValue);
 const hasError = ref(false);
-const hiddenPicker = ref<HTMLInputElement | null>(null);
+const colorPicker = ref<HTMLInputElement | null>(null);
 const pickerValue = computed(() => (hasError.value ? '#000000' : inputValue.value || '#ff79c6'));
 
 const previewColor = computed(() => {
@@ -109,10 +97,6 @@ const handleBlur = () => {
   }
 };
 
-function openPicker() {
-  hiddenPicker.value?.click();
-}
-
 function onPick(e: Event) {
   const value = (e.target as HTMLInputElement).value;
   if (isValidColor(value)) {
@@ -135,12 +119,11 @@ watch(
 defineExpose({
   inputValue,
   hasError,
-  hiddenPicker,
+  colorPicker,
   pickerValue,
   previewColor,
   handleInput,
   handleBlur,
-  openPicker,
   onPick,
 });
 </script>
@@ -198,7 +181,7 @@ defineExpose({
   }
 }
 
-.color-preview {
+.color-picker {
   width: 50px;
   height: 50px;
   border-radius: 8px;
@@ -259,21 +242,13 @@ defineExpose({
   border: 1px solid var(--surface-border);
 }
 
-.native-picker {
-  position: absolute;
-  left: -9999px;
-  width: 1px;
-  height: 1px;
-  opacity: 0;
-}
-
 @media (max-width: 768px) {
   .input-wrapper {
     flex-direction: column;
     gap: 1rem;
   }
 
-  .color-preview {
+  .color-picker {
     width: 100%;
     height: 40px;
   }
