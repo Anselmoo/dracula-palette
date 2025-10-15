@@ -226,106 +226,63 @@
       </div>
     </div>
     <p v-else class="empty">No colors available</p>
-    <div class="color-fan" v-if="palette.length && !noEffect">
-      <h4 class="fan-title">Color Harmony Fan</h4>
-      <div class="fan-container">
-        <svg
-          width="100%"
-          height="240"
-          viewBox="0 0 600 240"
-          role="img"
-          aria-label="Interactive color harmony fan"
-          class="fan-svg"
-        >
-          <g transform="translate(300, 220)">
-            <!-- Generate fan leaves for all hues -->
-            <template v-for="i in 24" :key="'leaf' + i">
-              <path
-                :d="fanLeafPath(i, 24)"
-                :fill="getFanColor(i, 24)"
-                :class="[
-                  'fan-leaf',
-                  { active: isFanLeafActive(i, 24), highlight: isFanLeafHighlight(i, 24) },
-                ]"
-                @click="onFanLeafClick(i, 24)"
-                @mouseenter="hoveredLeaf = i"
-                @mouseleave="hoveredLeaf = null"
-              >
-                <title>{{ Math.round(((i - 1) * 180) / 24) }}° - {{ getFanColor(i, 24) }}</title>
-              </path>
-              <!-- Degree labels on active leaves -->
-              <text
-                v-if="isFanLeafActive(i, 24) || hoveredLeaf === i"
-                :x="getFanLabelX(i, 24)"
-                :y="getFanLabelY(i, 24)"
-                class="fan-label"
-                text-anchor="middle"
-              >
-                {{ Math.round(((i - 1) * 180) / 24) }}°
-              </text>
-            </template>
-            <!-- Connection lines for harmony relationships -->
-            <template v-if="showComp || showAnalog || showTriad">
-              <g class="harmony-connections">
-                <template v-for="h in [hA, hB, hC]" :key="'conn' + h">
-                  <!-- Complementary connection (180°) -->
-                  <line
-                    v-if="showComp"
-                    :x1="getFanConnectionX(h, 180)"
-                    :y1="getFanConnectionY(h, 180)"
-                    :x2="getFanConnectionX((h + 180) % 360, 180)"
-                    :y2="getFanConnectionY((h + 180) % 360, 180)"
-                    class="harmony-line comp"
-                  />
-                  <!-- Analogous connections (±30°) -->
-                  <line
-                    v-if="showAnalog"
-                    :x1="getFanConnectionX(h, 180)"
-                    :y1="getFanConnectionY(h, 180)"
-                    :x2="getFanConnectionX((h + 30) % 360, 180)"
-                    :y2="getFanConnectionY((h + 30) % 360, 180)"
-                    class="harmony-line analog"
-                  />
-                  <line
-                    v-if="showAnalog"
-                    :x1="getFanConnectionX(h, 180)"
-                    :y1="getFanConnectionY(h, 180)"
-                    :x2="getFanConnectionX((h - 30 + 360) % 360, 180)"
-                    :y2="getFanConnectionY((h - 30 + 360) % 360, 180)"
-                    class="harmony-line analog"
-                  />
-                  <!-- Triadic connections (±120°) -->
-                  <line
-                    v-if="showTriad"
-                    :x1="getFanConnectionX(h, 180)"
-                    :y1="getFanConnectionY(h, 180)"
-                    :x2="getFanConnectionX((h + 120) % 360, 180)"
-                    :y2="getFanConnectionY((h + 120) % 360, 180)"
-                    class="harmony-line triad"
-                  />
-                  <line
-                    v-if="showTriad"
-                    :x1="getFanConnectionX(h, 180)"
-                    :y1="getFanConnectionY(h, 180)"
-                    :x2="getFanConnectionX((h + 240) % 360, 180)"
-                    :y2="getFanConnectionY((h + 240) % 360, 180)"
-                    class="harmony-line triad"
-                  />
-                </template>
-              </g>
-            </template>
-          </g>
-        </svg>
-      </div>
-      <p class="fan-note">
-        Click on fan leaves to select colors. Harmony connections show:
-        <span v-if="showComp" class="conn-badge comp">Complementary (180°)</span>
-        <span v-if="showAnalog" class="conn-badge analog">Analogous (±30°)</span>
-        <span v-if="showTriad" class="conn-badge triad">Triadic (±120°)</span>
+    <div class="chords" v-if="palette.length && !noEffect">
+      <svg width="240" height="160" viewBox="0 0 240 160" role="img" aria-label="Chord diagram">
+        <g transform="translate(120,80)">
+          <template v-for="h in [hA, hB, hC]" :key="h">
+            <!-- Complement -->
+            <line
+              :x1="polarX(h, 55)"
+              :y1="polarY(h, 55)"
+              :x2="polarX((h + 180) % 360, 55)"
+              :y2="polarY((h + 180) % 360, 55)"
+              class="ch"
+              v-if="showComp"
+            />
+            <!-- Analogous -->
+            <line
+              :x1="polarX(h, 55)"
+              :y1="polarY(h, 55)"
+              :x2="polarX((h + 30) % 360, 55)"
+              :y2="polarY((h + 30) % 360, 55)"
+              class="ch"
+              v-if="showAnalog"
+            />
+            <line
+              :x1="polarX(h, 55)"
+              :y1="polarY(h, 55)"
+              :x2="polarX((h - 30 + 360) % 360, 55)"
+              :y2="polarY((h - 30 + 360) % 360, 55)"
+              class="ch"
+              v-if="showAnalog"
+            />
+            <!-- Triad -->
+            <line
+              :x1="polarX(h, 55)"
+              :y1="polarY(h, 55)"
+              :x2="polarX((h + 120) % 360, 55)"
+              :y2="polarY((h + 120) % 360, 55)"
+              class="ch"
+              v-if="showTriad"
+            />
+            <line
+              :x1="polarX(h, 55)"
+              :y1="polarY(h, 55)"
+              :x2="polarX((h + 240) % 360, 55)"
+              :y2="polarY((h + 240) % 360, 55)"
+              class="ch"
+              v-if="showTriad"
+            />
+          </template>
+        </g>
+      </svg>
+      <p class="note">
+        Lines show connections: complementary (opposite), analogous (±30°), triadic (±120°). Hidden
+        if not impactful.
       </p>
     </div>
     <p v-else-if="noEffect" class="empty">
-      Harmony fan hidden: palette near-neutral or negligible hue separation.
+      Harmony chords hidden: palette near-neutral or negligible hue separation.
     </p>
   </section>
 </template>
@@ -338,7 +295,6 @@ const srcIndexA = ref(0);
 const srcIndexB = ref(1);
 const srcIndexC = ref(2);
 const syncBC = ref(false);
-const hoveredLeaf = ref<number | null>(null);
 const base = computed(() => props.palette[srcIndexA.value]?.hex ?? '#6f6dfa');
 
 function hexToHsl(hex: string) {
@@ -558,135 +514,9 @@ function arcPath(start: number, end: number, r0: number, r1: number) {
     Y0 = Math.sin(a0) * r1;
   const X1 = Math.cos(a1) * r1,
     Y1 = Math.sin(a1) * r1;
-  return `M ${x0} ${y0} L ${X0} ${Y0} A ${r1} ${r1} 0 0 1 ${X1} ${Y1} L ${x1} ${y1} A ${r0} ${r0} 0 0 0 ${x0} ${y0} Z`;
+  const large = end - start > 180 ? 1 : 0;
+  return `M ${x0} ${y0} L ${X0} ${Y0} A ${r1} ${r1} 0 ${large} 1 ${X1} ${Y1} L ${x1} ${y1} A ${r0} ${r0} 0 ${large} 0 ${x0} ${y0} Z`;
 }
-
-// Fan visualization helpers
-function fanLeafPath(leafIndex: number, totalLeaves: number) {
-  // Each leaf spans from 0° to 180° range (half circle)
-  const anglePerLeaf = 180 / totalLeaves;
-  const startAngle = (leafIndex - 1) * anglePerLeaf;
-  const endAngle = leafIndex * anglePerLeaf;
-  const outerRadius = 200;
-  const innerRadius = 40;
-
-  // Convert angles to radians (0° is at bottom, rotating counter-clockwise)
-  const startRad = ((startAngle - 90) * Math.PI) / 180;
-  const endRad = ((endAngle - 90) * Math.PI) / 180;
-
-  const x1 = Math.cos(startRad) * innerRadius;
-  const y1 = Math.sin(startRad) * innerRadius;
-  const x2 = Math.cos(endRad) * innerRadius;
-  const y2 = Math.sin(endRad) * innerRadius;
-  const x3 = Math.cos(endRad) * outerRadius;
-  const y3 = Math.sin(endRad) * outerRadius;
-  const x4 = Math.cos(startRad) * outerRadius;
-  const y4 = Math.sin(startRad) * outerRadius;
-
-  return `M ${x1} ${y1} L ${x4} ${y4} A ${outerRadius} ${outerRadius} 0 0 1 ${x3} ${y3} L ${x2} ${y2} A ${innerRadius} ${innerRadius} 0 0 0 ${x1} ${y1} Z`;
-}
-
-function getFanColor(leafIndex: number, totalLeaves: number) {
-  const hue = ((leafIndex - 1) * 180) / totalLeaves;
-  return `hsl(${hue}, 80%, 50%)`;
-}
-
-function isFanLeafActive(leafIndex: number, totalLeaves: number) {
-  const leafHue = ((leafIndex - 1) * 180) / totalLeaves;
-  const tolerance = 180 / totalLeaves + 2; // Slight tolerance
-  return (
-    isHueNear(leafHue, hA.value, tolerance) ||
-    isHueNear(leafHue, hB.value, tolerance) ||
-    isHueNear(leafHue, hC.value, tolerance)
-  );
-}
-
-function isFanLeafHighlight(leafIndex: number, totalLeaves: number) {
-  const leafHue = ((leafIndex - 1) * 180) / totalLeaves;
-  const tolerance = 180 / totalLeaves + 2;
-
-  // Check if this leaf matches any harmony relationship
-  for (const h of [hA.value, hB.value, hC.value]) {
-    if (showComp.value && isHueNear(leafHue, (h + 180) % 360, tolerance)) return true;
-    if (
-      showAnalog.value &&
-      (isHueNear(leafHue, (h + 30) % 360, tolerance) ||
-        isHueNear(leafHue, (h - 30 + 360) % 360, tolerance))
-    )
-      return true;
-    if (
-      showTriad.value &&
-      (isHueNear(leafHue, (h + 120) % 360, tolerance) ||
-        isHueNear(leafHue, (h + 240) % 360, tolerance))
-    )
-      return true;
-  }
-  return false;
-}
-
-function isHueNear(h1: number, h2: number, tolerance: number) {
-  let diff = Math.abs(h1 - h2);
-  if (diff > 180) diff = 360 - diff;
-  return diff <= tolerance;
-}
-
-function getFanLabelX(leafIndex: number, totalLeaves: number) {
-  const hue = ((leafIndex - 1) * 180) / totalLeaves;
-  const angle = ((hue - 90) * Math.PI) / 180;
-  return Math.cos(angle) * 160;
-}
-
-function getFanLabelY(leafIndex: number, totalLeaves: number) {
-  const hue = ((leafIndex - 1) * 180) / totalLeaves;
-  const angle = ((hue - 90) * Math.PI) / 180;
-  return Math.sin(angle) * 160;
-}
-
-function getFanConnectionX(hue: number, radius: number) {
-  const angle = ((hue - 90) * Math.PI) / 180;
-  return Math.cos(angle) * radius;
-}
-
-function getFanConnectionY(hue: number, radius: number) {
-  const angle = ((hue - 90) * Math.PI) / 180;
-  return Math.sin(angle) * radius;
-}
-
-function onFanLeafClick(leafIndex: number, totalLeaves: number) {
-  const leafHue = ((leafIndex - 1) * 180) / totalLeaves;
-
-  // Find the color in the palette closest to this hue
-  let bestIdx = 0;
-  let bestDist = 999;
-
-  for (let i = 0; i < props.palette.length; i++) {
-    const { h } = hexToHsl(props.palette[i].hex);
-    let d = Math.abs(h - leafHue);
-    d = Math.min(d, 360 - d);
-    if (d < bestDist) {
-      bestDist = d;
-      bestIdx = i;
-    }
-  }
-
-  // Assign to the next available source (A, B, or C)
-  if (!isFanLeafActive(leafIndex, totalLeaves)) {
-    // Find which source to update
-    const aActive = isFanLeafActive(
-      Math.round((hA.value * totalLeaves) / 180) + 1,
-      totalLeaves
-    );
-    const bActive = isFanLeafActive(
-      Math.round((hB.value * totalLeaves) / 180) + 1,
-      totalLeaves
-    );
-
-    if (!aActive) srcIndexA.value = bestIdx;
-    else if (!bActive) srcIndexB.value = bestIdx;
-    else srcIndexC.value = bestIdx;
-  }
-}
-
 // UI toggles and no-effect detection
 const showComp = ref(true);
 const showAnalog = ref(true);
@@ -808,137 +638,29 @@ function onWheelClick(evt: MouseEvent, which: 'A' | 'B' | 'C') {
 .empty {
   color: var(--dracula-comment);
 }
-.color-fan {
-  margin-top: 1.5rem;
-  padding: 1rem;
-  background: var(--surface-primary);
-  border-radius: 12px;
-  border: 1px solid var(--surface-border);
-}
-.fan-title {
-  margin: 0 0 1rem;
-  font-size: 1.1rem;
-  color: var(--dracula-foreground);
+.chords {
+  margin-top: 0.5rem;
   text-align: center;
 }
-.fan-container {
-  display: flex;
-  justify-content: center;
-  overflow-x: auto;
+.ch {
+  stroke: var(--dracula-foreground);
+  stroke-opacity: 0.4;
+  stroke-width: 1.5;
+  animation: chordPulse 2s ease-in-out infinite;
 }
-.fan-svg {
-  max-width: 100%;
-  height: auto;
-}
-.fan-leaf {
-  cursor: pointer;
-  stroke: var(--surface-border);
-  stroke-width: 0.5;
-  opacity: 0.7;
-  transition: all 0.3s ease;
-
-  &:hover {
-    opacity: 1;
-    stroke-width: 2;
-    filter: brightness(1.1);
-  }
-
-  &.active {
-    opacity: 1;
-    stroke: var(--dracula-pink);
-    stroke-width: 2.5;
-    filter: drop-shadow(0 0 4px rgba(255, 121, 198, 0.6));
-  }
-
-  &.highlight {
-    opacity: 0.95;
-    stroke: var(--dracula-cyan);
-    stroke-width: 1.5;
-    animation: highlightPulse 2s ease-in-out infinite;
-  }
-}
-@keyframes highlightPulse {
+@keyframes chordPulse {
   0%,
   100% {
-    filter: brightness(1);
+    stroke-opacity: 0.4;
   }
   50% {
-    filter: brightness(1.2);
+    stroke-opacity: 0.7;
   }
 }
-.fan-label {
-  font-size: 11px;
-  font-weight: 600;
-  fill: var(--dracula-foreground);
-  pointer-events: none;
-  text-shadow: 0 0 3px var(--dracula-background);
-}
-.harmony-connections {
-  pointer-events: none;
-}
-.harmony-line {
-  stroke-width: 2;
-  opacity: 0.6;
-  animation: connectionPulse 2s ease-in-out infinite;
-
-  &.comp {
-    stroke: var(--dracula-pink);
-  }
-
-  &.analog {
-    stroke: var(--dracula-cyan);
-  }
-
-  &.triad {
-    stroke: var(--dracula-purple);
-  }
-}
-@keyframes connectionPulse {
-  0%,
-  100% {
-    opacity: 0.4;
-  }
-  50% {
-    opacity: 0.8;
-  }
-}
-.fan-note {
-  margin-top: 1rem;
-  text-align: center;
-  font-size: 0.9rem;
-  color: var(--dracula-comment);
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  justify-content: center;
-  align-items: center;
-}
-.conn-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.25rem;
-  padding: 0.25rem 0.5rem;
-  border-radius: 4px;
+.note {
   font-size: 0.85rem;
-  font-weight: 500;
-
-  &.comp {
-    background: rgba(255, 121, 198, 0.2);
-    color: var(--dracula-pink);
-    border: 1px solid var(--dracula-pink);
-  }
-
-  &.analog {
-    background: rgba(139, 233, 253, 0.2);
-    color: var(--dracula-cyan);
-    border: 1px solid var(--dracula-cyan);
-  }
-
-  &.triad {
-    background: rgba(189, 147, 249, 0.2);
-    color: var(--dracula-purple);
-    border: 1px solid var(--dracula-purple);
-  }
+  opacity: 0.8;
+  margin: 0.25rem 0 0;
 }
 @media (max-width: 900px) {
   .row {
