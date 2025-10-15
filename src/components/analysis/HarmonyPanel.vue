@@ -646,6 +646,16 @@ function onWheelClick(evt: MouseEvent, which: 'A' | 'B' | 'C') {
   stroke: var(--dracula-foreground);
   stroke-opacity: 0.4;
   stroke-width: 1.5;
+  animation: chordPulse 2s ease-in-out infinite;
+}
+@keyframes chordPulse {
+  0%,
+  100% {
+    stroke-opacity: 0.4;
+  }
+  50% {
+    stroke-opacity: 0.7;
+  }
 }
 .note {
   font-size: 0.85rem;
