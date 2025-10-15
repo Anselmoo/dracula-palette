@@ -226,103 +226,6 @@
       </div>
     </div>
     <p v-else class="empty">No colors available</p>
-    <div class="chords" v-if="palette.length && !noEffect">
-      <svg width="300" height="180" viewBox="0 0 300 180" role="img" aria-label="Harmony relationship diagram">
-        <g transform="translate(150,90)">
-          <!-- Draw arcs for each source color at their hue positions -->
-          <circle :cx="polarX(hA, 70)" :cy="polarY(hA, 70)" r="8" :fill="aHex" class="source-pin" />
-          <circle :cx="polarX(hB, 70)" :cy="polarY(hB, 70)" r="8" :fill="bHex" class="source-pin" />
-          <circle :cx="polarX(hC, 70)" :cy="polarY(hC, 70)" r="8" :fill="cHex" class="source-pin" />
-          
-          <!-- Complementary connections (only between actual sources if they are complementary) -->
-          <line
-            v-if="showComp && isHarmonyRelated(hA, hB, 180)"
-            :x1="polarX(hA, 70)"
-            :y1="polarY(hA, 70)"
-            :x2="polarX(hB, 70)"
-            :y2="polarY(hB, 70)"
-            class="ch comp"
-          />
-          <line
-            v-if="showComp && isHarmonyRelated(hA, hC, 180)"
-            :x1="polarX(hA, 70)"
-            :y1="polarY(hA, 70)"
-            :x2="polarX(hC, 70)"
-            :y2="polarY(hC, 70)"
-            class="ch comp"
-          />
-          <line
-            v-if="showComp && isHarmonyRelated(hB, hC, 180)"
-            :x1="polarX(hB, 70)"
-            :y1="polarY(hB, 70)"
-            :x2="polarX(hC, 70)"
-            :y2="polarY(hC, 70)"
-            class="ch comp"
-          />
-          
-          <!-- Analogous connections (±30°) -->
-          <line
-            v-if="showAnalog && isHarmonyRelated(hA, hB, 30)"
-            :x1="polarX(hA, 70)"
-            :y1="polarY(hA, 70)"
-            :x2="polarX(hB, 70)"
-            :y2="polarY(hB, 70)"
-            class="ch analog"
-          />
-          <line
-            v-if="showAnalog && isHarmonyRelated(hA, hC, 30)"
-            :x1="polarX(hA, 70)"
-            :y1="polarY(hA, 70)"
-            :x2="polarX(hC, 70)"
-            :y2="polarY(hC, 70)"
-            class="ch analog"
-          />
-          <line
-            v-if="showAnalog && isHarmonyRelated(hB, hC, 30)"
-            :x1="polarX(hB, 70)"
-            :y1="polarY(hB, 70)"
-            :x2="polarX(hC, 70)"
-            :y2="polarY(hC, 70)"
-            class="ch analog"
-          />
-          
-          <!-- Triadic connections (±120°) -->
-          <line
-            v-if="showTriad && isHarmonyRelated(hA, hB, 120)"
-            :x1="polarX(hA, 70)"
-            :y1="polarY(hA, 70)"
-            :x2="polarX(hB, 70)"
-            :y2="polarY(hB, 70)"
-            class="ch triad"
-          />
-          <line
-            v-if="showTriad && isHarmonyRelated(hA, hC, 120)"
-            :x1="polarX(hA, 70)"
-            :y1="polarY(hA, 70)"
-            :x2="polarX(hC, 70)"
-            :y2="polarY(hC, 70)"
-            class="ch triad"
-          />
-          <line
-            v-if="showTriad && isHarmonyRelated(hB, hC, 120)"
-            :x1="polarX(hB, 70)"
-            :y1="polarY(hB, 70)"
-            :x2="polarX(hC, 70)"
-            :y2="polarY(hC, 70)"
-            class="ch triad"
-          />
-        </g>
-      </svg>
-      <p class="note">
-        Lines connect sources that share harmony relationships: 
-        <span class="comp-label">complementary (180°)</span>, 
-        <span class="analog-label">analogous (±30°)</span>, 
-        <span class="triad-label">triadic (±120°)</span>.
-      </p>
-    </div>
-    <p v-else-if="noEffect" class="empty">
-      Harmony chords hidden: palette near-neutral or negligible hue separation.
-    </p>
   </section>
 </template>
 <script setup lang="ts">
@@ -596,14 +499,6 @@ function onWheelClick(evt: MouseEvent, which: 'A' | 'B' | 'C') {
   else if (which === 'B') srcIndexB.value = best;
   else srcIndexC.value = best;
 }
-
-// Helper function to check if two hues have a harmony relationship
-function isHarmonyRelated(h1: number, h2: number, targetDiff: number): boolean {
-  let diff = Math.abs(h1 - h2);
-  if (diff > 180) diff = 360 - diff;
-  // Allow some tolerance (±15°) for the relationship
-  return Math.abs(diff - targetDiff) <= 15;
-}
 </script>
 <style scoped lang="scss">
 .controls {
@@ -684,61 +579,6 @@ function isHarmonyRelated(h1: number, h2: number, targetDiff: number): boolean {
 }
 .empty {
   color: var(--dracula-comment);
-}
-.chords {
-  margin-top: 0.5rem;
-  text-align: center;
-}
-.ch {
-  stroke-width: 2;
-  opacity: 0.5;
-  animation: chordPulse 2s ease-in-out infinite;
-  
-  &.comp {
-    stroke: var(--dracula-pink);
-  }
-  
-  &.analog {
-    stroke: var(--dracula-cyan);
-  }
-  
-  &.triad {
-    stroke: var(--dracula-purple);
-  }
-}
-.source-pin {
-  stroke: var(--dracula-foreground);
-  stroke-width: 2;
-  filter: drop-shadow(0 0 4px rgba(0, 0, 0, 0.5));
-}
-@keyframes chordPulse {
-  0%,
-  100% {
-    opacity: 0.4;
-  }
-  50% {
-    opacity: 0.7;
-  }
-}
-.note {
-  font-size: 0.85rem;
-  opacity: 0.8;
-  margin: 0.25rem 0 0;
-  
-  .comp-label {
-    color: var(--dracula-pink);
-    font-weight: 600;
-  }
-  
-  .analog-label {
-    color: var(--dracula-cyan);
-    font-weight: 600;
-  }
-  
-  .triad-label {
-    color: var(--dracula-purple);
-    font-weight: 600;
-  }
 }
 @media (max-width: 900px) {
   .row {
