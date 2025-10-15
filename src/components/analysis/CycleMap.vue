@@ -2,102 +2,118 @@
   <section class="cycle-map">
     <h3 class="cycle-map__heading"><Icon name="relations" :size="16" /> Color Relationship Map</h3>
     <p class="cycle-map__description">
-      Interactive hue-sorted color wheel. Click segments to select, hover for details.
+      Chord diagram showing color relationships. Hover over colors or connections to explore harmony and contrast.
     </p>
     <div class="cycle-map__controls">
       <label>
-        <input type="checkbox" v-model="triangle" />
-        Show triangle
-      </label>
-      <label>
-        Pattern
-        <select v-model="pattern">
-          <option value="triad">Triad (even thirds)</option>
-          <option value="triple">User triple (0, 33%, 66%)</option>
+        Relationship Type
+        <select v-model="relationshipType">
+          <option value="harmony">Harmony (hue proximity)</option>
+          <option value="contrast">Contrast (luminance difference)</option>
+          <option value="complement">Complementary</option>
         </select>
       </label>
       <label>
-        <input type="checkbox" v-model="autoRotate" />
-        Auto-rotate
+        <input type="checkbox" v-model="showLabels" />
+        Show labels
       </label>
-      <label v-if="selectedSegment !== null">
+      <label v-if="selectedNode !== null">
         Selected:
         <span class="selected-color">{{
-          ordered[selectedSegment]?.name || ordered[selectedSegment]?.hex
+          ordered[selectedNode]?.name || ordered[selectedNode]?.hex
         }}</span>
       </label>
     </div>
-    <div class="cycle-map__visualization" :title="'Hue-sorted ring; click or hover for details'">
+    <div class="cycle-map__visualization" :title="'Chord diagram showing color relationships'">
       <svg
         :width="size"
         :height="size"
-        viewBox="0 0 200 200"
+        viewBox="0 0 240 240"
         role="img"
-        aria-label="Hue cycle map"
+        aria-label="Color relationship chord diagram"
         class="cycle-map__svg"
-        :class="{ 'is-rotating': autoRotate }"
       >
         <defs>
-          <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
-            <feGaussianBlur stdDeviation="2" result="coloredBlur" />
+          <filter id="chord-glow" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur stdDeviation="3" result="coloredBlur" />
             <feMerge>
               <feMergeNode in="coloredBlur" />
               <feMergeNode in="SourceGraphic" />
             </feMerge>
           </filter>
-          <radialGradient id="centerGradient">
-            <stop offset="0%" :stop-color="centerColor" stop-opacity="0.2" />
-            <stop offset="100%" :stop-color="centerColor" stop-opacity="0" />
+          <radialGradient id="bgGradient">
+            <stop offset="0%" stop-color="var(--analysis-card-bg)" stop-opacity="0.3" />
+            <stop offset="100%" stop-color="var(--analysis-card-bg)" stop-opacity="0" />
           </radialGradient>
         </defs>
-        <g transform="translate(100,100)">
-          <!-- Animated center circle -->
-          <circle r="60" fill="url(#centerGradient)" class="center-circle" />
+        <g transform="translate(120,120)">
+          <!-- Background circle -->
+          <circle r="100" fill="url(#bgGradient)" class="bg-circle" />
 
-          <!-- Color segments -->
-          <template v-for="(c, i) in ordered" :key="c.hex">
-            <path
-              :d="arcPath(i)"
-              :fill="c.hex"
-              class="cycle-map__segment"
-              :class="{
-                'is-selected': selectedSegment === i,
-                'is-hovered': hoveredSegment === i,
-              }"
-              @click="selectSegment(i)"
-              @mouseenter="hoveredSegment = i"
-              @mouseleave="hoveredSegment = null"
-              :style="{ animationDelay: `${i * 50}ms` }"
-            >
-              <title>{{ c.name }} — {{ c.hex }}</title>
-            </path>
-          </template>
-
-          <!-- Optional triangle mode overlay -->
-          <g v-if="triangle && ordered.length >= 3" class="cycle-map__triangle">
-            <polyline
-              :points="trianglePoints"
-              fill="none"
-              :stroke="triangleStrokeColor"
-              stroke-width="2"
-              stroke-linejoin="round"
-              class="triangle-line"
-            />
-            <!-- Triangle vertices -->
-            <circle
-              v-for="(pt, idx) in triangleVertices"
-              :key="`vertex-${idx}`"
-              :cx="pt.x"
-              :cy="pt.y"
-              r="4"
-              :fill="triangleStrokeColor"
-              class="triangle-vertex"
-            />
+          <!-- Relationship chords -->
+          <g class="chords-group">
+            <template v-for="(chord, idx) in relationshipChords" :key="`chord-${idx}`">
+              <path
+                :d="chordPath(chord)"
+                :stroke="chord.color"
+                :stroke-opacity="getChordOpacity(chord)"
+                fill="none"
+                stroke-width="2"
+                class="chord"
+                :class="{
+                  'is-highlighted': isChordHighlighted(chord),
+                  'is-dimmed': shouldDimChord(chord),
+                }"
+                @mouseenter="hoveredChord = chord"
+                @mouseleave="hoveredChord = null"
+                :style="{ animationDelay: `${idx * 30}ms` }"
+              >
+                <title>{{ chord.source.name }} ↔ {{ chord.target.name }}: {{ chord.label }}</title>
+              </path>
+            </template>
           </g>
 
-          <!-- Center label -->
-          <text v-if="selectedSegment !== null" class="center-text" text-anchor="middle" dy="0.3em">
-            {{ ordered.length }}
+          <!-- Color nodes -->
+          <g class="nodes-group">
+            <template v-for="(c, i) in ordered" :key="c.hex">
+              <circle
+                :cx="nodePosition(i).x"
+                :cy="nodePosition(i).y"
+                :r="nodeRadius"
+                :fill="c.hex"
+                class="color-node"
+                :class="{
+                  'is-selected': selectedNode === i,
+                  'is-hovered': hoveredNode === i,
+                  'is-connected': isNodeConnected(i),
+                }"
+                @click="selectNode(i)"
+                @mouseenter="hoveredNode = i"
+                @mouseleave="hoveredNode = null"
+                :style="{ animationDelay: `${i * 40}ms` }"
+              >
+                <title>{{ c.name }} — {{ c.hex }}</title>
+              </circle>
+              <!-- Labels -->
+              <text
+                v-if="showLabels"
+                :x="labelPosition(i).x"
+                :y="labelPosition(i).y"
+                class="node-label"
+                :class="{ 'is-active': selectedNode === i || hoveredNode === i }"
+                text-anchor="middle"
+              >
+                {{ c.name }}
+              </text>
+            </template>
+          </g>
+
+          <!-- Center info -->
+          <text v-if="hoveredChord" class="center-text" text-anchor="middle" dy="-0.3em">
+            {{ hoveredChord.label }}
+          </text>
+          <text v-else-if="selectedNode === null" class="center-text" text-anchor="middle" dy="0.3em">
+            {{ ordered.length }} colors
           </text>
         </g>
       </svg>
@@ -105,60 +121,39 @@
   </section>
 </template>
 <script setup lang="ts">
-import { computed, ref, watch, onBeforeUnmount } from 'vue';
+import { computed, ref } from 'vue';
 import Icon from '../Icon.vue';
+import { relativeLuminance } from '@/utils/contrast';
 
-const props = defineProps<{ palette: { hex: string; name: string }[] }>();
-const size = 220;
-const triangle = ref(true);
-const pattern = ref<'triad' | 'triple'>('triad');
-const autoRotate = ref(false);
-const selectedSegment = ref<number | null>(null);
-const hoveredSegment = ref<number | null>(null);
-
-// Auto-rotation interval
-let rotationInterval: number | null = null;
-
-watch(autoRotate, enabled => {
-  if (enabled) {
-    rotationInterval = window.setInterval(() => {
-      if (selectedSegment.value === null) {
-        selectedSegment.value = 0;
-      } else {
-        selectedSegment.value = (selectedSegment.value + 1) % ordered.value.length;
-      }
-    }, 2000);
-  } else {
-    if (rotationInterval !== null) {
-      clearInterval(rotationInterval);
-      rotationInterval = null;
-    }
-  }
-});
-
-onBeforeUnmount(() => {
-  if (rotationInterval !== null) {
-    clearInterval(rotationInterval);
-  }
-});
-
-function selectSegment(index: number) {
-  selectedSegment.value = selectedSegment.value === index ? null : index;
-  if (selectedSegment.value !== null) {
-    autoRotate.value = false;
-  }
+interface ColorNode {
+  hex: string;
+  name: string;
+  hue: number;
+  luminance: number;
 }
 
-const centerColor = computed(() => {
-  if (selectedSegment.value !== null && ordered.value[selectedSegment.value]) {
-    return ordered.value[selectedSegment.value].hex;
-  }
-  return 'var(--dracula-purple)';
-});
+interface Chord {
+  source: ColorNode;
+  target: ColorNode;
+  sourceIndex: number;
+  targetIndex: number;
+  strength: number;
+  label: string;
+  color: string;
+}
 
-const triangleStrokeColor = computed(() => {
-  return hoveredSegment.value !== null ? 'var(--dracula-cyan)' : 'var(--dracula-foreground)';
-});
+const props = defineProps<{ palette: { hex: string; name: string }[] }>();
+const size = 240;
+const nodeRadius = 12;
+const relationshipType = ref<'harmony' | 'contrast' | 'complement'>('harmony');
+const showLabels = ref(true);
+const selectedNode = ref<number | null>(null);
+const hoveredNode = ref<number | null>(null);
+const hoveredChord = ref<Chord | null>(null);
+
+function selectNode(index: number) {
+  selectedNode.value = selectedNode.value === index ? null : index;
+}
 
 function hexToHsl(hex: string) {
   const r = parseInt(hex.slice(1, 3), 16) / 255;
@@ -188,54 +183,168 @@ function hexToHsl(hex: string) {
   return { h: h * 360, s: s * 100, l: l * 100 };
 }
 
-const ordered = computed(() => {
+const ordered = computed((): ColorNode[] => {
   const unique = new Map<string, { hex: string; name: string }>();
   props.palette.forEach(p => {
     unique.set(p.hex.toLowerCase(), p);
   });
-  return Array.from(unique.values()).sort((a, b) => hexToHsl(a.hex).h - hexToHsl(b.hex).h);
+  return Array.from(unique.values())
+    .map(c => ({
+      hex: c.hex,
+      name: c.name,
+      hue: hexToHsl(c.hex).h,
+      luminance: relativeLuminance(c.hex),
+    }))
+    .sort((a, b) => a.hue - b.hue);
 });
 
-function arcPath(i: number) {
-  const rOuter = 90,
-    rInner = 60;
+function nodePosition(index: number): { x: number; y: number } {
+  const radius = 85;
   const n = ordered.value.length || 1;
-  const a0 = (2 * Math.PI * i) / n;
-  const a1 = (2 * Math.PI * (i + 1)) / n;
-  const p = (r: number, a: number) => [r * Math.cos(a), r * Math.sin(a)];
-  const [x0, y0] = p(rOuter, a0);
-  const [x1, y1] = p(rOuter, a1);
-  const [x2, y2] = p(rInner, a1);
-  const [x3, y3] = p(rInner, a0);
-  const large = a1 - a0 > Math.PI ? 1 : 0;
-  return `M ${x0} ${y0} A ${rOuter} ${rOuter} 0 ${large} 1 ${x1} ${y1} L ${x2} ${y2} A ${rInner} ${rInner} 0 ${large} 0 ${x3} ${y3} Z`;
+  const angle = (2 * Math.PI * index) / n - Math.PI / 2; // Start at top
+  return {
+    x: radius * Math.cos(angle),
+    y: radius * Math.sin(angle),
+  };
 }
 
-const trianglePoints = computed(() => {
+function labelPosition(index: number): { x: number; y: number } {
+  const radius = 105;
+  const n = ordered.value.length || 1;
+  const angle = (2 * Math.PI * index) / n - Math.PI / 2;
+  return {
+    x: radius * Math.cos(angle),
+    y: radius * Math.sin(angle),
+  };
+}
+
+const relationshipChords = computed((): Chord[] => {
+  const chords: Chord[] = [];
   const n = ordered.value.length;
-  if (n < 3) return '';
-  const idxA = 0;
-  const idxB = pattern.value === 'triad' ? Math.floor(n / 3) : Math.floor(n * 0.33);
-  const idxC = pattern.value === 'triad' ? Math.floor((2 * n) / 3) : Math.floor(n * 0.66);
-  const r = 70;
-  const angle = (i: number) => (2 * Math.PI * i) / n;
-  const p = (i: number) => `${r * Math.cos(angle(i))},${r * Math.sin(angle(i))}`;
-  return `${p(idxA)} ${p(idxB)} ${p(idxC)} ${p(idxA)}`;
+
+  if (n < 2) return chords;
+
+  for (let i = 0; i < n; i++) {
+    for (let j = i + 1; j < n; j++) {
+      const source = ordered.value[i];
+      const target = ordered.value[j];
+      let strength = 0;
+      let label = '';
+      let shouldInclude = false;
+
+      if (relationshipType.value === 'harmony') {
+        // Harmony based on hue proximity
+        const hueDiff = Math.abs(source.hue - target.hue);
+        const minDiff = Math.min(hueDiff, 360 - hueDiff);
+        if (minDiff < 60) {
+          // Analogous colors
+          strength = 1 - minDiff / 60;
+          label = `Analogous (${Math.round(minDiff)}°)`;
+          shouldInclude = true;
+        }
+      } else if (relationshipType.value === 'contrast') {
+        // Contrast based on luminance difference
+        const lumDiff = Math.abs(source.luminance - target.luminance);
+        if (lumDiff > 0.3) {
+          strength = Math.min(lumDiff / 0.7, 1);
+          label = `Contrast (${(lumDiff * 100).toFixed(0)}%)`;
+          shouldInclude = true;
+        }
+      } else if (relationshipType.value === 'complement') {
+        // Complementary colors (opposite on hue wheel)
+        const hueDiff = Math.abs(source.hue - target.hue);
+        const minDiff = Math.min(hueDiff, 360 - hueDiff);
+        if (minDiff > 150 && minDiff < 210) {
+          strength = 1 - Math.abs(minDiff - 180) / 30;
+          label = `Complementary (${Math.round(minDiff)}°)`;
+          shouldInclude = true;
+        }
+      }
+
+      if (shouldInclude) {
+        // Mix colors for chord color
+        const mixColor = blendColors(source.hex, target.hex);
+        chords.push({
+          source,
+          target,
+          sourceIndex: i,
+          targetIndex: j,
+          strength,
+          label,
+          color: mixColor,
+        });
+      }
+    }
+  }
+
+  return chords;
 });
 
-const triangleVertices = computed(() => {
-  const n = ordered.value.length;
-  if (n < 3) return [];
-  const idxA = 0;
-  const idxB = pattern.value === 'triad' ? Math.floor(n / 3) : Math.floor(n * 0.33);
-  const idxC = pattern.value === 'triad' ? Math.floor((2 * n) / 3) : Math.floor(n * 0.66);
-  const r = 70;
-  const angle = (i: number) => (2 * Math.PI * i) / n;
-  return [idxA, idxB, idxC].map(idx => ({
-    x: r * Math.cos(angle(idx)),
-    y: r * Math.sin(angle(idx)),
-  }));
-});
+function blendColors(hex1: string, hex2: string): string {
+  const r1 = parseInt(hex1.slice(1, 3), 16);
+  const g1 = parseInt(hex1.slice(3, 5), 16);
+  const b1 = parseInt(hex1.slice(5, 7), 16);
+  const r2 = parseInt(hex2.slice(1, 3), 16);
+  const g2 = parseInt(hex2.slice(3, 5), 16);
+  const b2 = parseInt(hex2.slice(5, 7), 16);
+
+  const r = Math.round((r1 + r2) / 2);
+  const g = Math.round((g1 + g2) / 2);
+  const b = Math.round((b1 + b2) / 2);
+
+  return `#${r.toString(16).padStart(2, '0')}${g.toString(16).padStart(2, '0')}${b.toString(16).padStart(2, '0')}`;
+}
+
+function chordPath(chord: Chord): string {
+  const sourcePos = nodePosition(chord.sourceIndex);
+  const targetPos = nodePosition(chord.targetIndex);
+
+  // Calculate control points for smooth bezier curve
+  const dx = targetPos.x - sourcePos.x;
+  const dy = targetPos.y - sourcePos.y;
+  const distance = Math.sqrt(dx * dx + dy * dy);
+
+  // Control point distance from the center (creates the arc)
+  const controlDist = distance * 0.3;
+
+  // Midpoint
+  const mx = (sourcePos.x + targetPos.x) / 2;
+  const my = (sourcePos.y + targetPos.y) / 2;
+
+  // Perpendicular direction for control point (towards center)
+  const nx = -my / Math.sqrt(mx * mx + my * my) || 0;
+  const ny = mx / Math.sqrt(mx * mx + my * my) || 0;
+
+  const cx = mx + nx * controlDist;
+  const cy = my + ny * controlDist;
+
+  return `M ${sourcePos.x} ${sourcePos.y} Q ${cx} ${cy} ${targetPos.x} ${targetPos.y}`;
+}
+
+function getChordOpacity(chord: Chord): number {
+  return 0.3 + chord.strength * 0.5;
+}
+
+function isChordHighlighted(chord: Chord): boolean {
+  if (hoveredChord.value === chord) return true;
+  if (selectedNode.value === chord.sourceIndex || selectedNode.value === chord.targetIndex)
+    return true;
+  if (hoveredNode.value === chord.sourceIndex || hoveredNode.value === chord.targetIndex) return true;
+  return false;
+}
+
+function shouldDimChord(chord: Chord): boolean {
+  if (selectedNode.value === null && hoveredNode.value === null && hoveredChord.value === null)
+    return false;
+  return !isChordHighlighted(chord);
+}
+
+function isNodeConnected(nodeIndex: number): boolean {
+  if (selectedNode.value === null && hoveredNode.value === null) return false;
+  return relationshipChords.value.some(
+    chord => chord.sourceIndex === nodeIndex || chord.targetIndex === nodeIndex
+  );
+}
 </script>
 <style scoped lang="scss">
 @import '@/assets/styles/analysis-mixins';
@@ -268,115 +377,128 @@ const triangleVertices = computed(() => {
 .cycle-map__visualization {
   @include analysis-svg-container;
   position: relative;
+  min-height: 260px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .cycle-map__svg {
   filter: drop-shadow(0 4px 8px var(--surface-shadow));
   transition: filter var(--transition-normal);
 
-  &.is-rotating {
-    animation: gentle-pulse 4s ease-in-out infinite;
-  }
-
   &:hover {
     filter: drop-shadow(0 6px 12px var(--surface-shadow));
   }
 }
 
-.center-circle {
-  animation: pulse-glow 3s ease-in-out infinite;
+.bg-circle {
+  animation: pulse-glow 4s ease-in-out infinite;
 
   @media (prefers-reduced-motion: reduce) {
     animation: none;
   }
 }
 
-.cycle-map__segment {
-  cursor: pointer;
-  transition: all var(--transition-normal);
-  transform-origin: center;
-  animation: segment-fade-in 0.6s ease-out backwards;
+// Chord styling
+.chords-group {
+  .chord {
+    cursor: pointer;
+    transition: all var(--transition-normal);
+    animation: chord-fade-in 0.8s ease-out backwards;
 
-  &:hover {
-    opacity: 0.9;
-    filter: brightness(1.1) drop-shadow(0 0 8px currentColor);
-  }
+    &.is-highlighted {
+      stroke-width: 3;
+      stroke-opacity: 0.9 !important;
+      filter: drop-shadow(0 0 8px currentColor) url(#chord-glow);
+      animation: chord-pulse 1.5s ease-in-out infinite;
+    }
 
-  &.is-selected {
-    filter: brightness(1.2) drop-shadow(0 0 12px currentColor);
-    opacity: 1;
-    animation: segment-selected 0.5s ease-out;
-  }
+    &.is-dimmed {
+      stroke-opacity: 0.1 !important;
+      stroke-width: 1;
+    }
 
-  &.is-hovered {
-    transform: scale(1.05);
-    filter: brightness(1.15);
-  }
+    &:hover {
+      stroke-width: 3;
+      filter: drop-shadow(0 0 6px currentColor);
+    }
 
-  @media (prefers-reduced-motion: reduce) {
-    animation: none;
-
-    &:hover,
-    &.is-selected,
-    &.is-hovered {
+    @media (prefers-reduced-motion: reduce) {
       animation: none;
-      transform: none;
     }
   }
 }
 
-.cycle-map__triangle {
-  filter: drop-shadow(0 0 4px rgba(0, 0, 0, 0.3));
-  animation: triangle-fade-in 0.8s ease-out 0.3s backwards;
+// Node styling
+.nodes-group {
+  .color-node {
+    cursor: pointer;
+    transition: all var(--transition-normal);
+    stroke: var(--analysis-swatch-border);
+    stroke-width: 2;
+    animation: node-appear 0.6s ease-out backwards;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
 
-  @media (prefers-reduced-motion: reduce) {
-    animation: none;
+    &:hover {
+      stroke-width: 3;
+      filter: drop-shadow(0 0 12px currentColor) brightness(1.1);
+      transform: scale(1.15);
+      transform-origin: center;
+    }
+
+    &.is-selected {
+      stroke-width: 4;
+      stroke: var(--dracula-cyan);
+      filter: drop-shadow(0 0 16px currentColor) brightness(1.15);
+      animation: node-selected 0.5s ease-out;
+    }
+
+    &.is-hovered {
+      stroke-width: 3;
+      stroke: var(--dracula-purple);
+      transform: scale(1.2);
+    }
+
+    &.is-connected {
+      filter: drop-shadow(0 0 8px currentColor);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      animation: none;
+
+      &:hover,
+      &.is-selected,
+      &.is-hovered {
+        animation: none;
+        transform: scale(1.05);
+      }
+    }
   }
-}
 
-.triangle-line {
-  stroke-dasharray: 300;
-  stroke-dashoffset: 300;
-  animation: draw-triangle 1.5s ease-out 0.5s forwards;
-  transition: stroke var(--transition-normal);
+  .node-label {
+    font-size: 10px;
+    fill: var(--dracula-foreground);
+    opacity: 0.7;
+    pointer-events: none;
+    transition: all var(--transition-fast);
+    font-weight: 500;
 
-  @media (prefers-reduced-motion: reduce) {
-    animation: none;
-    stroke-dashoffset: 0;
-  }
-}
-
-.triangle-vertex {
-  animation: vertex-appear 0.4s ease-out backwards;
-  transition: all var(--transition-fast);
-
-  &:nth-child(1) {
-    animation-delay: 1.8s;
-  }
-
-  &:nth-child(2) {
-    animation-delay: 1.9s;
-  }
-
-  &:nth-child(3) {
-    animation-delay: 2s;
-  }
-
-  &:hover {
-    r: 6;
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    animation: none;
+    &.is-active {
+      opacity: 1;
+      font-weight: 700;
+      fill: var(--dracula-cyan);
+    }
   }
 }
 
 .center-text {
-  font-size: 24px;
-  font-weight: bold;
+  font-size: 14px;
+  font-weight: 600;
   fill: var(--dracula-foreground);
-  opacity: 0.6;
-  animation: text-pulse 2s ease-in-out infinite;
+  opacity: 0.7;
+  pointer-events: none;
+  animation: text-fade-in 0.5s ease-out;
 
   @media (prefers-reduced-motion: reduce) {
     animation: none;
@@ -384,65 +506,29 @@ const triangleVertices = computed(() => {
 }
 
 // Keyframe Animations
-@keyframes segment-fade-in {
+@keyframes chord-fade-in {
   from {
-    opacity: 0;
-    transform: scale(0.8);
+    stroke-opacity: 0;
+    stroke-dasharray: 100;
+    stroke-dashoffset: 100;
   }
   to {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-
-@keyframes segment-selected {
-  0% {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(1.08);
-  }
-  100% {
-    transform: scale(1.05);
-  }
-}
-
-@keyframes pulse-glow {
-  0%,
-  100% {
-    opacity: 0.3;
-  }
-  50% {
-    opacity: 0.6;
-  }
-}
-
-@keyframes gentle-pulse {
-  0%,
-  100% {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(1.02);
-  }
-}
-
-@keyframes triangle-fade-in {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-@keyframes draw-triangle {
-  to {
+    stroke-dasharray: 0;
     stroke-dashoffset: 0;
   }
 }
 
-@keyframes vertex-appear {
+@keyframes chord-pulse {
+  0%,
+  100% {
+    stroke-width: 3;
+  }
+  50% {
+    stroke-width: 4;
+  }
+}
+
+@keyframes node-appear {
   from {
     opacity: 0;
     transform: scale(0);
@@ -453,13 +539,34 @@ const triangleVertices = computed(() => {
   }
 }
 
-@keyframes text-pulse {
-  0%,
-  100% {
-    opacity: 0.4;
+@keyframes node-selected {
+  0% {
+    transform: scale(1);
   }
   50% {
-    opacity: 0.8;
+    transform: scale(1.3);
+  }
+  100% {
+    transform: scale(1.15);
+  }
+}
+
+@keyframes pulse-glow {
+  0%,
+  100% {
+    opacity: 0.3;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+@keyframes text-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 0.7;
   }
 }
 </style>
