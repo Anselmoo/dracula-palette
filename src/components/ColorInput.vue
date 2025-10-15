@@ -189,6 +189,22 @@ defineExpose({
   transition: all 0.3s ease;
   flex-shrink: 0;
   cursor: pointer;
+  padding: 0;
+  overflow: hidden;
+
+  &::-webkit-color-swatch-wrapper {
+    padding: 0;
+  }
+
+  &::-webkit-color-swatch {
+    border: none;
+    border-radius: 6px;
+  }
+
+  &::-moz-color-swatch {
+    border: none;
+    border-radius: 6px;
+  }
 
   &:hover {
     transform: scale(1.05);
