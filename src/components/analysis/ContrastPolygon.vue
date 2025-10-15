@@ -283,6 +283,8 @@ function resetFilters() {
     align-items: center;
     justify-content: center;
     padding: 2rem;
+    background: var(--analysis-panel-bg);
+    border-radius: var(--radius-md);
 
     @media (prefers-reduced-motion: no-preference) {
       .edge {
