@@ -13,7 +13,7 @@
           v-model="inputValue"
           type="text"
           class="color-input"
-          placeholder="#ff79c6"
+          :placeholder="getFallbackColor()"
           :class="{ error: hasError }"
           @input="handleInput"
           @blur="handleBlur"
@@ -34,9 +34,9 @@
       <div class="format-examples">
         <p class="examples-title">Supported formats:</p>
         <div class="examples-grid">
-          <span class="example">#ff79c6</span>
-          <span class="example">rgb(255, 121, 198)</span>
-          <span class="example">hsl(326, 100%, 74%)</span>
+          <span class="example">{{ exampleHex }}</span>
+          <span class="example">{{ exampleRgb }}</span>
+          <span class="example">{{ exampleHsl }}</span>
           <span class="example">pink</span>
         </div>
       </div>
@@ -47,6 +47,7 @@
 <script setup lang="ts">
 import { ref, computed, watch } from 'vue';
 import { isValidColor, normalizeColorToHex } from '../utils/colorMatcher';
+import { useTheme } from '../composables/useTheme';
 
 interface Props {
   modelValue: string;
@@ -60,16 +61,48 @@ interface Emits {
 const props = defineProps<Props>();
 const emit = defineEmits<Emits>();
 
+const { currentColors } = useTheme();
+
+// Get theme-aware fallback color (Pink from current palette)
+const getFallbackColor = () => {
+  const pinkColor = currentColors.value.find(c => c.name === 'Pink');
+  return pinkColor?.hex || '#ff79c6';
+};
+
 const inputValue = ref(props.modelValue);
 const hasError = ref(false);
 const colorPicker = ref<HTMLInputElement | null>(null);
-const pickerValue = computed(() => (hasError.value ? '#000000' : inputValue.value || '#ff79c6'));
+const pickerValue = computed(() => (hasError.value ? '#000000' : inputValue.value || getFallbackColor()));
 
 const previewColor = computed(() => {
   if (hasError.value) {
     return 'transparent';
   }
-  return inputValue.value || '#ff79c6';
+  return inputValue.value || getFallbackColor();
+});
+
+// Get example formats for the current theme's pink color
+const exampleHex = computed(() => getFallbackColor());
+const exampleRgb = computed(() => {
+  const pinkColor = currentColors.value.find(c => c.name === 'Pink');
+  if (pinkColor?.rgb) {
+    const [r, g, b] = pinkColor.rgb;
+    return `rgb(${r}, ${g}, ${b})`;
+  }
+  return 'rgb(255, 121, 198)'; // fallback
+});
+const exampleHsl = computed(() => {
+  // For Dracula pink: hsl(326, 100%, 74%)
+  // For Alucard pink: hsl(338, 78%, 36%)
+  const pinkColor = currentColors.value.find(c => c.name === 'Pink');
+  const hex = pinkColor?.hex || '#ff79c6';
+  // Simple conversion for the known pink colors
+  if (hex === '#ff79c6') {
+    return 'hsl(326, 100%, 74%)';
+  } else if (hex === '#a3144d') {
+    return 'hsl(338, 78%, 36%)';
+  }
+  return 'hsl(326, 100%, 74%)'; // fallback
 });
 
 const handleInput = () => {
