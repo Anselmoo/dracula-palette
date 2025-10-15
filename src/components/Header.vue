@@ -39,8 +39,8 @@ const { isDarkMode } = useTheme();
   position: sticky;
   top: 0;
   z-index: 100;
-  background: var(--dracula-current-line);
-  border-bottom: 1px solid var(--dracula-selection);
+  background: var(--header-footer-bg);
+  border-bottom: 1px solid var(--header-footer-border);
   padding: 2rem 0;
   text-align: center;
   backdrop-filter: blur(8px);
@@ -65,7 +65,6 @@ const { isDarkMode } = useTheme();
   align-items: center;
   justify-content: center;
   gap: 1rem;
-  margin-bottom: 1rem;
 }
 
 .logo-image {
@@ -95,9 +94,10 @@ const { isDarkMode } = useTheme();
 
 .subnav {
   display: flex;
+  justify-content: center;
   gap: 1.25rem;
   padding: 0.5rem 1rem 0.8rem;
-  border-top: 1px solid var(--dracula-selection);
+  border-top: 1px solid var(--header-footer-border);
   overflow-x: auto;
 }
 
