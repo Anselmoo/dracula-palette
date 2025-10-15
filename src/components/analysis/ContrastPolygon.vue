@@ -185,13 +185,13 @@ function resetFilters() {
 }
 </script>
 <style scoped lang="scss">
-@import '@/assets/styles/analysis-mixins';
+@use '@/assets/styles/analysis-mixins' as mixins;
 
 .contrast-polygon {
-  @include analysis-panel;
+  @include mixins.analysis-panel;
 
   &__heading {
-    @include analysis-heading;
+    @include mixins.analysis-heading;
     display: flex;
     align-items: center;
     gap: 0.5rem;
@@ -205,7 +205,7 @@ function resetFilters() {
   }
 
   &__controls {
-    @include analysis-controls;
+    @include mixins.analysis-controls;
     margin-bottom: 1.5rem;
 
     .label-text {
@@ -276,7 +276,7 @@ function resetFilters() {
   }
 
   &__visualization {
-    @include analysis-svg-container;
+    @include mixins.analysis-svg-container;
     min-height: 400px;
     display: flex;
     align-items: center;
@@ -404,7 +404,7 @@ function resetFilters() {
   }
 
   // Responsive adjustments
-  @include analysis-responsive;
+  @include mixins.analysis-responsive;
 
   @media (max-width: 768px) {
     &__visualization {

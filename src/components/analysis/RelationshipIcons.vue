@@ -33,19 +33,19 @@ defineProps<Props>();
 </script>
 
 <style scoped lang="scss">
-@import '@/assets/styles/analysis-mixins';
+@use '@/assets/styles/analysis-mixins' as mixins;
 
 .relationship-icons {
-  @include analysis-panel-accent(var(--dracula-purple));
-  @include analysis-animation-fade-in;
+  @include mixins.analysis-panel-accent(var(--dracula-purple));
+  @include mixins.analysis-animation-fade-in;
 }
 
 .relationship-icons__heading {
-  @include analysis-heading;
+  @include mixins.analysis-heading;
 }
 
 .relationship-icons__description {
-  @include analysis-description;
+  @include mixins.analysis-description;
 }
 
 .relationship-icons__graph {
@@ -73,6 +73,6 @@ defineProps<Props>();
     box-shadow: var(--shadow-md);
   }
 
-  @include analysis-animation-pulse(3s);
+  @include mixins.analysis-animation-pulse(3s);
 }
 </style>

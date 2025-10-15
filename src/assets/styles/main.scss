@@ -1,5 +1,5 @@
 // Import analysis component mixins
-@import './analysis-mixins';
+@use './analysis-mixins' as mixins;
 
 // Reset and base styles
 *,

@@ -238,24 +238,24 @@ const triangleVertices = computed(() => {
 });
 </script>
 <style scoped lang="scss">
-@import '@/assets/styles/analysis-mixins';
+@use '@/assets/styles/analysis-mixins' as mixins;
 
 .cycle-map {
-  @include analysis-panel;
-  @include analysis-animation-fade-in;
+  @include mixins.analysis-panel;
+  @include mixins.analysis-animation-fade-in;
   margin-top: var(--spacing-sm);
 }
 
 .cycle-map__heading {
-  @include analysis-heading;
+  @include mixins.analysis-heading;
 }
 
 .cycle-map__description {
-  @include analysis-description;
+  @include mixins.analysis-description;
 }
 
 .cycle-map__controls {
-  @include analysis-controls;
+  @include mixins.analysis-controls;
 
   .selected-color {
     font-weight: 600;
@@ -266,7 +266,7 @@ const triangleVertices = computed(() => {
 }
 
 .cycle-map__visualization {
-  @include analysis-svg-container;
+  @include mixins.analysis-svg-container;
   position: relative;
 }
 
