@@ -64,6 +64,8 @@ const ICONS: Record<string, string> = {
   dna: '<path d="M7 5c3 4 7 4 10 0M7 19c3-4 7-4 10 0" stroke="currentColor" stroke-width="1.5" fill="none"/><path d="M8 8h8M8 16h8" stroke="currentColor"/>',
   puzzle: '<path d="M9 3h3a2 2 0 012 2v2h2a2 2 0 012 2v3h-3a2 2 0 01-2-2v-1h-1a2 2 0 01-2-2V3z"/>',
   text: '<path d="M4 6h16v2H13v10h-2V8H4z"/>',
+  network:
+    '<circle cx="12" cy="12" r="2"/><circle cx="6" cy="6" r="2"/><circle cx="18" cy="6" r="2"/><circle cx="6" cy="18" r="2"/><circle cx="18" cy="18" r="2"/><path d="M10 11L8 8M14 11l2-2M10 13l-2 3M14 13l2 3" stroke="currentColor" stroke-width="1.5" fill="none"/>',
 };
 
 const path = computed(() => ICONS[props.name] ?? '');
