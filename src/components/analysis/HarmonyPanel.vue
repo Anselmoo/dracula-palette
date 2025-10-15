@@ -62,7 +62,7 @@
                 </text>
               </g>
             </template>
-            <circle :cx="polarX(hA, 90)" :cy="polarY(hA, 90)" r="6" class="pin">
+            <circle :cx="polarX(hA, 90)" :cy="polarY(hA, 90)" r="6" class="pin" :fill="aHex">
               <title>{{ aHex }}</title>
             </circle>
             <circle
@@ -72,6 +72,7 @@
               :cy="polarY(h, 90)"
               r="5"
               class="pin sec"
+              :fill="hueToHexA(h)"
             >
               <title>{{ hueToHexA(h) }} ({{ Math.round(h) }}°)</title>
             </circle>
@@ -107,7 +108,7 @@
                 </text>
               </g>
             </template>
-            <circle :cx="polarX(hB, 90)" :cy="polarY(hB, 90)" r="6" class="pin">
+            <circle :cx="polarX(hB, 90)" :cy="polarY(hB, 90)" r="6" class="pin" :fill="bHex">
               <title>{{ bHex }}</title>
             </circle>
             <circle
@@ -117,6 +118,7 @@
               :cy="polarY(h, 90)"
               r="5"
               class="pin sec"
+              :fill="hueToHexB(h)"
             >
               <title>{{ hueToHexB(h) }} ({{ Math.round(h) }}°)</title>
             </circle>
@@ -152,7 +154,7 @@
                 </text>
               </g>
             </template>
-            <circle :cx="polarX(hC, 90)" :cy="polarY(hC, 90)" r="6" class="pin">
+            <circle :cx="polarX(hC, 90)" :cy="polarY(hC, 90)" r="6" class="pin" :fill="cHex">
               <title>{{ cHex }}</title>
             </circle>
             <circle
@@ -162,6 +164,7 @@
               :cy="polarY(h, 90)"
               r="5"
               class="pin sec"
+              :fill="hueToHexC(h)"
             >
               <title>{{ hueToHexC(h) }} ({{ Math.round(h) }}°)</title>
             </circle>
@@ -579,12 +582,11 @@ function onWheelClick(evt: MouseEvent, which: 'A' | 'B' | 'C') {
   justify-content: center;
 }
 .pin {
-  fill: #fff;
   stroke: var(--surface-border);
   stroke-width: 1.5;
 }
 .pin.sec {
-  fill: #000000aa;
+  opacity: 0.85;
 }
 .tick {
   stroke: var(--surface-border);
