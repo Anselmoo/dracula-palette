@@ -392,7 +392,7 @@ const tabs = [
   {
     id: 'advancedGradients',
     icon: 'gradients',
-    label: 'Advanced Patterns',
+    label: 'Advanced Gradient',
     tooltip: 'Bubbles, Aurora, Mesh, Plasma, etc.',
   },
   { id: 'accessibility', icon: 'accessibility', label: 'Accessibility', tooltip: 'WCAG checks' },

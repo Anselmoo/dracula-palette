@@ -2,7 +2,7 @@
   <section class="gradient-explore" aria-label="Advanced Gradient Explorer">
     <h3 class="t">
       <Icon name="gradients" />
-      <span>Advanced Gradient Patterns</span>
+      <span>Advanced Gradient</span>
     </h3>
 
     <div class="controls">
@@ -13,6 +13,25 @@
       <label class="toggle-grain">
         <input type="checkbox" v-model="grain" />
         <span class="lbl">Film Grain</span>
+      </label>
+      <label class="control-angle">
+        <span class="lbl">Angle</span>
+        <input type="range" min="0" max="360" v-model.number="angle" />
+        <span class="lbl angle-value">{{ angle }}°</span>
+      </label>
+      <label class="control-stops">
+        <span class="lbl">Color Stops</span>
+        <input type="range" min="2" max="6" v-model.number="colorStops" />
+        <span class="lbl stops-value">{{ colorStops }}</span>
+      </label>
+      <label class="control-blend">
+        <span class="lbl">Blend Mode</span>
+        <select v-model="blendMode">
+          <option value="normal">Normal</option>
+          <option value="multiply">Multiply</option>
+          <option value="screen">Screen</option>
+          <option value="overlay">Overlay</option>
+        </select>
       </label>
     </div>
 
@@ -44,13 +63,16 @@ const { currentColors } = useTheme();
 const activePreset = ref('bubbles');
 const animate = ref(true);
 const grain = ref(false);
+const angle = ref(135);
+const colorStops = ref(4);
+const blendMode = ref('normal');
 
 // Get effective colors
 const colors = computed(() => {
   if (props.palette?.length >= 2) {
-    return props.palette.slice(0, 4).map(c => c.hex);
+    return props.palette.slice(0, colorStops.value).map(c => c.hex);
   }
-  return currentColors.value.slice(0, 4).map(c => c.hex);
+  return currentColors.value.slice(0, colorStops.value).map(c => c.hex);
 });
 
 // Pattern presets
@@ -78,70 +100,77 @@ const presets = [
 // Generate HTML for current pattern
 const currentHTML = computed(() => {
   const c = colors.value;
-  const [c0, c1, c2, c3] = c;
+  // Ensure we have at least 2 colors, pad with last color if needed
+  while (c.length < 2) c.push(c[c.length - 1] || '#282a36');
+  const c0 = c[0] || '#282a36';
+  const c1 = c[1] || '#44475a';
+  const c2 = c[2] || c1;
+  const c3 = c[3] || c2;
+  
   const grainSVG = grain.value
     ? `<svg style="position:absolute;width:100%;height:100%;opacity:0.08;pointer-events:none;top:0;left:0;" xmlns="http://www.w3.org/2000/svg"><filter id="grain"><feTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch"/></filter><rect width="100%" height="100%" filter="url(#grain)"/></svg>`
     : '';
 
   const animClass = animate.value ? 'animated' : '';
+  const blend = blendMode.value !== 'normal' ? `mix-blend-mode:${blendMode.value};` : '';
 
   switch (activePreset.value) {
     case 'bubbles':
-      return `<div class="scene"><div class="bubble bubble1 ${animClass}" style="background:${c0}"></div><div class="bubble bubble2 ${animClass}" style="background:${c1}"></div><div class="bubble bubble3 ${animClass}" style="background:${c2}"></div>${grainSVG}</div>`;
+      return `<div class="scene"><div class="bubble bubble1 ${animClass}" style="background:${c0};${blend}"></div><div class="bubble bubble2 ${animClass}" style="background:${c1};${blend}"></div><div class="bubble bubble3 ${animClass}" style="background:${c2};${blend}"></div>${grainSVG}</div>`;
 
     case 'aurora':
-      return `<div class="scene" style="background:linear-gradient(180deg,${c0},${c1})"><div class="aurora aurora1 ${animClass}" style="background:linear-gradient(90deg,${c1},${c2},${c3})"></div><div class="aurora aurora2 ${animClass}" style="background:linear-gradient(-90deg,${c2},${c0},${c1})"></div>${grainSVG}</div>`;
+      return `<div class="scene" style="background:linear-gradient(${angle.value}deg,${c0},${c1})"><div class="aurora aurora1 ${animClass}" style="background:linear-gradient(${angle.value}deg,${c.join(',')});${blend}"></div><div class="aurora aurora2 ${animClass}" style="background:linear-gradient(${angle.value + 180}deg,${[...c].reverse().join(',')});${blend}"></div>${grainSVG}</div>`;
 
     case 'mesh':
-      return `<div class="scene" style="background:${c0}"><div class="mesh ${animClass}" style="background:radial-gradient(at 20% 30%,${c1} 0,transparent 50%),radial-gradient(at 80% 70%,${c2} 0,transparent 50%),radial-gradient(at 50% 50%,${c3} 0,transparent 50%)"></div>${grainSVG}</div>`;
+      return `<div class="scene" style="background:${c0}"><div class="mesh ${animClass}" style="background:radial-gradient(at 20% 30%,${c1} 0,transparent 50%),radial-gradient(at 80% 70%,${c2} 0,transparent 50%),radial-gradient(at 50% 50%,${c3} 0,transparent 50%);${blend}"></div>${grainSVG}</div>`;
 
     case 'sunset':
-      return `<div class="scene" style="background:linear-gradient(180deg,${c0},${c1},${c2})"><div class="sun ${animClass}" style="background:radial-gradient(circle,${c3},transparent)"></div>${grainSVG}</div>`;
+      return `<div class="scene" style="background:linear-gradient(${angle.value}deg,${c.slice(0, -1).join(',')})"><div class="sun ${animClass}" style="background:radial-gradient(circle,${c[c.length - 1]},transparent);${blend}"></div>${grainSVG}</div>`;
 
     case 'galaxy':
-      return `<div class="scene" style="background:radial-gradient(ellipse at center,${c0} 0%,${c1} 100%)"><div class="star star1 ${animClass}" style="background:${c2}"></div><div class="star star2 ${animClass}" style="background:${c3}"></div><div class="star star3 ${animClass}" style="background:${c1}"></div>${grainSVG}</div>`;
+      return `<div class="scene" style="background:radial-gradient(ellipse at center,${c0} 0%,${c1} 100%)"><div class="star star1 ${animClass}" style="background:${c2};${blend}"></div><div class="star star2 ${animClass}" style="background:${c3 || c2};${blend}"></div><div class="star star3 ${animClass}" style="background:${c1};${blend}"></div>${grainSVG}</div>`;
 
     case 'neon':
-      return `<div class="scene" style="background:${c0}"><div class="neon neon1 ${animClass}" style="background:${c1};box-shadow:0 0 40px ${c1}"></div><div class="neon neon2 ${animClass}" style="background:${c2};box-shadow:0 0 40px ${c2}"></div>${grainSVG}</div>`;
+      return `<div class="scene" style="background:${c0}"><div class="neon neon1 ${animClass}" style="background:${c1};box-shadow:0 0 40px ${c1};${blend}"></div><div class="neon neon2 ${animClass}" style="background:${c2};box-shadow:0 0 40px ${c2};${blend}"></div>${grainSVG}</div>`;
 
     case 'holographic':
-      return `<div class="scene" style="background:linear-gradient(135deg,${c0},${c1},${c2},${c3})"><div class="holo ${animClass}" style="background:repeating-linear-gradient(90deg,transparent,rgba(255,255,255,0.1) 2px,transparent 4px)"></div>${grainSVG}</div>`;
+      return `<div class="scene" style="background:linear-gradient(${angle.value}deg,${c.join(',')})"><div class="holo ${animClass}" style="background:repeating-linear-gradient(${angle.value}deg,transparent,rgba(255,255,255,0.1) 2px,transparent 4px);${blend}"></div>${grainSVG}</div>`;
 
     case 'lava':
-      return `<div class="scene" style="background:${c0}"><div class="blob blob1 ${animClass}" style="background:${c1}"></div><div class="blob blob2 ${animClass}" style="background:${c2}"></div><div class="blob blob3 ${animClass}" style="background:${c3}"></div>${grainSVG}</div>`;
+      return `<div class="scene" style="background:${c0}"><div class="blob blob1 ${animClass}" style="background:${c1};${blend}"></div><div class="blob blob2 ${animClass}" style="background:${c2};${blend}"></div><div class="blob blob3 ${animClass}" style="background:${c3 || c2};${blend}"></div>${grainSVG}</div>`;
 
     case 'ocean':
-      return `<div class="scene"><div class="depth ${animClass}" style="background:linear-gradient(180deg,${c0} 0%,${c1} 40%,${c2} 70%,${c3} 100%)"></div>${grainSVG}</div>`;
+      return `<div class="scene"><div class="depth ${animClass}" style="background:linear-gradient(${angle.value}deg,${c.map((col, i) => `${col} ${Math.round((i / (c.length - 1)) * 100)}%`).join(',')});${blend}"></div>${grainSVG}</div>`;
 
     case 'crystal':
-      return `<div class="scene" style="background:${c0}"><div class="facet facet1 ${animClass}" style="background:${c1}"></div><div class="facet facet2 ${animClass}" style="background:${c2}"></div><div class="facet facet3 ${animClass}" style="background:${c3}"></div>${grainSVG}</div>`;
+      return `<div class="scene" style="background:${c0}"><div class="facet facet1 ${animClass}" style="background:${c1};${blend}"></div><div class="facet facet2 ${animClass}" style="background:${c2};${blend}"></div><div class="facet facet3 ${animClass}" style="background:${c3 || c2};${blend}"></div>${grainSVG}</div>`;
 
     case 'plasma':
-      return `<div class="scene" style="background:${c0}"><div class="plasma plasma1 ${animClass}" style="background:${c1}"></div><div class="plasma plasma2 ${animClass}" style="background:${c2}"></div><div class="plasma plasma3 ${animClass}" style="background:${c3}"></div>${grainSVG}</div>`;
+      return `<div class="scene" style="background:${c0}"><div class="plasma plasma1 ${animClass}" style="background:${c1};${blend}"></div><div class="plasma plasma2 ${animClass}" style="background:${c2};${blend}"></div><div class="plasma plasma3 ${animClass}" style="background:${c3 || c2};${blend}"></div>${grainSVG}</div>`;
 
     case 'smoke':
-      return `<div class="scene" style="background:linear-gradient(180deg,${c0},${c1})"><div class="smoke smoke1 ${animClass}" style="background:linear-gradient(90deg,transparent,${c2},transparent)"></div><div class="smoke smoke2 ${animClass}" style="background:linear-gradient(-90deg,transparent,${c3},transparent)"></div>${grainSVG}</div>`;
+      return `<div class="scene" style="background:linear-gradient(${angle.value}deg,${c0},${c1})"><div class="smoke smoke1 ${animClass}" style="background:linear-gradient(${angle.value}deg,transparent,${c2},transparent);${blend}"></div><div class="smoke smoke2 ${animClass}" style="background:linear-gradient(${angle.value + 180}deg,transparent,${c3 || c2},transparent);${blend}"></div>${grainSVG}</div>`;
 
     case 'fire':
-      return `<div class="scene" style="background:linear-gradient(180deg,${c0},${c1})"><div class="flame flame1 ${animClass}" style="background:linear-gradient(0deg,${c2},transparent)"></div><div class="flame flame2 ${animClass}" style="background:linear-gradient(0deg,${c3},transparent)"></div>${grainSVG}</div>`;
+      return `<div class="scene" style="background:linear-gradient(${angle.value}deg,${c0},${c1})"><div class="flame flame1 ${animClass}" style="background:linear-gradient(${angle.value}deg,${c2},transparent);${blend}"></div><div class="flame flame2 ${animClass}" style="background:linear-gradient(${angle.value}deg,${c3 || c2},transparent);${blend}"></div>${grainSVG}</div>`;
 
     case 'ice':
-      return `<div class="scene" style="background:${c0}"><div class="frost frost1 ${animClass}" style="background:linear-gradient(135deg,${c1},transparent)"></div><div class="frost frost2 ${animClass}" style="background:linear-gradient(-45deg,${c2},transparent)"></div>${grainSVG}</div>`;
+      return `<div class="scene" style="background:${c0}"><div class="frost frost1 ${animClass}" style="background:linear-gradient(${angle.value}deg,${c1},transparent);${blend}"></div><div class="frost frost2 ${animClass}" style="background:linear-gradient(${angle.value + 90}deg,${c2},transparent);${blend}"></div>${grainSVG}</div>`;
 
     case 'waves':
-      return `<div class="scene" style="background:${c0}"><div class="wave wave1 ${animClass}" style="background:${c1}"></div><div class="wave wave2 ${animClass}" style="background:${c2}"></div><div class="wave wave3 ${animClass}" style="background:${c3}"></div>${grainSVG}</div>`;
+      return `<div class="scene" style="background:${c0}"><div class="wave wave1 ${animClass}" style="background:${c1};${blend}"></div><div class="wave wave2 ${animClass}" style="background:${c2};${blend}"></div><div class="wave wave3 ${animClass}" style="background:${c3 || c2};${blend}"></div>${grainSVG}</div>`;
 
     case 'geometric':
-      return `<div class="scene" style="background:linear-gradient(135deg,${c0},${c1})"><div class="geo geo1 ${animClass}" style="background:${c2}"></div><div class="geo geo2 ${animClass}" style="background:${c3}"></div>${grainSVG}</div>`;
+      return `<div class="scene" style="background:linear-gradient(${angle.value}deg,${c0},${c1})"><div class="geo geo1 ${animClass}" style="background:${c2};${blend}"></div><div class="geo geo2 ${animClass}" style="background:${c3 || c2};${blend}"></div>${grainSVG}</div>`;
 
     case 'stripes':
-      return `<div class="scene" style="background:repeating-linear-gradient(90deg,${c0} 0%,${c1} 25%,${c2} 50%,${c3} 75%,${c0} 100%)"></div>${grainSVG}`;
+      return `<div class="scene" style="background:repeating-linear-gradient(${angle.value}deg,${c.map((col, i) => `${col} ${i * (100 / c.length)}%,${col} ${(i + 1) * (100 / c.length)}%`).join(',')})"></div>${grainSVG}`;
 
     case 'spotlight':
-      return `<div class="scene" style="background:${c0}"><div style="position:absolute;width:100%;height:100%;background:radial-gradient(circle at 50% 50%,${c1} 0%,${c2} 30%,${c3} 60%,transparent 100%)"></div>${grainSVG}</div>`;
+      return `<div class="scene" style="background:${c0}"><div style="position:absolute;width:100%;height:100%;background:radial-gradient(circle at 50% 50%,${c.map((col, i) => `${col} ${i * (100 / c.length)}%`).join(',')},transparent 100%);${blend}"></div>${grainSVG}</div>`;
 
     default:
-      return `<div class="scene" style="background:linear-gradient(135deg,${c.join(',')})"></div>${grainSVG}`;
+      return `<div class="scene" style="background:linear-gradient(${angle.value}deg,${c.join(',')})"></div>${grainSVG}`;
   }
 });
 
@@ -237,7 +266,7 @@ onMounted(() => updateStyles());
 onUnmounted(() => {
   if (styleEl) document.head.removeChild(styleEl);
 });
-watch([activePreset, animate, grain], () => updateStyles());
+watch([activePreset, animate, grain, angle, colorStops, blendMode], () => updateStyles());
 </script>
 
 <style scoped lang="scss">
@@ -257,6 +286,7 @@ watch([activePreset, animate, grain], () => updateStyles());
   gap: 1.5rem;
   margin-bottom: 1rem;
   align-items: center;
+  flex-wrap: wrap;
 }
 .lbl {
   font-size: 0.9rem;
@@ -270,7 +300,36 @@ watch([activePreset, animate, grain], () => updateStyles());
   gap: 0.3rem;
   cursor: pointer;
 }
+.control-angle,
+.control-stops,
+.control-blend {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.control-angle input[type='range'],
+.control-stops input[type='range'] {
+  width: 120px;
+}
+.control-blend select {
+  padding: 0.25rem 0.5rem;
+  background: var(--surface-primary);
+  color: var(--dracula-foreground);
+  border: 1px solid var(--surface-border);
+  border-radius: 6px;
+  cursor: pointer;
+}
+.angle-value,
+.stops-value {
+  min-width: 40px;
+  text-align: center;
+  font-weight: 600;
+  color: var(--dracula-purple);
+}
 input[type='checkbox'] {
+  cursor: pointer;
+}
+input[type='range'] {
   cursor: pointer;
 }
 .preset-grid {
