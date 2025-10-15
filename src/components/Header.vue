@@ -65,7 +65,6 @@ const { isDarkMode } = useTheme();
   align-items: center;
   justify-content: center;
   gap: 1rem;
-  margin-bottom: 1rem;
 }
 
 .logo-image {

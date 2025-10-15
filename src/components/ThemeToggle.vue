@@ -60,6 +60,16 @@ const nextTheme = computed(() => (isDarkMode.value ? 'Alucard' : 'Dracula'));
   }
 }
 
+/* Theme-specific button styling */
+.theme-alucard .theme-toggle-button {
+  background: var(--dracula-selection);
+  border-color: var(--dracula-comment);
+  
+  &:hover {
+    background: color-mix(in srgb, var(--dracula-selection) 80%, var(--dracula-comment) 20%);
+  }
+}
+
 .theme-icon {
   font-size: 1.25rem;
   line-height: 1;
