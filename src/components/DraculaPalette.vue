@@ -449,8 +449,9 @@ defineExpose({
   display: flex;
   gap: 2px;
   margin-top: 0.75rem;
-  padding-top: 0.75rem;
-  border-top: 1px solid var(--dracula-comment);
+  padding: 0.75rem;
+  border: 1px solid var(--surface-border);
+  border-radius: 6px;
   position: relative;
 }
 
@@ -458,8 +459,8 @@ defineExpose({
   content: 'Variants';
   position: absolute;
   top: -8px;
-  left: 0;
-  background: var(--surface-primary);
+  left: 8px;
+  background: var(--surface-secondary);
   color: var(--dracula-comment);
   font-size: 0.7rem;
   padding: 0 0.5rem;
