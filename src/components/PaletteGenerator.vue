@@ -14,24 +14,24 @@
       <div class="preset-buttons">
         <button class="preset-btn" @click="generatePreset('red-green')" :disabled="isGenerating">
           <div class="preset-colors">
-            <div class="preset-color" style="background-color: #ff5555"></div>
-            <div class="preset-color" style="background-color: #50fa7b"></div>
+            <div class="preset-color" :style="{ backgroundColor: officialColors.red.hex }"></div>
+            <div class="preset-color" :style="{ backgroundColor: officialColors.green.hex }"></div>
           </div>
           <span>Red & Green</span>
         </button>
 
         <button class="preset-btn" @click="generatePreset('purple-cyan')" :disabled="isGenerating">
           <div class="preset-colors">
-            <div class="preset-color" style="background-color: #bd93f9"></div>
-            <div class="preset-color" style="background-color: #8be9fd"></div>
+            <div class="preset-color" :style="{ backgroundColor: officialColors.purple.hex }"></div>
+            <div class="preset-color" :style="{ backgroundColor: officialColors.cyan.hex }"></div>
           </div>
           <span>Purple & Cyan</span>
         </button>
 
         <button class="preset-btn" @click="generatePreset('pink-yellow')" :disabled="isGenerating">
           <div class="preset-colors">
-            <div class="preset-color" style="background-color: #ff79c6"></div>
-            <div class="preset-color" style="background-color: #f1fa8c"></div>
+            <div class="preset-color" :style="{ backgroundColor: officialColors.pink.hex }"></div>
+            <div class="preset-color" :style="{ backgroundColor: officialColors.yellow.hex }"></div>
           </div>
           <span>Pink & Yellow</span>
         </button>
@@ -42,18 +42,18 @@
           :disabled="isGenerating"
         >
           <div class="preset-colors">
-            <div class="preset-color" style="background-color: #ffb86c"></div>
-            <div class="preset-color" style="background-color: #bd93f9"></div>
+            <div class="preset-color" :style="{ backgroundColor: officialColors.orange.hex }"></div>
+            <div class="preset-color" :style="{ backgroundColor: officialColors.purple.hex }"></div>
           </div>
           <span>Orange & Purple</span>
         </button>
 
         <button class="preset-btn" @click="generatePreset('all-accents')" :disabled="isGenerating">
           <div class="preset-colors">
-            <div class="preset-color" style="background-color: #ff5555"></div>
-            <div class="preset-color" style="background-color: #50fa7b"></div>
-            <div class="preset-color" style="background-color: #bd93f9"></div>
-            <div class="preset-color" style="background-color: #ff79c6"></div>
+            <div class="preset-color" :style="{ backgroundColor: officialColors.red.hex }"></div>
+            <div class="preset-color" :style="{ backgroundColor: officialColors.green.hex }"></div>
+            <div class="preset-color" :style="{ backgroundColor: officialColors.purple.hex }"></div>
+            <div class="preset-color" :style="{ backgroundColor: officialColors.pink.hex }"></div>
           </div>
           <span>All Accents</span>
         </button>
@@ -297,6 +297,7 @@ import {
 } from '../utils/exportUtils';
 import { hexToRgb } from '../utils/contrast';
 import ColorExportModal from './ColorExportModal.vue';
+import { useTheme } from '../composables/useTheme';
 
 interface Props {
   selectedColor?: DraculaColor | null;
@@ -312,6 +313,9 @@ const props = withDefaults(defineProps<Props>(), {
   selectedColors: () => [],
 });
 const emit = defineEmits<Emits>();
+
+// Get current theme colors
+const { currentColors } = useTheme();
 
 // Export modal state
 const exportModal = ref({
@@ -498,81 +502,44 @@ const emitPaletteUpdate = (sources: PaletteSourceColor[], standards: PaletteStan
   });
 };
 
-// Official color mappings for presets
-const officialColors: Record<string, DraculaColor> = {
-  red: {
-    name: 'Red',
-    hex: '#ff5555',
-    rgb: [255, 85, 85],
-    oklch: [0.67, 0.17, 27],
-    description: 'Red accent color',
-    category: 'accent',
-  },
-  green: {
-    name: 'Green',
-    hex: '#50fa7b',
-    rgb: [80, 250, 123],
-    oklch: [0.85, 0.15, 141],
-    description: 'Green accent color',
-    category: 'accent',
-  },
-  purple: {
-    name: 'Purple',
-    hex: '#bd93f9',
-    rgb: [189, 147, 249],
-    oklch: [0.72, 0.12, 293],
-    description: 'Purple accent color',
-    category: 'accent',
-  },
-  cyan: {
-    name: 'Cyan',
-    hex: '#8be9fd',
-    rgb: [139, 233, 253],
-    oklch: [0.87, 0.08, 199],
-    description: 'Cyan accent color',
-    category: 'accent',
-  },
-  pink: {
-    name: 'Pink',
-    hex: '#ff79c6',
-    rgb: [255, 121, 198],
-    oklch: [0.74, 0.15, 334],
-    description: 'Pink accent color',
-    category: 'accent',
-  },
-  yellow: {
-    name: 'Yellow',
-    hex: '#f1fa8c',
-    rgb: [241, 250, 140],
-    oklch: [0.92, 0.08, 102],
-    description: 'Yellow accent color',
-    category: 'accent',
-  },
-  orange: {
-    name: 'Orange',
-    hex: '#ffb86c',
-    rgb: [255, 184, 108],
-    oklch: [0.79, 0.1, 71],
-    description: 'Orange accent color',
-    category: 'accent',
-  },
-};
+// Official color mappings for presets - computed based on current theme
+const officialColors = computed(() => {
+  const colors = currentColors.value;
+  const colorMap: Record<string, DraculaColor> = {};
+  
+  // Map colors by their names (case-insensitive)
+  colors.forEach(color => {
+    const key = color.name.toLowerCase();
+    colorMap[key] = color;
+  });
+  
+  return {
+    red: colorMap['red'] || colors.find(c => c.category === 'accent' && c.name.toLowerCase().includes('red'))!,
+    green: colorMap['green'] || colors.find(c => c.category === 'accent' && c.name.toLowerCase().includes('green'))!,
+    purple: colorMap['purple'] || colors.find(c => c.category === 'accent' && c.name.toLowerCase().includes('purple'))!,
+    cyan: colorMap['cyan'] || colors.find(c => c.category === 'accent' && c.name.toLowerCase().includes('cyan'))!,
+    pink: colorMap['pink'] || colors.find(c => c.category === 'accent' && c.name.toLowerCase().includes('pink'))!,
+    yellow: colorMap['yellow'] || colors.find(c => c.category === 'accent' && c.name.toLowerCase().includes('yellow'))!,
+    orange: colorMap['orange'] || colors.find(c => c.category === 'accent' && c.name.toLowerCase().includes('orange'))!,
+  };
+});
 
 // Generate preset combinations
 const generatePreset = async (presetType: string) => {
+  const colors = officialColors.value;
   const presetConfigs: Record<string, DraculaColor[]> = {
-    'red-green': [officialColors.red, officialColors.green],
-    'purple-cyan': [officialColors.purple, officialColors.cyan],
-    'pink-yellow': [officialColors.pink, officialColors.yellow],
-    'orange-purple': [officialColors.orange, officialColors.purple],
+    'red-green': [colors.red, colors.green],
+    'purple-cyan': [colors.purple, colors.cyan],
+    'pink-yellow': [colors.pink, colors.yellow],
+    'orange-purple': [colors.orange, colors.purple],
     'all-accents': [
-      officialColors.red,
-      officialColors.green,
-      officialColors.purple,
-      officialColors.cyan,
-      officialColors.pink,
-      officialColors.yellow,
-      officialColors.orange,
+      colors.red,
+      colors.green,
+      colors.purple,
+      colors.cyan,
+      colors.pink,
+      colors.yellow,
+      colors.orange,
     ],
   };
 
