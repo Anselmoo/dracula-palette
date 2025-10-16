@@ -101,4 +101,30 @@ describe('PaletteGenerator Theme Awareness', () => {
 
     expect(draculaGreen?.hex).not.toBe(alucardGreen?.hex);
   });
+
+  it('should use theme-aware colors in customColorPlaceholder', () => {
+    const wrapper = mount(PaletteGenerator, {
+      props: {
+        selectedColors: [],
+      },
+    });
+
+    const vm = wrapper.vm as any;
+    
+    // Test that customColorPlaceholder returns theme-aware colors
+    const placeholder0 = vm.customColorPlaceholder(0);
+    const placeholder1 = vm.customColorPlaceholder(1);
+    const placeholder4 = vm.customColorPlaceholder(4);
+
+    // These should be valid hex colors
+    expect(placeholder0).toMatch(/^#[0-9a-fA-F]{6}$/);
+    expect(placeholder1).toMatch(/^#[0-9a-fA-F]{6}$/);
+    expect(placeholder4).toMatch(/^#[0-9a-fA-F]{6}$/);
+
+    // Verify they match the officialColors (theme-aware)
+    const officialColors = vm.officialColors;
+    expect(placeholder0).toBe(officialColors.pink.hex);
+    expect(placeholder1).toBe(officialColors.green.hex);
+    expect(placeholder4).toBe(officialColors.red.hex);
+  });
 });
