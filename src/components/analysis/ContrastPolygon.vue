@@ -80,6 +80,7 @@
 <script setup lang="ts">
 import { computed, onMounted, onBeforeUnmount, ref, watch } from 'vue';
 import { contrastRatio } from '../../utils/contrast';
+import Icon from '../Icon.vue';
 
 type Entry = { hex: string; name?: string };
 const props = defineProps<{ palette: Entry[] }>();
@@ -198,7 +199,7 @@ function resetFilters() {
   }
 
   &__description {
-    color: var(--text-secondary);
+    color: var(--dracula-comment);
     font-size: 0.9rem;
     margin: 0 0 1rem 0;
     line-height: 1.5;
@@ -209,7 +210,7 @@ function resetFilters() {
     margin-bottom: 1.5rem;
 
     .label-text {
-      color: var(--text-primary);
+      color: var(--dracula-foreground);
       font-size: 0.95rem;
       font-weight: 500;
     }
@@ -217,19 +218,19 @@ function resetFilters() {
     select {
       padding: 0.4rem 0.8rem;
       font-size: 0.95rem;
-      background: var(--surface-bg);
-      color: var(--text-primary);
+      background: var(--analysis-input-bg);
+      color: var(--dracula-foreground);
       border: 1px solid var(--surface-border);
       border-radius: var(--radius-sm);
       cursor: pointer;
       transition: border-color 0.2s ease;
 
       &:hover {
-        border-color: var(--primary);
+        border-color: var(--dracula-purple);
       }
 
       &:focus {
-        outline: 2px solid var(--primary);
+        outline: 2px solid var(--dracula-purple);
         outline-offset: 2px;
       }
     }
@@ -242,11 +243,11 @@ function resetFilters() {
 
       input[type='checkbox'] {
         cursor: pointer;
-        accent-color: var(--primary);
+        accent-color: var(--dracula-purple);
       }
 
       span:not(.label-text) {
-        color: var(--text-primary);
+        color: var(--dracula-foreground);
         font-size: 0.95rem;
       }
     }
@@ -255,8 +256,8 @@ function resetFilters() {
       padding: 0.4rem 0.8rem;
       font-size: 0.9rem;
       font-weight: 500;
-      background: var(--primary);
-      color: var(--bg-primary);
+      background: var(--dracula-purple);
+      color: var(--dracula-background);
       border: none;
       border-radius: var(--radius-md);
       cursor: pointer;
@@ -265,7 +266,7 @@ function resetFilters() {
         transform 0.1s ease;
 
       &:hover {
-        background: var(--primary-hover, var(--primary));
+        background: var(--dracula-pink);
         transform: translateY(-1px);
       }
 
@@ -282,6 +283,8 @@ function resetFilters() {
     align-items: center;
     justify-content: center;
     padding: 2rem;
+    background: var(--analysis-panel-bg);
+    border-radius: var(--radius-md);
 
     @media (prefers-reduced-motion: no-preference) {
       .edge {
@@ -352,7 +355,7 @@ function resetFilters() {
 
     .dot-border {
       fill: none;
-      stroke: var(--text-primary);
+      stroke: var(--dracula-foreground);
       stroke-width: 2;
       opacity: 0.6;
     }
