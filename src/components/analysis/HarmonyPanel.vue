@@ -65,12 +65,23 @@
             <circle :cx="polarX(hA, 90)" :cy="polarY(hA, 90)" r="6" class="pin" :fill="aHex">
               <title>{{ aHex }}</title>
             </circle>
+            <g class="edges">
+              <line
+                v-for="(e, idx) in edgesA"
+                :key="'ea' + idx"
+                :x1="polarX(hA, 90)"
+                :y1="polarY(hA, 90)"
+                :x2="polarX(e.h, 90)"
+                :y2="polarY(e.h, 90)"
+                :class="['edge', e.cls]"
+              />
+            </g>
             <circle
               v-for="(h, idx) in huesA"
               :key="idx"
               :cx="polarX(h, 90)"
               :cy="polarY(h, 90)"
-              r="5"
+              r="6"
               class="pin sec"
               :fill="hueToHexA(h)"
             >
@@ -111,12 +122,23 @@
             <circle :cx="polarX(hB, 90)" :cy="polarY(hB, 90)" r="6" class="pin" :fill="bHex">
               <title>{{ bHex }}</title>
             </circle>
+            <g class="edges">
+              <line
+                v-for="(e, idx) in edgesB"
+                :key="'eb' + idx"
+                :x1="polarX(hB, 90)"
+                :y1="polarY(hB, 90)"
+                :x2="polarX(e.h, 90)"
+                :y2="polarY(e.h, 90)"
+                :class="['edge', e.cls]"
+              />
+            </g>
             <circle
               v-for="(h, idx) in huesB"
               :key="idx"
               :cx="polarX(h, 90)"
               :cy="polarY(h, 90)"
-              r="5"
+              r="6"
               class="pin sec"
               :fill="hueToHexB(h)"
             >
@@ -157,12 +179,23 @@
             <circle :cx="polarX(hC, 90)" :cy="polarY(hC, 90)" r="6" class="pin" :fill="cHex">
               <title>{{ cHex }}</title>
             </circle>
+            <g class="edges">
+              <line
+                v-for="(e, idx) in edgesC"
+                :key="'ec' + idx"
+                :x1="polarX(hC, 90)"
+                :y1="polarY(hC, 90)"
+                :x2="polarX(e.h, 90)"
+                :y2="polarY(e.h, 90)"
+                :class="['edge', e.cls]"
+              />
+            </g>
             <circle
               v-for="(h, idx) in huesC"
               :key="idx"
               :cx="polarX(h, 90)"
               :cy="polarY(h, 90)"
-              r="5"
+              r="6"
               class="pin sec"
               :fill="hueToHexC(h)"
             >
@@ -310,21 +343,41 @@ const hC = computed(() => {
   const idx = syncBC.value ? srcIndexA.value : srcIndexC.value;
   return hexToHsl(props.palette[idx]?.hex ?? props.palette[srcIndexB.value]?.hex ?? '#6f6dfa').h;
 });
-const huesA = computed(() => [
-  ...(showComp.value ? [(hA.value + 180) % 360] : []),
-  ...(showAnalog.value ? [(hA.value + 30) % 360, (hA.value - 30 + 360) % 360] : []),
-  ...(showTriad.value ? [(hA.value + 120) % 360, (hA.value + 240) % 360] : []),
-]);
-const huesB = computed(() => [
-  ...(showComp.value ? [(hB.value + 180) % 360] : []),
-  ...(showAnalog.value ? [(hB.value + 30) % 360, (hB.value - 30 + 360) % 360] : []),
-  ...(showTriad.value ? [(hB.value + 120) % 360, (hB.value + 240) % 360] : []),
-]);
-const huesC = computed(() => [
-  ...(showComp.value ? [(hC.value + 180) % 360] : []),
-  ...(showAnalog.value ? [(hC.value + 30) % 360, (hC.value - 30 + 360) % 360] : []),
-  ...(showTriad.value ? [(hC.value + 120) % 360, (hC.value + 240) % 360] : []),
-]);
+// Utility to deduplicate hues that collapse to the same segment
+function dedupHues(list: number[], eps: number = 0.5): number[] {
+  const out: number[] = [];
+  for (const h of list) {
+    const hh = ((h % 360) + 360) % 360;
+    const exists = out.some(r => {
+      let d = Math.abs(r - hh);
+      d = Math.min(d, 360 - d);
+      return d < eps;
+    });
+    if (!exists) out.push(hh);
+  }
+  return out;
+}
+const huesA = computed(() =>
+  dedupHues([
+    ...(showComp.value ? [(hA.value + 180) % 360] : []),
+    ...(showAnalog.value ? [(hA.value + 30) % 360, (hA.value - 30 + 360) % 360] : []),
+    ...(showTriad.value ? [(hA.value + 120) % 360, (hA.value + 240) % 360] : []),
+  ])
+);
+const huesB = computed(() =>
+  dedupHues([
+    ...(showComp.value ? [(hB.value + 180) % 360] : []),
+    ...(showAnalog.value ? [(hB.value + 30) % 360, (hB.value - 30 + 360) % 360] : []),
+    ...(showTriad.value ? [(hB.value + 120) % 360, (hB.value + 240) % 360] : []),
+  ])
+);
+const huesC = computed(() =>
+  dedupHues([
+    ...(showComp.value ? [(hC.value + 180) % 360] : []),
+    ...(showAnalog.value ? [(hC.value + 30) % 360, (hC.value - 30 + 360) % 360] : []),
+    ...(showTriad.value ? [(hC.value + 120) % 360, (hC.value + 240) % 360] : []),
+  ])
+);
 
 const compA = computed(() => {
   const { s, l } = hexToHsl(props.palette[srcIndexA.value]?.hex ?? '#6f6dfa');
@@ -464,7 +517,34 @@ const showComp = ref(true);
 const showAnalog = ref(true);
 const showTriad = ref(true);
 const showTicks = ref(false);
-const noEffect = computed(() => {
+// Connecting edge builder per wheel
+type Edge = { h: number; cls: 'comp' | 'anal' | 'tri' };
+function buildEdges(baseHue: number): Edge[] {
+  const list: Edge[] = [];
+  if (showComp.value) list.push({ h: (baseHue + 180) % 360, cls: 'comp' });
+  if (showAnalog.value)
+    list.push(
+      { h: (baseHue + 30) % 360, cls: 'anal' },
+      { h: (baseHue - 30 + 360) % 360, cls: 'anal' }
+    );
+  if (showTriad.value)
+    list.push({ h: (baseHue + 120) % 360, cls: 'tri' }, { h: (baseHue + 240) % 360, cls: 'tri' });
+  // deduplicate by hue while keeping the first class occurrence
+  const deduped: Edge[] = [];
+  for (const e of list) {
+    const exists = deduped.some(r => {
+      let d = Math.abs(r.h - e.h);
+      d = Math.min(d, 360 - d);
+      return d < 0.5;
+    });
+    if (!exists) deduped.push(e);
+  }
+  return deduped;
+}
+const edgesA = computed(() => buildEdges(hA.value));
+const edgesB = computed(() => buildEdges(hB.value));
+const edgesC = computed(() => buildEdges(hC.value));
+const _noEffect = computed(() => {
   if (baseHsl.value.s * 100 < 8) return true; // near-neutral saturation
   // analogous collapsing detection
   const a = analogous.value;
@@ -524,11 +604,26 @@ function onWheelClick(evt: MouseEvent, which: 'A' | 'B' | 'C') {
   justify-content: center;
 }
 .pin {
-  stroke: var(--surface-border);
-  stroke-width: 1.5;
+  stroke: #fff;
+  stroke-width: 1.75;
+  filter: drop-shadow(0 0 1px rgba(0, 0, 0, 0.35));
 }
 .pin.sec {
-  opacity: 0.85;
+  opacity: 0.95;
+}
+.edge {
+  stroke: var(--surface-border);
+  stroke-opacity: 0.6;
+  stroke-width: 1.5;
+}
+.edge.comp {
+  stroke-opacity: 0.85;
+}
+.edge.anal {
+  stroke-dasharray: 3 2;
+}
+.edge.tri {
+  stroke-dasharray: 4 3;
 }
 .tick {
   stroke: var(--surface-border);
