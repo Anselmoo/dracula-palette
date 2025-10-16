@@ -2,6 +2,15 @@
   <section class="harmony">
     <h3 class="t"><Icon name="harmony" /><span>Harmony</span></h3>
     <div class="controls">
+      <!-- Removed redundant 'Enable connections' checkbox; relation icons turn overlays on when needed -->
+      <label class="spacer"></label>
+      <label>
+        View
+        <select v-model="viewMode">
+          <option value="wheels">Wheels</option>
+          <option value="chord">Chord</option>
+        </select>
+      </label>
       <label
         >Source A
         <select v-model="srcIndexA">
@@ -26,13 +35,66 @@
           </option>
         </select>
       </label>
-      <label><input type="checkbox" v-model="showComp" /> Complementary</label>
-      <label><input type="checkbox" v-model="showAnalog" /> Analogous</label>
-      <label><input type="checkbox" v-model="showTriad" /> Triadic</label>
-      <label><input type="checkbox" v-model="showTicks" /> Show degree ticks</label>
+      <div class="toggles">
+        <label
+          :class="['icon-toggle', { active: showComp }]"
+          :title="showComp ? 'Disable Complementary' : 'Enable Complementary'"
+        >
+          <input
+            type="checkbox"
+            v-model="showComp"
+            class="visually-hidden"
+            :disabled="false"
+            aria-hidden="true"
+          />
+          <button type="button" class="icon-btn" :aria-pressed="showComp" @click="onToggleComp">
+            <Icon name="contrast" />
+          </button>
+        </label>
+        <label
+          :class="['icon-toggle', { active: showAnalog }]"
+          :title="showAnalog ? 'Disable Analogous' : 'Enable Analogous'"
+        >
+          <input
+            type="checkbox"
+            v-model="showAnalog"
+            class="visually-hidden"
+            :disabled="false"
+            aria-hidden="true"
+          />
+          <button type="button" class="icon-btn" :aria-pressed="showAnalog" @click="onToggleAnalog">
+            <Icon name="relations" />
+          </button>
+        </label>
+        <label
+          :class="['icon-toggle', { active: showTriad }]"
+          :title="showTriad ? 'Disable Triadic' : 'Enable Triadic'"
+        >
+          <input
+            type="checkbox"
+            v-model="showTriad"
+            class="visually-hidden"
+            :disabled="false"
+            aria-hidden="true"
+          />
+          <button type="button" class="icon-btn" :aria-pressed="showTriad" @click="onToggleTriad">
+            <Icon name="shuffle" />
+          </button>
+        </label>
+        <!-- Degree ticks toggle moved to the end of the icon cluster -->
+        <label
+          :class="['icon-toggle', { active: showTicks }]"
+          :title="showTicks ? 'Hide degree ticks' : 'Show degree ticks'"
+        >
+          <input type="checkbox" v-model="showTicks" class="visually-hidden" aria-hidden="true" />
+          <button type="button" class="icon-btn" :aria-pressed="showTicks" @click="onToggleTicks">
+            <Icon name="target" />
+          </button>
+        </label>
+      </div>
       <label><input type="checkbox" v-model="syncBC" /> Sync B/C with A</label>
     </div>
-    <div class="wheels">
+    <div v-if="viewMode === 'wheels'" class="wheels">
       <div class="wheel" aria-label="Wheel A">
         <svg
           width="220"
@@ -63,7 +125,7 @@
               </g>
             </template>
             <circle :cx="polarX(hA, 90)" :cy="polarY(hA, 90)" r="6" class="pin" :fill="aHex">
-              <title>{{ aHex }}</title>
+              <title>Source A {{ aHex }} ({{ Math.round(hA) }}°)</title>
             </circle>
             <g class="edges">
               <line
@@ -77,15 +139,15 @@
               />
             </g>
             <circle
-              v-for="(h, idx) in huesA"
+              v-for="(t, idx) in targetsA"
               :key="idx"
-              :cx="polarX(h, 90)"
-              :cy="polarY(h, 90)"
+              :cx="polarX(t.h, 90)"
+              :cy="polarY(t.h, 90)"
               r="6"
               class="pin sec"
-              :fill="hueToHexA(h)"
+              :fill="hueToHexA(t.h)"
             >
-              <title>{{ hueToHexA(h) }} ({{ Math.round(h) }}°)</title>
+              <title>{{ t.label }} — {{ hueToHexA(t.h) }} ({{ Math.round(t.h) }}°)</title>
             </circle>
           </g>
         </svg>
@@ -120,7 +182,7 @@
               </g>
             </template>
             <circle :cx="polarX(hB, 90)" :cy="polarY(hB, 90)" r="6" class="pin" :fill="bHex">
-              <title>{{ bHex }}</title>
+              <title>Source B {{ bHex }} ({{ Math.round(hB) }}°)</title>
             </circle>
             <g class="edges">
               <line
@@ -134,15 +196,15 @@
               />
             </g>
             <circle
-              v-for="(h, idx) in huesB"
+              v-for="(t, idx) in targetsB"
               :key="idx"
-              :cx="polarX(h, 90)"
-              :cy="polarY(h, 90)"
+              :cx="polarX(t.h, 90)"
+              :cy="polarY(t.h, 90)"
               r="6"
               class="pin sec"
-              :fill="hueToHexB(h)"
+              :fill="hueToHexB(t.h)"
             >
-              <title>{{ hueToHexB(h) }} ({{ Math.round(h) }}°)</title>
+              <title>{{ t.label }} — {{ hueToHexB(t.h) }} ({{ Math.round(t.h) }}°)</title>
             </circle>
           </g>
         </svg>
@@ -177,7 +239,7 @@
               </g>
             </template>
             <circle :cx="polarX(hC, 90)" :cy="polarY(hC, 90)" r="6" class="pin" :fill="cHex">
-              <title>{{ cHex }}</title>
+              <title>Source C {{ cHex }} ({{ Math.round(hC) }}°)</title>
             </circle>
             <g class="edges">
               <line
@@ -191,21 +253,21 @@
               />
             </g>
             <circle
-              v-for="(h, idx) in huesC"
+              v-for="(t, idx) in targetsC"
               :key="idx"
-              :cx="polarX(h, 90)"
-              :cy="polarY(h, 90)"
+              :cx="polarX(t.h, 90)"
+              :cy="polarY(t.h, 90)"
               r="6"
               class="pin sec"
-              :fill="hueToHexC(h)"
+              :fill="hueToHexC(t.h)"
             >
-              <title>{{ hueToHexC(h) }} ({{ Math.round(h) }}°)</title>
+              <title>{{ t.label }} — {{ hueToHexC(t.h) }} ({{ Math.round(t.h) }}°)</title>
             </circle>
           </g>
         </svg>
       </div>
     </div>
-    <div class="row" v-if="palette.length">
+    <div class="row" v-if="viewMode === 'wheels' && palette.length">
       <div class="card">
         <h4>Complementary</h4>
         <div class="swatches">
@@ -258,12 +320,18 @@
         </div>
       </div>
     </div>
+    <HarmonyChord v-else-if="viewMode === 'chord'" :palette="palette" />
+    <p class="help" v-if="showOverlays">
+      Connections illustrate hue relationships from each source to its complementary (180°),
+      analogous (±30°), and triadic (+120°,+240°) targets.
+    </p>
     <p v-else class="empty">No colors available</p>
   </section>
 </template>
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue';
 import Icon from '../Icon.vue';
+import HarmonyChord from './HarmonyChord.vue';
 
 const props = defineProps<{ palette: { hex: string; name?: string }[] }>();
 const srcIndexA = ref(0);
@@ -271,6 +339,8 @@ const srcIndexB = ref(1);
 const srcIndexC = ref(2);
 const syncBC = ref(false);
 const base = computed(() => props.palette[srcIndexA.value]?.hex ?? '#6f6dfa');
+const viewMode = ref<'wheels' | 'chord'>('wheels');
+const showOverlays = ref(false);
 
 function hexToHsl(hex: string) {
   const m = hex.replace('#', '');
@@ -343,41 +413,34 @@ const hC = computed(() => {
   const idx = syncBC.value ? srcIndexA.value : srcIndexC.value;
   return hexToHsl(props.palette[idx]?.hex ?? props.palette[srcIndexB.value]?.hex ?? '#6f6dfa').h;
 });
-// Utility to deduplicate hues that collapse to the same segment
-function dedupHues(list: number[], eps: number = 0.5): number[] {
-  const out: number[] = [];
-  for (const h of list) {
-    const hh = ((h % 360) + 360) % 360;
+type Target = { h: number; label: string };
+function buildTargets(h: number): Target[] {
+  if (!showOverlays.value) return [];
+  const items: Target[] = [];
+  if (showComp.value) items.push({ h: (h + 180) % 360, label: 'Complementary (180°)' });
+  if (showAnalog.value) {
+    items.push({ h: (h + 30) % 360, label: 'Analogous (+30°)' });
+    items.push({ h: (h - 30 + 360) % 360, label: 'Analogous (−30°)' });
+  }
+  if (showTriad.value) {
+    items.push({ h: (h + 120) % 360, label: 'Triadic (+120°)' });
+    items.push({ h: (h + 240) % 360, label: 'Triadic (+240°)' });
+  }
+  // de-dup by hue closeness
+  const out: Target[] = [];
+  for (const t of items) {
     const exists = out.some(r => {
-      let d = Math.abs(r - hh);
+      let d = Math.abs(r.h - t.h);
       d = Math.min(d, 360 - d);
-      return d < eps;
+      return d < 0.5;
     });
-    if (!exists) out.push(hh);
+    if (!exists) out.push(t);
   }
   return out;
 }
-const huesA = computed(() =>
-  dedupHues([
-    ...(showComp.value ? [(hA.value + 180) % 360] : []),
-    ...(showAnalog.value ? [(hA.value + 30) % 360, (hA.value - 30 + 360) % 360] : []),
-    ...(showTriad.value ? [(hA.value + 120) % 360, (hA.value + 240) % 360] : []),
-  ])
-);
-const huesB = computed(() =>
-  dedupHues([
-    ...(showComp.value ? [(hB.value + 180) % 360] : []),
-    ...(showAnalog.value ? [(hB.value + 30) % 360, (hB.value - 30 + 360) % 360] : []),
-    ...(showTriad.value ? [(hB.value + 120) % 360, (hB.value + 240) % 360] : []),
-  ])
-);
-const huesC = computed(() =>
-  dedupHues([
-    ...(showComp.value ? [(hC.value + 180) % 360] : []),
-    ...(showAnalog.value ? [(hC.value + 30) % 360, (hC.value - 30 + 360) % 360] : []),
-    ...(showTriad.value ? [(hC.value + 120) % 360, (hC.value + 240) % 360] : []),
-  ])
-);
+const targetsA = computed(() => buildTargets(hA.value));
+const targetsB = computed(() => buildTargets(hB.value));
+const targetsC = computed(() => buildTargets(hC.value));
 
 const compA = computed(() => {
   const { s, l } = hexToHsl(props.palette[srcIndexA.value]?.hex ?? '#6f6dfa');
@@ -450,6 +513,23 @@ const triC = computed(() => {
   ];
 });
 
+// Icon toggle handlers ensure overlays are enabled when turning a relation on
+const onToggleComp = () => {
+  showComp.value = !showComp.value;
+  showOverlays.value = showComp.value || showAnalog.value || showTriad.value;
+};
+const onToggleAnalog = () => {
+  showAnalog.value = !showAnalog.value;
+  showOverlays.value = showComp.value || showAnalog.value || showTriad.value;
+};
+const onToggleTriad = () => {
+  showTriad.value = !showTriad.value;
+  showOverlays.value = showComp.value || showAnalog.value || showTriad.value;
+};
+const onToggleTicks = () => {
+  showTicks.value = !showTicks.value;
+};
+
 // Helpers for pin tooltips
 const aHex = computed(() => props.palette[srcIndexA.value]?.hex ?? '#6f6dfa');
 const bHex = computed(
@@ -516,11 +596,16 @@ function arcPath(start: number, end: number, r0: number, r1: number) {
 const showComp = ref(true);
 const showAnalog = ref(true);
 const showTriad = ref(true);
-const showTicks = ref(false);
+const showTicks = ref(true);
+// Keep overlays flag in sync if toggles change elsewhere
+watch([showComp, showAnalog, showTriad], () => {
+  showOverlays.value = showComp.value || showAnalog.value || showTriad.value;
+});
 // Connecting edge builder per wheel
 type Edge = { h: number; cls: 'comp' | 'anal' | 'tri' };
 function buildEdges(baseHue: number): Edge[] {
   const list: Edge[] = [];
+  if (!showOverlays.value) return list;
   if (showComp.value) list.push({ h: (baseHue + 180) % 360, cls: 'comp' });
   if (showAnalog.value)
     list.push(
@@ -588,6 +673,30 @@ function onWheelClick(evt: MouseEvent, which: 'A' | 'B' | 'C') {
   margin: 0.25rem 0 0.5rem;
   color: var(--dracula-comment);
 }
+.controls .icon-toggle {
+  display: inline-flex;
+  align-items: center;
+}
+.controls .icon-btn {
+  background: transparent;
+  border: none;
+  color: var(--dracula-comment);
+  cursor: pointer;
+  padding: 0.2rem;
+  border-radius: 6px;
+  line-height: 0;
+}
+.controls .icon-btn:focus-visible {
+  outline: 2px solid var(--dracula-foreground);
+  outline-offset: 2px;
+}
+.controls .icon-toggle.active .icon-btn {
+  color: var(--dracula-foreground);
+  box-shadow: inset 0 0 0 1px var(--surface-border);
+}
+.controls .icon-toggle.disabled .icon-btn {
+  opacity: 0.45;
+}
 .t {
   margin: 0 0 0.5rem;
 }
@@ -607,17 +716,31 @@ function onWheelClick(evt: MouseEvent, which: 'A' | 'B' | 'C') {
   stroke: #fff;
   stroke-width: 1.75;
   filter: drop-shadow(0 0 1px rgba(0, 0, 0, 0.35));
+  transition:
+    stroke-width 0.12s ease,
+    filter 0.12s ease,
+    transform 0.12s ease;
 }
 .pin.sec {
   opacity: 0.95;
+  transition:
+    stroke-width 0.12s ease,
+    filter 0.12s ease,
+    transform 0.12s ease;
+}
+.pin:hover,
+.pin.sec:hover {
+  stroke-width: 2.5;
+  filter: drop-shadow(0 0 2px rgba(0, 0, 0, 0.45));
+  transform: scale(1.08);
 }
 .edge {
-  stroke: var(--surface-border);
-  stroke-opacity: 0.6;
-  stroke-width: 1.5;
+  stroke: var(--dracula-foreground);
+  stroke-opacity: 0.65;
+  stroke-width: 2.25;
 }
 .edge.comp {
-  stroke-opacity: 0.85;
+  stroke-opacity: 0.9;
 }
 .edge.anal {
   stroke-dasharray: 3 2;
@@ -674,6 +797,19 @@ function onWheelClick(evt: MouseEvent, which: 'A' | 'B' | 'C') {
 }
 .empty {
   color: var(--dracula-comment);
+}
+.help {
+  color: var(--dracula-comment);
+  font-size: 0.85rem;
+  margin-top: 0.25rem;
+}
+.visually-hidden {
+  position: absolute !important;
+  height: 1px;
+  width: 1px;
+  overflow: hidden;
+  clip: rect(1px, 1px, 1px, 1px);
+  white-space: nowrap; /* added line */
 }
 @media (max-width: 900px) {
   .row {
