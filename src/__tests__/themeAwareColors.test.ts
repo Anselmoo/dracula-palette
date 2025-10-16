@@ -29,7 +29,7 @@ describe('Theme-Aware Color Defaults', () => {
 
     const draculaPink = DRACULA_COLORS.find(c => c.name === 'Pink');
     expect(draculaPink?.hex).toBe('#ff79c6');
-    
+
     // Check that the placeholder uses Dracula pink
     const input = wrapper.find('input[type="text"]');
     expect(input.attributes('placeholder')).toBe('#ff79c6');
@@ -49,7 +49,7 @@ describe('Theme-Aware Color Defaults', () => {
   it('should have different pink colors between Dracula and Alucard', () => {
     const draculaPink = DRACULA_COLORS.find(c => c.name === 'Pink');
     const alucardPink = ALUCARD_COLORS.find(c => c.name === 'Pink');
-    
+
     expect(draculaPink?.hex).toBe('#ff79c6');
     expect(alucardPink?.hex).toBe('#a3144d');
     expect(draculaPink?.hex).not.toBe(alucardPink?.hex);
@@ -58,7 +58,7 @@ describe('Theme-Aware Color Defaults', () => {
   it('should have different purple colors between Dracula and Alucard', () => {
     const draculaPurple = DRACULA_COLORS.find(c => c.name === 'Purple');
     const alucardPurple = ALUCARD_COLORS.find(c => c.name === 'Purple');
-    
+
     expect(draculaPurple?.hex).toBe('#bd93f9');
     expect(alucardPurple?.hex).toBe('#644ac9');
     expect(draculaPurple?.hex).not.toBe(alucardPurple?.hex);

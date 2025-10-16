@@ -506,21 +506,35 @@ const emitPaletteUpdate = (sources: PaletteSourceColor[], standards: PaletteStan
 const officialColors = computed(() => {
   const colors = currentColors.value;
   const colorMap: Record<string, DraculaColor> = {};
-  
+
   // Map colors by their names (case-insensitive)
   colors.forEach(color => {
     const key = color.name.toLowerCase();
     colorMap[key] = color;
   });
-  
+
   return {
-    red: colorMap['red'] || colors.find(c => c.category === 'accent' && c.name.toLowerCase().includes('red'))!,
-    green: colorMap['green'] || colors.find(c => c.category === 'accent' && c.name.toLowerCase().includes('green'))!,
-    purple: colorMap['purple'] || colors.find(c => c.category === 'accent' && c.name.toLowerCase().includes('purple'))!,
-    cyan: colorMap['cyan'] || colors.find(c => c.category === 'accent' && c.name.toLowerCase().includes('cyan'))!,
-    pink: colorMap['pink'] || colors.find(c => c.category === 'accent' && c.name.toLowerCase().includes('pink'))!,
-    yellow: colorMap['yellow'] || colors.find(c => c.category === 'accent' && c.name.toLowerCase().includes('yellow'))!,
-    orange: colorMap['orange'] || colors.find(c => c.category === 'accent' && c.name.toLowerCase().includes('orange'))!,
+    red:
+      colorMap['red'] ||
+      colors.find(c => c.category === 'accent' && c.name.toLowerCase().includes('red'))!,
+    green:
+      colorMap['green'] ||
+      colors.find(c => c.category === 'accent' && c.name.toLowerCase().includes('green'))!,
+    purple:
+      colorMap['purple'] ||
+      colors.find(c => c.category === 'accent' && c.name.toLowerCase().includes('purple'))!,
+    cyan:
+      colorMap['cyan'] ||
+      colors.find(c => c.category === 'accent' && c.name.toLowerCase().includes('cyan'))!,
+    pink:
+      colorMap['pink'] ||
+      colors.find(c => c.category === 'accent' && c.name.toLowerCase().includes('pink'))!,
+    yellow:
+      colorMap['yellow'] ||
+      colors.find(c => c.category === 'accent' && c.name.toLowerCase().includes('yellow'))!,
+    orange:
+      colorMap['orange'] ||
+      colors.find(c => c.category === 'accent' && c.name.toLowerCase().includes('orange'))!,
   };
 });
 

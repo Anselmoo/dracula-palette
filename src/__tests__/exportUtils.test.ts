@@ -131,7 +131,11 @@ describe('Export Utils', () => {
       expect(options).toHaveLength(8);
       expect(options[0]).toEqual({ value: 'hex', label: 'HEX', description: '#ff79c6' });
       expect(options[1]).toEqual({ value: 'rgb', label: 'RGB', description: 'rgb(255, 121, 198)' });
-      expect(options[2]).toEqual({ value: 'rgba', label: 'RGBA', description: 'rgba(255, 121, 198, 1)' });
+      expect(options[2]).toEqual({
+        value: 'rgba',
+        label: 'RGBA',
+        description: 'rgba(255, 121, 198, 1)',
+      });
       expect(options[3].value).toBe('hsl');
       expect(options[3].label).toBe('HSL');
       expect(options[3].description).toMatch(/hsl\(\d+, \d+%, \d+%\)/);
@@ -144,7 +148,11 @@ describe('Export Utils', () => {
       expect(options).toHaveLength(8);
       expect(options[0]).toEqual({ value: 'hex', label: 'HEX', description: '#a3144d' });
       expect(options[1]).toEqual({ value: 'rgb', label: 'RGB', description: 'rgb(163, 20, 77)' });
-      expect(options[2]).toEqual({ value: 'rgba', label: 'RGBA', description: 'rgba(163, 20, 77, 1)' });
+      expect(options[2]).toEqual({
+        value: 'rgba',
+        label: 'RGBA',
+        description: 'rgba(163, 20, 77, 1)',
+      });
     });
 
     it('should return correct OKLCH format for colors', () => {
@@ -165,7 +173,7 @@ describe('Export Utils', () => {
 
       expect(lchOption).toBeDefined();
       expect(lchOption!.description).toMatch(/lch\(\d+ \d+ \d+\)/);
-      
+
       expect(labOption).toBeDefined();
       expect(labOption!.description).toMatch(/lab\(\d+ \d+ \d+\)/);
     });

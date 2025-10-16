@@ -67,7 +67,9 @@ const getFallbackColor = () => {
 const inputValue = ref(props.modelValue);
 const hasError = ref(false);
 const colorPicker = ref<HTMLInputElement | null>(null);
-const pickerValue = computed(() => (hasError.value ? '#000000' : inputValue.value || getFallbackColor()));
+const pickerValue = computed(() =>
+  hasError.value ? '#000000' : inputValue.value || getFallbackColor()
+);
 
 const previewColor = computed(() => {
   if (hasError.value) {
