@@ -64,7 +64,7 @@ const nextTheme = computed(() => (isDarkMode.value ? 'Alucard' : 'Dracula'));
 .theme-alucard .theme-toggle-button {
   background: var(--dracula-selection);
   border-color: var(--dracula-comment);
-  
+
   &:hover {
     background: color-mix(in srgb, var(--dracula-selection) 80%, var(--dracula-comment) 20%);
   }

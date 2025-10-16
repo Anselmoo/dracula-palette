@@ -1,12 +1,7 @@
 <template>
   <div class="color-input-container">
     <div class="input-section">
-      <label
-        for="color-input"
-        class="input-label"
-      >
-        Enter a CSS color:
-      </label>
+      <label for="color-input" class="input-label"> Enter a CSS color: </label>
       <div class="input-wrapper">
         <input
           id="color-input"
