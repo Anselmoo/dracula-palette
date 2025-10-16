@@ -60,20 +60,20 @@ export async function copyColorToClipboard(
   await navigator.clipboard.writeText(formattedColor);
 }
 
-export function getColorFormatOptions(): {
+export function getColorFormatOptions(hex: string): {
   value: ColorFormat;
   label: string;
   description: string;
 }[] {
   return [
-    { value: 'hex', label: 'HEX', description: '#ff5555' },
-    { value: 'rgb', label: 'RGB', description: 'rgb(255, 85, 85)' },
-    { value: 'rgba', label: 'RGBA', description: 'rgba(255, 85, 85, 1)' },
-    { value: 'hsl', label: 'HSL', description: 'hsl(0, 100%, 67%)' },
-    { value: 'hsla', label: 'HSLA', description: 'hsla(0, 100%, 67%, 1)' },
-    { value: 'oklch', label: 'OKLCH', description: 'oklch(0.685 0.179 26)' },
-    { value: 'lch', label: 'LCH', description: 'lch(61 77 26)' },
-    { value: 'lab', label: 'LAB', description: 'lab(61 57 29)' },
+    { value: 'hex', label: 'HEX', description: formatColor(hex, 'hex') },
+    { value: 'rgb', label: 'RGB', description: formatColor(hex, 'rgb') },
+    { value: 'rgba', label: 'RGBA', description: formatColor(hex, 'rgba') },
+    { value: 'hsl', label: 'HSL', description: formatColor(hex, 'hsl') },
+    { value: 'hsla', label: 'HSLA', description: formatColor(hex, 'hsla') },
+    { value: 'oklch', label: 'OKLCH', description: formatColor(hex, 'oklch') },
+    { value: 'lch', label: 'LCH', description: formatColor(hex, 'lch') },
+    { value: 'lab', label: 'LAB', description: formatColor(hex, 'lab') },
   ];
 }
 

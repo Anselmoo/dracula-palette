@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { formatColor, generateJSONExport } from '../utils/exportUtils';
+import { formatColor, generateJSONExport, getColorFormatOptions } from '../utils/exportUtils';
 import type { GeneratedPalette } from '../types/palette';
 
 describe('Export Utils', () => {
@@ -120,6 +120,54 @@ describe('Export Utils', () => {
       expect(parsed.accessibility).toBeDefined();
       expect(parsed.totalColors).toBe(2);
       expect(parsed.generatedAt).toBeDefined();
+    });
+  });
+
+  describe('getColorFormatOptions', () => {
+    it('should return format options with actual color values for dark mode Pink', () => {
+      const darkModePink = '#ff79c6';
+      const options = getColorFormatOptions(darkModePink);
+
+      expect(options).toHaveLength(8);
+      expect(options[0]).toEqual({ value: 'hex', label: 'HEX', description: '#ff79c6' });
+      expect(options[1]).toEqual({ value: 'rgb', label: 'RGB', description: 'rgb(255, 121, 198)' });
+      expect(options[2]).toEqual({ value: 'rgba', label: 'RGBA', description: 'rgba(255, 121, 198, 1)' });
+      expect(options[3].value).toBe('hsl');
+      expect(options[3].label).toBe('HSL');
+      expect(options[3].description).toMatch(/hsl\(\d+, \d+%, \d+%\)/);
+    });
+
+    it('should return format options with actual color values for light mode Pink', () => {
+      const lightModePink = '#a3144d';
+      const options = getColorFormatOptions(lightModePink);
+
+      expect(options).toHaveLength(8);
+      expect(options[0]).toEqual({ value: 'hex', label: 'HEX', description: '#a3144d' });
+      expect(options[1]).toEqual({ value: 'rgb', label: 'RGB', description: 'rgb(163, 20, 77)' });
+      expect(options[2]).toEqual({ value: 'rgba', label: 'RGBA', description: 'rgba(163, 20, 77, 1)' });
+    });
+
+    it('should return correct OKLCH format for colors', () => {
+      const redColor = '#ff5555';
+      const options = getColorFormatOptions(redColor);
+
+      const oklchOption = options.find(opt => opt.value === 'oklch');
+      expect(oklchOption).toBeDefined();
+      expect(oklchOption!.description).toMatch(/oklch\(\d+\.\d+ \d+\.\d+ \d+\)/);
+    });
+
+    it('should return correct LCH and LAB formats', () => {
+      const color = '#ff5555';
+      const options = getColorFormatOptions(color);
+
+      const lchOption = options.find(opt => opt.value === 'lch');
+      const labOption = options.find(opt => opt.value === 'lab');
+
+      expect(lchOption).toBeDefined();
+      expect(lchOption!.description).toMatch(/lch\(\d+ \d+ \d+\)/);
+      
+      expect(labOption).toBeDefined();
+      expect(labOption!.description).toMatch(/lab\(\d+ \d+ \d+\)/);
     });
   });
 });

@@ -96,7 +96,10 @@ const emit = defineEmits<Emits>();
 
 const selectedFormat = ref<ColorFormat>('hex');
 const previewCopied = ref(false);
-const formatOptions = getColorFormatOptions();
+
+const formatOptions = computed(() => {
+  return getColorFormatOptions(props.color);
+});
 
 const formattedColor = computed(() => {
   return formatColor(props.color, selectedFormat.value);
