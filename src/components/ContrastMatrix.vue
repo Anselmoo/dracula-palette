@@ -111,6 +111,14 @@ const matrixStyle = computed(() => ({
   gridTemplateColumns: `160px repeat(${backgroundList.value.length}, minmax(140px, 1fr))`,
 }));
 
+// Theme-aware color scale for heatmap
+const heatmapColorScale = computed(() => {
+  const red = currentColors.value.find(c => c.name === 'Red')?.hex ?? '#ff5555';
+  const yellow = currentColors.value.find(c => c.name === 'Yellow')?.hex ?? '#f1fa8c';
+  const green = currentColors.value.find(c => c.name === 'Green')?.hex ?? '#50fa7b';
+  return chroma.scale([red, yellow, green]).domain([1, 4.5, 7]);
+});
+
 function ratio(fg: string, bg: string): string {
   return contrastRatio(fg, bg).toFixed(2);
 }
@@ -133,8 +141,7 @@ function previewStyle(fg: string, bg: string) {
 function heatStyle(fg: string, bg: string) {
   const r = contrastRatio(fg, bg);
   const rc = Math.max(1, Math.min(7, r));
-  const scale = chroma.scale(['#ff5555', '#f1fa8c', '#50fa7b']).domain([1, 4.5, 7]);
-  const color = scale(rc).alpha(0.35).hex();
+  const color = heatmapColorScale.value(rc).alpha(0.35).hex();
   return {
     background: color,
   };

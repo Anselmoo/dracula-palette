@@ -80,10 +80,14 @@
 <script setup lang="ts">
 import { computed, onMounted, onBeforeUnmount, ref, watch } from 'vue';
 import { contrastRatio } from '../../utils/contrast';
+import { useTheme } from '../../composables/useTheme';
 import Icon from '../Icon.vue';
 
 type Entry = { hex: string; name?: string };
 const props = defineProps<{ palette: Entry[] }>();
+
+// Get theme-aware colors
+const { currentColors } = useTheme();
 
 // Controls
 const minRatio = ref<number>(0);
@@ -173,11 +177,20 @@ function edgeClass(r: number) {
   if (r >= 3) return 'edge-aal';
   return 'edge-fail';
 }
+
+// Theme-aware colors for edge coloring
+const themeColors = computed(() => ({
+  green: currentColors.value.find(c => c.name === 'Green')?.hex ?? '#50fa7b',
+  yellow: currentColors.value.find(c => c.name === 'Yellow')?.hex ?? '#f1fa8c',
+  orange: currentColors.value.find(c => c.name === 'Orange')?.hex ?? '#ffb86c',
+  red: currentColors.value.find(c => c.name === 'Red')?.hex ?? '#ff5555',
+}));
+
 function edgeColor(r: number) {
-  if (r >= 7) return '#50fa7b';
-  if (r >= 4.5) return '#f1fa8c';
-  if (r >= 3) return '#ffb86c';
-  return '#ff5555';
+  if (r >= 7) return themeColors.value.green;
+  if (r >= 4.5) return themeColors.value.yellow;
+  if (r >= 3) return themeColors.value.orange;
+  return themeColors.value.red;
 }
 
 function resetFilters() {
