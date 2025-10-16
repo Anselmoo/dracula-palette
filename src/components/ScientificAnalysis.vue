@@ -164,7 +164,7 @@
         :aria-labelledby="'tab-relations'"
         :id="'panel-relations'"
       >
-        <CycleMap :palette="selectedPalette" />
+        <HarmonyChord :palette="selectedPalette" />
         <RelationshipIcons class="mt" :palette="selectedPalette" />
       </section>
 
@@ -329,7 +329,7 @@ import AdvancedGradientExplore from './analysis/AdvancedGradientExplore.vue';
 import AccessibilityPanel from './analysis/AccessibilityPanel.vue';
 import HarmonyPanel from './analysis/HarmonyPanel.vue';
 import RelationshipIcons from './analysis/RelationshipIcons.vue';
-import CycleMap from './analysis/CycleMap.vue';
+import HarmonyChord from './analysis/HarmonyChord.vue';
 import ContrastPolygon from './analysis/ContrastPolygon.vue';
 import MatrixAdvanced from './analysis/MatrixAdvanced.vue';
 import ContrastTriangle from './analysis/ContrastTriangle.vue';
@@ -396,7 +396,7 @@ const tabs = [
     tooltip: 'Bubbles, Aurora, Mesh, Plasma, etc.',
   },
   { id: 'accessibility', icon: 'accessibility', label: 'Accessibility', tooltip: 'WCAG checks' },
-  { id: 'relations', icon: 'relations', label: 'Relations', tooltip: 'Cycle map + icons' },
+  { id: 'relations', icon: 'relations', label: 'Relations', tooltip: 'Chord diagram + icons' },
   {
     id: 'polygon',
     icon: 'network',
