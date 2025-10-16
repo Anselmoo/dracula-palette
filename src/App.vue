@@ -65,9 +65,16 @@ import type { DraculaColor, ColorSuggestion } from './types/color';
 import type { PaletteAnalysisPayload } from './types/palette';
 
 // Initialize theme
-const { currentTheme } = useTheme();
+const { currentTheme, currentColors } = useTheme();
 
-const inputColor = ref('#bd93f9'); // Purple - better starting color than Pink
+// Get theme-aware default color (Purple from current palette)
+const getDefaultColor = () => {
+  const colors = currentColors.value;
+  const purpleColor = colors.find(c => c.name === 'Purple');
+  return purpleColor?.hex || '#bd93f9';
+};
+
+const inputColor = ref(getDefaultColor());
 const selectedColor = ref<DraculaColor | null>(null);
 const selectedColors = ref<DraculaColor[]>([]);
 const suggestions = ref<ColorSuggestion[]>([]);
@@ -137,6 +144,8 @@ handleColorChange(inputColor.value);
 watch(currentTheme, () => {
   selectedColors.value = [];
   selectedColor.value = null;
+  inputColor.value = getDefaultColor();
+  handleColorChange(inputColor.value);
 });
 
 void {
