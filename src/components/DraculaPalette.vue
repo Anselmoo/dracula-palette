@@ -452,7 +452,6 @@ defineExpose({
   padding: 0.75rem;
   border: 1px solid var(--surface-border);
   border-radius: 6px;
-  background: var(--surface-secondary);
   position: relative;
 }
 
