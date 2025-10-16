@@ -66,7 +66,6 @@
                 }"
                 @mouseenter="hoveredChord = chord"
                 @mouseleave="hoveredChord = null"
-                :style="{ animationDelay: `${idx * 30}ms` }"
               >
                 <title>{{ chord.source.name }} ↔ {{ chord.target.name }}: {{ chord.label }}</title>
               </path>
@@ -90,7 +89,6 @@
                 @click="selectNode(i)"
                 @mouseenter="hoveredNode = i"
                 @mouseleave="hoveredNode = null"
-                :style="{ animationDelay: `${i * 40}ms` }"
               >
                 <title>{{ c.name }} — {{ c.hex }}</title>
               </circle>
@@ -101,7 +99,8 @@
                 :y="labelPosition(i).y"
                 class="node-label"
                 :class="{ 'is-active': selectedNode === i || hoveredNode === i }"
-                text-anchor="middle"
+                :text-anchor="getLabelAnchor(i)"
+                :dy="getLabelDy(i)"
               >
                 {{ c.name }}
               </text>
@@ -216,6 +215,40 @@ function labelPosition(index: number): { x: number; y: number } {
     x: radius * Math.cos(angle),
     y: radius * Math.sin(angle),
   };
+}
+
+function getLabelAnchor(index: number): string {
+  const n = ordered.value.length || 1;
+  const angle = (2 * Math.PI * index) / n - Math.PI / 2;
+  const normalizedAngle = ((angle + Math.PI * 2) % (Math.PI * 2));
+  
+  // Left side
+  if (normalizedAngle > Math.PI / 2 && normalizedAngle < (3 * Math.PI) / 2) {
+    return 'end';
+  }
+  // Right side
+  if (normalizedAngle < Math.PI / 2 || normalizedAngle > (3 * Math.PI) / 2) {
+    return 'start';
+  }
+  // Top/bottom
+  return 'middle';
+}
+
+function getLabelDy(index: number): string {
+  const n = ordered.value.length || 1;
+  const angle = (2 * Math.PI * index) / n - Math.PI / 2;
+  const normalizedAngle = ((angle + Math.PI * 2) % (Math.PI * 2));
+  
+  // Top (near 3π/2 or 270°)
+  if (normalizedAngle > (5 * Math.PI) / 4 && normalizedAngle < (7 * Math.PI) / 4) {
+    return '1em';
+  }
+  // Bottom (near π/2 or 90°) 
+  if (normalizedAngle > Math.PI / 4 && normalizedAngle < (3 * Math.PI) / 4) {
+    return '-0.5em';
+  }
+  // Sides
+  return '0.3em';
 }
 
 const relationshipChords = computed((): Chord[] => {
@@ -393,8 +426,6 @@ function isNodeConnected(nodeIndex: number): boolean {
 }
 
 .bg-circle {
-  animation: pulse-glow 4s ease-in-out infinite;
-
   @media (prefers-reduced-motion: reduce) {
     animation: none;
   }
@@ -405,13 +436,11 @@ function isNodeConnected(nodeIndex: number): boolean {
   .chord {
     cursor: pointer;
     transition: all var(--transition-normal);
-    animation: chord-fade-in 0.8s ease-out backwards;
 
     &.is-highlighted {
       stroke-width: 3;
       stroke-opacity: 0.9 !important;
       filter: drop-shadow(0 0 8px currentColor) url(#chord-glow);
-      animation: chord-pulse 1.5s ease-in-out infinite;
     }
 
     &.is-dimmed {
@@ -437,7 +466,6 @@ function isNodeConnected(nodeIndex: number): boolean {
     transition: all var(--transition-normal);
     stroke: var(--analysis-swatch-border);
     stroke-width: 2;
-    animation: node-appear 0.6s ease-out backwards;
     filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
 
     &:hover {
@@ -451,7 +479,6 @@ function isNodeConnected(nodeIndex: number): boolean {
       stroke-width: 4;
       stroke: var(--dracula-cyan);
       filter: drop-shadow(0 0 16px currentColor) brightness(1.15);
-      animation: node-selected 0.5s ease-out;
     }
 
     &.is-hovered {
@@ -498,59 +525,13 @@ function isNodeConnected(nodeIndex: number): boolean {
   fill: var(--dracula-foreground);
   opacity: 0.7;
   pointer-events: none;
-  animation: text-fade-in 0.5s ease-out;
 
   @media (prefers-reduced-motion: reduce) {
     animation: none;
   }
 }
 
-// Keyframe Animations
-@keyframes chord-fade-in {
-  from {
-    stroke-opacity: 0;
-    stroke-dasharray: 100;
-    stroke-dashoffset: 100;
-  }
-  to {
-    stroke-dasharray: 0;
-    stroke-dashoffset: 0;
-  }
-}
-
-@keyframes chord-pulse {
-  0%,
-  100% {
-    stroke-width: 3;
-  }
-  50% {
-    stroke-width: 4;
-  }
-}
-
-@keyframes node-appear {
-  from {
-    opacity: 0;
-    transform: scale(0);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-
-@keyframes node-selected {
-  0% {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(1.3);
-  }
-  100% {
-    transform: scale(1.15);
-  }
-}
-
+// Keyframe Animations - kept minimal for performance
 @keyframes pulse-glow {
   0%,
   100% {
@@ -558,15 +539,6 @@ function isNodeConnected(nodeIndex: number): boolean {
   }
   50% {
     opacity: 0.5;
-  }
-}
-
-@keyframes text-fade-in {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 0.7;
   }
 }
 </style>
