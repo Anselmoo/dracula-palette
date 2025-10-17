@@ -14,11 +14,18 @@
         <span class="label">Sources</span>
         <div class="chips">
           <span
-            v-for="s in sources"
+            v-for="(s, index) in sources"
             :key="s.hex"
-            class="chip"
+            class="chip chip-interactive"
+            :class="{ 'chip-hidden': !isColorVisible(index) }"
             :style="{ background: s.hex }"
             :title="s.name"
+            @click="revealNextColor(index)"
+            @keydown.enter="revealNextColor(index)"
+            @keydown.space.prevent="revealNextColor(index)"
+            role="button"
+            tabindex="0"
+            :aria-label="`${s.name} color chip. Click to reveal ${isColorVisible(index) ? 'next color' : 'this color'}`"
             >{{ s.name }}</span
           >
         </div>
@@ -51,6 +58,7 @@
   </section>
 </template>
 <script setup lang="ts">
+import { ref, watch } from 'vue';
 import type { PaletteStandard, PaletteSourceColor } from '../../types/palette';
 import Icon from '../Icon.vue';
 
@@ -61,7 +69,7 @@ interface Insights {
   totalColors: number;
 }
 
-withDefaults(
+const props = withDefaults(
   defineProps<{
     standards: PaletteStandard[];
     sources: PaletteSourceColor[];
@@ -74,6 +82,31 @@ withDefaults(
     swatches: () => [],
   }
 );
+
+// Track the number of visible colors (initially 1)
+const visibleCount = ref(1);
+
+// Watch for changes in sources to reset visible count
+watch(
+  () => props.sources,
+  () => {
+    visibleCount.value = Math.min(1, props.sources.length);
+  },
+  { immediate: true }
+);
+
+// Check if a color at given index should be visible
+const isColorVisible = (index: number): boolean => {
+  return index < visibleCount.value;
+};
+
+// Reveal the next color when a visible chip is clicked
+const revealNextColor = (clickedIndex: number): void => {
+  // Only process clicks on visible chips
+  if (isColorVisible(clickedIndex) && visibleCount.value < props.sources.length) {
+    visibleCount.value += 1;
+  }
+};
 </script>
 <style scoped lang="scss">
 .snapshot {
@@ -119,6 +152,32 @@ withDefaults(
   color: var(--dracula-foreground);
   border: 1px solid var(--surface-border);
   font-size: 0.8rem;
+}
+.chip-interactive {
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-origin: center;
+}
+.chip-interactive:not(.chip-hidden):hover {
+  transform: scale(1.05);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+.chip-interactive:not(.chip-hidden):active {
+  transform: scale(0.98);
+}
+.chip-interactive:not(.chip-hidden):focus-visible {
+  outline: 2px solid var(--dracula-cyan);
+  outline-offset: 2px;
+}
+.chip-hidden {
+  opacity: 0;
+  transform: scale(0.8);
+  max-width: 0;
+  padding: 0;
+  margin: 0;
+  border: 0;
+  overflow: hidden;
+  pointer-events: none;
 }
 .metrics {
   display: flex;
