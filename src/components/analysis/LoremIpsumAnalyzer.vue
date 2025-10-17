@@ -19,6 +19,49 @@
           <option value="short">Short</option>
           <option value="medium">Medium</option>
           <option value="long">Long</option>
+          <option value="custom">Custom</option>
+        </select>
+      </label>
+      <label v-if="length === 'custom'"
+        >Custom Length (words)
+        <input type="number" v-model.number="customWordCount" min="5" max="500" />
+      </label>
+    </div>
+    <div class="color-controls">
+      <label
+        >Heading Color
+        <select v-model="selectedHeadingColor">
+          <option value="">Auto (from palette)</option>
+          <option v-for="c in availableColors" :key="c.hex" :value="c.hex">
+            {{ c.name || c.hex }}
+          </option>
+        </select>
+      </label>
+      <label
+        >Strong Color
+        <select v-model="selectedStrongColor">
+          <option value="">Auto (from palette)</option>
+          <option v-for="c in availableColors" :key="c.hex" :value="c.hex">
+            {{ c.name || c.hex }}
+          </option>
+        </select>
+      </label>
+      <label
+        >Emphasis Color
+        <select v-model="selectedEmphasisColor">
+          <option value="">Auto (from palette)</option>
+          <option v-for="c in availableColors" :key="c.hex" :value="c.hex">
+            {{ c.name || c.hex }}
+          </option>
+        </select>
+      </label>
+      <label
+        >Code Color
+        <select v-model="selectedCodeColor">
+          <option value="">Auto (from palette)</option>
+          <option v-for="c in availableColors" :key="c.hex" :value="c.hex">
+            {{ c.name || c.hex }}
+          </option>
         </select>
       </label>
     </div>
@@ -57,7 +100,14 @@ type VariantKey =
   | 'startup';
 const variant = ref<VariantKey>('classic');
 const paras = ref(2);
-const length = ref<'short' | 'medium' | 'long'>('medium');
+const length = ref<'short' | 'medium' | 'long' | 'custom'>('medium');
+const customWordCount = ref(50);
+
+// Color selection refs
+const selectedHeadingColor = ref('');
+const selectedStrongColor = ref('');
+const selectedEmphasisColor = ref('');
+const selectedCodeColor = ref('');
 
 const LOREM: Record<VariantKey, string[]> = {
   classic: [
@@ -98,10 +148,15 @@ const LOREM: Record<VariantKey, string[]> = {
   ],
 };
 
-function buildParagraph(seed: string, len: 'short' | 'medium' | 'long') {
+function buildParagraph(seed: string, len: 'short' | 'medium' | 'long' | 'custom') {
   const base = seed.split(' ');
-  const mult = len === 'short' ? 0.7 : len === 'long' ? 1.6 : 1.0;
-  const words = Math.max(6, Math.round(base.length * mult));
+  let words: number;
+  if (len === 'custom') {
+    words = Math.max(5, customWordCount.value);
+  } else {
+    const mult = len === 'short' ? 0.7 : len === 'long' ? 1.6 : 1.0;
+    words = Math.max(6, Math.round(base.length * mult));
+  }
   const out: string[] = [];
   let i = 0;
   while (out.length < words) {
@@ -133,23 +188,55 @@ const generated = computed(() => {
   return res;
 });
 
+// Available colors for selection
+const availableColors = computed(() => {
+  const all = [
+    ...(props.palette ?? []),
+    ...(props.backgrounds ?? []),
+    ...(props.accents ?? []),
+  ];
+  // Deduplicate by hex
+  const seen = new Set<string>();
+  return all.filter(c => {
+    if (seen.has(c.hex)) return false;
+    seen.add(c.hex);
+    return true;
+  });
+});
+
 // Derive preview colors from chosen palette if provided
 const useMatrix = ref(false);
 onMounted(() => {
   const s = localStorage.getItem('ipsum-use-matrix');
   if (s) useMatrix.value = s === '1';
+  // Load saved color selections
+  const savedHeading = localStorage.getItem('ipsum-heading-color');
+  const savedStrong = localStorage.getItem('ipsum-strong-color');
+  const savedEmphasis = localStorage.getItem('ipsum-emphasis-color');
+  const savedCode = localStorage.getItem('ipsum-code-color');
+  if (savedHeading) selectedHeadingColor.value = savedHeading;
+  if (savedStrong) selectedStrongColor.value = savedStrong;
+  if (savedEmphasis) selectedEmphasisColor.value = savedEmphasis;
+  if (savedCode) selectedCodeColor.value = savedCode;
 });
 watch(useMatrix, v => localStorage.setItem('ipsum-use-matrix', v ? '1' : '0'));
+watch(selectedHeadingColor, v => localStorage.setItem('ipsum-heading-color', v));
+watch(selectedStrongColor, v => localStorage.setItem('ipsum-strong-color', v));
+watch(selectedEmphasisColor, v => localStorage.setItem('ipsum-emphasis-color', v));
+watch(selectedCodeColor, v => localStorage.setItem('ipsum-code-color', v));
+
 const previewStyle = computed(() => {
   // Heuristics by name if present
   const byName = (arr: Entry[] | undefined, needle: RegExp) =>
     arr?.find(c => (c.name || '').toLowerCase().match(needle))?.hex;
   const p = useMatrix.value ? (props.accents ?? props.palette ?? []) : (props.palette ?? []);
   const bgp = useMatrix.value ? (props.backgrounds ?? []) : [];
-  const h = byName(p, /heading|title|purple|red|brand/) || p[0]?.hex;
-  const st = byName(p, /strong|bold|pink|accent/) || p[1]?.hex;
-  const emc = byName(p, /em|emphasis|cyan|info/) || p[2]?.hex;
-  const code = byName(p, /code|green|success/) || p[3]?.hex;
+  
+  // Use selected colors if available, otherwise use heuristics
+  const h = selectedHeadingColor.value || byName(p, /heading|title|purple|red|brand/) || p[0]?.hex;
+  const st = selectedStrongColor.value || byName(p, /strong|bold|pink|accent/) || p[1]?.hex;
+  const emc = selectedEmphasisColor.value || byName(p, /em|emphasis|cyan|info/) || p[2]?.hex;
+  const code = selectedCodeColor.value || byName(p, /code|green|success/) || p[3]?.hex;
   const surface = byName(bgp, /bg|surface|paper|base/) || bgp[0]?.hex || p[4]?.hex;
   const border = byName(bgp, /border|line|hairline/) || bgp[1]?.hex || p[5]?.hex;
   const style: Record<string, string> = {};
@@ -181,6 +268,29 @@ const avgWords = computed(() =>
   flex-wrap: wrap;
   align-items: center;
   margin-bottom: 0.5rem;
+}
+.color-controls {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-bottom: 0.5rem;
+  padding: 0.5rem;
+  background: var(--surface-secondary);
+  border-radius: 6px;
+}
+.color-controls label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  font-size: 0.9rem;
+}
+.color-controls select {
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  border: 1px solid var(--surface-border);
+  background: var(--surface-primary);
+  color: var(--text-primary);
 }
 .stats {
   display: flex;
