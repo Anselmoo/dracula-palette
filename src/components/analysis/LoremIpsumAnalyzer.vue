@@ -64,6 +64,24 @@
           </option>
         </select>
       </label>
+      <label
+        >Background Color
+        <select v-model="selectedBackgroundColor">
+          <option value="">Auto (from palette)</option>
+          <option v-for="c in availableColors" :key="c.hex" :value="c.hex">
+            {{ c.name || c.hex }}
+          </option>
+        </select>
+      </label>
+      <label
+        >Border Color
+        <select v-model="selectedBorderColor">
+          <option value="">Auto (from palette)</option>
+          <option v-for="c in availableColors" :key="c.hex" :value="c.hex">
+            {{ c.name || c.hex }}
+          </option>
+        </select>
+      </label>
     </div>
     <div class="stats">
       <span>Words: {{ wordCount }}</span>
@@ -108,6 +126,8 @@ const selectedHeadingColor = ref('');
 const selectedStrongColor = ref('');
 const selectedEmphasisColor = ref('');
 const selectedCodeColor = ref('');
+const selectedBackgroundColor = ref('');
+const selectedBorderColor = ref('');
 
 const LOREM: Record<VariantKey, string[]> = {
   classic: [
@@ -214,16 +234,22 @@ onMounted(() => {
   const savedStrong = localStorage.getItem('ipsum-strong-color');
   const savedEmphasis = localStorage.getItem('ipsum-emphasis-color');
   const savedCode = localStorage.getItem('ipsum-code-color');
+  const savedBackground = localStorage.getItem('ipsum-background-color');
+  const savedBorder = localStorage.getItem('ipsum-border-color');
   if (savedHeading) selectedHeadingColor.value = savedHeading;
   if (savedStrong) selectedStrongColor.value = savedStrong;
   if (savedEmphasis) selectedEmphasisColor.value = savedEmphasis;
   if (savedCode) selectedCodeColor.value = savedCode;
+  if (savedBackground) selectedBackgroundColor.value = savedBackground;
+  if (savedBorder) selectedBorderColor.value = savedBorder;
 });
 watch(useMatrix, v => localStorage.setItem('ipsum-use-matrix', v ? '1' : '0'));
 watch(selectedHeadingColor, v => localStorage.setItem('ipsum-heading-color', v));
 watch(selectedStrongColor, v => localStorage.setItem('ipsum-strong-color', v));
 watch(selectedEmphasisColor, v => localStorage.setItem('ipsum-emphasis-color', v));
 watch(selectedCodeColor, v => localStorage.setItem('ipsum-code-color', v));
+watch(selectedBackgroundColor, v => localStorage.setItem('ipsum-background-color', v));
+watch(selectedBorderColor, v => localStorage.setItem('ipsum-border-color', v));
 
 const previewStyle = computed(() => {
   // Heuristics by name if present
@@ -237,8 +263,8 @@ const previewStyle = computed(() => {
   const st = selectedStrongColor.value || byName(p, /strong|bold|pink|accent/) || p[1]?.hex;
   const emc = selectedEmphasisColor.value || byName(p, /em|emphasis|cyan|info/) || p[2]?.hex;
   const code = selectedCodeColor.value || byName(p, /code|green|success/) || p[3]?.hex;
-  const surface = byName(bgp, /bg|surface|paper|base/) || bgp[0]?.hex || p[4]?.hex;
-  const border = byName(bgp, /border|line|hairline/) || bgp[1]?.hex || p[5]?.hex;
+  const surface = selectedBackgroundColor.value || byName(bgp, /bg|surface|paper|base/) || bgp[0]?.hex || p[4]?.hex;
+  const border = selectedBorderColor.value || byName(bgp, /border|line|hairline/) || bgp[1]?.hex || p[5]?.hex;
   const style: Record<string, string> = {};
   if (h) style['--ipsum-hdr'] = h;
   if (st) style['--ipsum-strong'] = st;
