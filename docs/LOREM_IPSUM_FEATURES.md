@@ -16,6 +16,7 @@ Users can now select specific palette colors for different text elements in the 
 - **Code Color**: Choose a color for inline code elements
 
 Each color dropdown includes:
+
 - "Auto (from palette)" option - Uses intelligent heuristics to select colors based on color names
 - All available colors from the current palette, backgrounds, and accents
 
@@ -56,6 +57,7 @@ In addition to the existing preset options (Short, Medium, Long), users can now:
 ### Implementation
 
 The component uses Vue 3's Composition API with:
+
 - Reactive refs for color selections and custom word count
 - Computed properties for available colors and preview styles
 - localStorage for persisting user preferences
@@ -66,11 +68,7 @@ The component uses Vue 3's Composition API with:
 ```typescript
 // Colors are populated from all available sources
 const availableColors = computed(() => {
-  const all = [
-    ...(props.palette ?? []),
-    ...(props.backgrounds ?? []),
-    ...(props.accents ?? []),
-  ];
+  const all = [...(props.palette ?? []), ...(props.backgrounds ?? []), ...(props.accents ?? [])];
   // Deduplicate by hex value
   const seen = new Set<string>();
   return all.filter(c => {
@@ -100,12 +98,15 @@ function buildParagraph(seed: string, len: 'short' | 'medium' | 'long' | 'custom
 ## Screenshots
 
 ### Before Enhancement
+
 ![Before](https://github.com/user-attachments/assets/bc54aee4-15ff-4a34-bd78-417956015a19)
 
 ### After Enhancement - With Color Controls
+
 ![After](https://github.com/user-attachments/assets/8c3b6ed5-9ef5-478a-aae2-65e4ddfec0ce)
 
 ### Custom Length and Color Selection Active
+
 ![With Colors](https://github.com/user-attachments/assets/e874ab1c-5d87-4e16-b530-b741f4fa991e)
 
 ## Benefits
@@ -118,6 +119,7 @@ function buildParagraph(seed: string, len: 'short' | 'medium' | 'long' | 'custom
 ## Browser Compatibility
 
 The feature uses standard web APIs and should work in all modern browsers:
+
 - Chrome/Edge 90+
 - Firefox 88+
 - Safari 14+
@@ -125,6 +127,7 @@ The feature uses standard web APIs and should work in all modern browsers:
 ## Future Enhancements
 
 Potential improvements for future versions:
+
 - Color picker UI for more precise color selection
 - Ability to save and load color presets
 - Export styled Lorem Ipsum text

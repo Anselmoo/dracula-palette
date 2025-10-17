@@ -48,8 +48,8 @@ describe('LoremIpsumAnalyzer', () => {
 
       // Check if custom word count input appears
       const inputs = wrapper.findAll('input[type="number"]');
-      const customInput = inputs.find(input => 
-        input.attributes('min') === '5' && input.attributes('max') === '500'
+      const customInput = inputs.find(
+        input => input.attributes('min') === '5' && input.attributes('max') === '500'
       );
       expect(customInput).toBeDefined();
     }
@@ -76,12 +76,8 @@ describe('LoremIpsumAnalyzer', () => {
           { hex: '#bd93f9', name: 'Purple' },
           { hex: '#ff79c6', name: 'Pink' },
         ],
-        backgrounds: [
-          { hex: '#282a36', name: 'Background' },
-        ],
-        accents: [
-          { hex: '#50fa7b', name: 'Green' },
-        ],
+        backgrounds: [{ hex: '#282a36', name: 'Background' }],
+        accents: [{ hex: '#50fa7b', name: 'Green' }],
       },
     });
 
@@ -106,7 +102,7 @@ describe('LoremIpsumAnalyzer', () => {
     });
 
     const vm = wrapper.vm as any;
-    
+
     // Set a custom heading color
     vm.selectedHeadingColor = '#ff79c6';
     await wrapper.vm.$nextTick();

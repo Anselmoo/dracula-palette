@@ -210,11 +210,7 @@ const generated = computed(() => {
 
 // Available colors for selection
 const availableColors = computed(() => {
-  const all = [
-    ...(props.palette ?? []),
-    ...(props.backgrounds ?? []),
-    ...(props.accents ?? []),
-  ];
+  const all = [...(props.palette ?? []), ...(props.backgrounds ?? []), ...(props.accents ?? [])];
   // Deduplicate by hex
   const seen = new Set<string>();
   return all.filter(c => {
@@ -257,14 +253,19 @@ const previewStyle = computed(() => {
     arr?.find(c => (c.name || '').toLowerCase().match(needle))?.hex;
   const p = useMatrix.value ? (props.accents ?? props.palette ?? []) : (props.palette ?? []);
   const bgp = useMatrix.value ? (props.backgrounds ?? []) : [];
-  
+
   // Use selected colors if available, otherwise use heuristics
   const h = selectedHeadingColor.value || byName(p, /heading|title|purple|red|brand/) || p[0]?.hex;
   const st = selectedStrongColor.value || byName(p, /strong|bold|pink|accent/) || p[1]?.hex;
   const emc = selectedEmphasisColor.value || byName(p, /em|emphasis|cyan|info/) || p[2]?.hex;
   const code = selectedCodeColor.value || byName(p, /code|green|success/) || p[3]?.hex;
-  const surface = selectedBackgroundColor.value || byName(bgp, /bg|surface|paper|base/) || bgp[0]?.hex || p[4]?.hex;
-  const border = selectedBorderColor.value || byName(bgp, /border|line|hairline/) || bgp[1]?.hex || p[5]?.hex;
+  const surface =
+    selectedBackgroundColor.value ||
+    byName(bgp, /bg|surface|paper|base/) ||
+    bgp[0]?.hex ||
+    p[4]?.hex;
+  const border =
+    selectedBorderColor.value || byName(bgp, /border|line|hairline/) || bgp[1]?.hex || p[5]?.hex;
   const style: Record<string, string> = {};
   if (h) style['--ipsum-hdr'] = h;
   if (st) style['--ipsum-strong'] = st;
