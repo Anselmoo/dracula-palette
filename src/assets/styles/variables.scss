@@ -2,14 +2,14 @@
 // Based on the official Dracula theme specification
 
 :root {
-  // Core Dracula Colors
+  // Core Dracula Colors (Dark Mode - Default)
   --dracula-background: #282a36;
   --dracula-current-line: #44475a;
   --dracula-selection: #6272a4;
   --dracula-foreground: #f8f8f2;
   --dracula-comment: #6272a4;
 
-  // Accent Colors
+  // Accent Colors (Dark Mode)
   --dracula-cyan: #8be9fd;
   --dracula-green: #50fa7b;
   --dracula-orange: #ffb86c;
@@ -74,8 +74,145 @@
   --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
   --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.1);
 
+  // Surfaces (used for cards/panels)
+  --surface-primary: #44475a;
+  --surface-secondary: rgba(40, 42, 54, 0.92);
+  --surface-border: rgba(98, 114, 164, 0.35);
+  --surface-shadow: rgba(0, 0, 0, 0.25);
+
+  // Overlay surfaces (dialogs, popovers)
+  --overlay-surface: rgba(40, 42, 54, 0.98);
+  --overlay-border: var(--surface-border);
+
+  // Header/Footer defaults (dark)
+  --header-footer-bg: var(--dracula-current-line);
+  --header-footer-border: var(--dracula-selection);
+  --header-subtitle-color: var(--dracula-comment);
+  --footer-text-color: var(--dracula-comment);
+  --footer-link-color: var(--dracula-cyan);
+  --footer-link-hover-color: var(--dracula-green);
+  --similarity-outline-color: var(--dracula-selection);
+
   // Transitions
   --transition-fast: 0.15s ease;
   --transition-normal: 0.3s ease;
   --transition-slow: 0.5s ease;
+
+  // Analysis Component Styling (Dark Mode)
+  --analysis-panel-bg: var(--surface-primary);
+  --analysis-panel-border: var(--surface-border);
+  --analysis-panel-shadow: var(--shadow-md);
+  --analysis-panel-shadow-hover: var(--shadow-lg);
+
+  --analysis-glass-bg: rgba(68, 71, 90, 0.6);
+
+  --analysis-card-bg: rgba(40, 42, 54, 0.6);
+  --analysis-card-border: rgba(98, 114, 164, 0.25);
+  --analysis-card-border-hover: var(--dracula-purple);
+
+  --analysis-input-bg: rgba(40, 42, 54, 0.8);
+  --analysis-input-border: var(--surface-border);
+  --analysis-input-border-hover: var(--dracula-purple);
+
+  --analysis-swatch-border: rgba(248, 248, 242, 0.2);
+}
+
+// Alucard Theme (Light Mode) - Official Dracula Specification
+// Source: https://draculatheme.com/spec
+.theme-alucard {
+  // Core Alucard Colors (Light Mode) - OFFICIAL SPEC VALUES
+  --dracula-background: #fffbeb;
+  --dracula-current-line: #6c664b; // Official spec - DO NOT CHANGE
+  --dracula-selection: #cfcfde;
+  --dracula-foreground: #1f1f1f;
+  --dracula-comment: #6c664b;
+
+  // Accent Colors (Light Mode)
+  --dracula-cyan: #036a96;
+  --dracula-green: #14710a;
+  --dracula-orange: #a34d14;
+  --dracula-pink: #a3144d;
+  --dracula-purple: #644ac9;
+  --dracula-red: #cb3a2a;
+  --dracula-yellow: #846e15;
+
+  // Update opacity variants for light mode
+  --dracula-cyan-10: rgba(3, 106, 150, 0.1);
+  --dracula-cyan-20: rgba(3, 106, 150, 0.2);
+  --dracula-cyan-30: rgba(3, 106, 150, 0.3);
+
+  --dracula-green-10: rgba(20, 113, 10, 0.1);
+  --dracula-green-20: rgba(20, 113, 10, 0.2);
+  --dracula-green-30: rgba(20, 113, 10, 0.3);
+
+  --dracula-orange-10: rgba(163, 77, 20, 0.1);
+  --dracula-orange-20: rgba(163, 77, 20, 0.2);
+  --dracula-orange-30: rgba(163, 77, 20, 0.3);
+
+  --dracula-pink-10: rgba(163, 20, 77, 0.1);
+  --dracula-pink-20: rgba(163, 20, 77, 0.2);
+  --dracula-pink-30: rgba(163, 20, 77, 0.3);
+
+  --dracula-purple-10: rgba(100, 74, 201, 0.1);
+  --dracula-purple-20: rgba(100, 74, 201, 0.2);
+  --dracula-purple-30: rgba(100, 74, 201, 0.3);
+
+  --dracula-red-10: rgba(203, 58, 42, 0.1);
+  --dracula-red-20: rgba(203, 58, 42, 0.2);
+  --dracula-red-30: rgba(203, 58, 42, 0.3);
+
+  --dracula-yellow-10: rgba(132, 110, 21, 0.1);
+  --dracula-yellow-20: rgba(132, 110, 21, 0.2);
+  --dracula-yellow-30: rgba(132, 110, 21, 0.3);
+
+  // Adjust shadows for light mode
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.06);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+  --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.12);
+
+  // Surfaces (cards/panels) tuned for light mode using official colors
+  --surface-primary: var(--dracula-background);
+  --surface-secondary: rgba(255, 251, 235, 0.92);
+  --surface-border: rgba(108, 102, 75, 0.35);
+  --surface-shadow: rgba(31, 31, 31, 0.08);
+
+  // Overlay surfaces (dialogs, popovers) for light mode: olive-tinted to avoid "white mode"
+  --overlay-surface: color-mix(
+    in srgb,
+    var(--dracula-current-line) 20%,
+    var(--dracula-background) 80%
+  );
+  --overlay-border: var(--surface-border);
+
+  // Header/Footer adjustments (light)
+  --header-footer-bg: #cfcfde;
+  --header-footer-border: var(--dracula-comment); /* #6c664b for visibility on light bg */
+  --header-subtitle-color: var(--dracula-foreground); /* dark text for readability */
+  --footer-text-color: var(--dracula-foreground); /* dark text for readability */
+  --footer-link-color: var(--dracula-purple); /* better contrast than cyan on olive */
+  --footer-link-hover-color: var(--dracula-pink);
+  --similarity-outline-color: var(--dracula-selection); /* official selection */
+
+  // Headings / gradients tuned for light mode
+  --heading-gradient-start: var(--dracula-purple);
+  --heading-gradient-end: var(--dracula-pink);
+
+  // Analysis Component Styling (Light Mode - Alucard)
+  --analysis-panel-bg: #ffffff;
+  --analysis-panel-border: rgba(108, 102, 75, 0.25);
+  --analysis-panel-shadow: 0 2px 8px rgba(31, 31, 31, 0.08);
+  --analysis-panel-shadow-hover: 0 4px 12px rgba(31, 31, 31, 0.12);
+
+  --analysis-glass-bg: rgba(255, 255, 255, 0.9);
+
+  --analysis-card-bg: #fafafa;
+  --analysis-card-border: rgba(108, 102, 75, 0.2);
+  --analysis-card-border-hover: var(--dracula-purple);
+
+  --analysis-input-bg: #ffffff;
+  --analysis-input-border: rgba(108, 102, 75, 0.3);
+  --analysis-input-border-hover: var(--dracula-purple);
+
+  --analysis-swatch-border: rgba(31, 31, 31, 0.15);
 }

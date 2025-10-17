@@ -1,6 +1,6 @@
 <template>
   <div v-if="suggestions.length > 0" class="color-suggestions">
-    <h2 class="suggestions-title">Closest Dracula Colors</h2>
+    <h2 class="suggestions-title">Closest {{ isDarkMode ? 'Dracula' : 'Alucard' }} Colors</h2>
     <div class="suggestions-grid">
       <div
         v-for="(suggestion, index) in suggestions"
@@ -41,6 +41,7 @@
 </template>
 
 <script setup lang="ts">
+import { useTheme } from '../composables/useTheme';
 import type { ColorSuggestion } from '../types/color';
 
 interface Props {
@@ -53,6 +54,8 @@ interface Emits {
 
 defineProps<Props>();
 const emit = defineEmits<Emits>();
+
+const { isDarkMode } = useTheme();
 
 const handleSuggestionClick = (suggestion: ColorSuggestion) => {
   emit('color-select', suggestion);
@@ -81,8 +84,8 @@ const handleSuggestionClick = (suggestion: ColorSuggestion) => {
 }
 
 .suggestion-card {
-  background: var(--dracula-current-line);
-  border: 2px solid var(--dracula-selection);
+  background: var(--surface-primary);
+  border: 2px solid var(--surface-border);
   border-radius: 12px;
   padding: 1.5rem;
   cursor: pointer;
@@ -93,7 +96,7 @@ const handleSuggestionClick = (suggestion: ColorSuggestion) => {
   @media (hover: hover) {
     &:hover {
       transform: translateY(-4px);
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      box-shadow: 0 8px 32px var(--surface-shadow);
       border-color: var(--dracula-pink);
     }
   }
@@ -171,7 +174,8 @@ const handleSuggestionClick = (suggestion: ColorSuggestion) => {
   align-items: center;
   margin-bottom: 1rem;
   padding: 0.75rem;
-  background: var(--dracula-background);
+  background: var(--surface-secondary);
+  border: 1px solid var(--surface-border); // add outline to separate from card bg in light mode
   border-radius: 6px;
 }
 

@@ -1,0 +1,822 @@
+<template>
+  <section class="harmony">
+    <h3 class="t"><Icon name="harmony" /><span>Harmony</span></h3>
+    <div class="controls">
+      <!-- Removed redundant 'Enable connections' checkbox; relation icons turn overlays on when needed -->
+      <label class="spacer"></label>
+      <label>
+        View
+        <select v-model="viewMode">
+          <option value="wheels">Wheels</option>
+          <option value="chord">Chord</option>
+        </select>
+      </label>
+      <label
+        >Source A
+        <select v-model="srcIndexA">
+          <option v-for="(c, i) in palette" :key="c.hex + i" :value="i">
+            {{ c.name || c.hex }}
+          </option>
+        </select>
+      </label>
+      <label
+        >Source B
+        <select v-model="srcIndexB">
+          <option v-for="(c, i) in palette" :key="'b' + c.hex + i" :value="i">
+            {{ c.name || c.hex }}
+          </option>
+        </select>
+      </label>
+      <label
+        >Source C
+        <select v-model="srcIndexC">
+          <option v-for="(c, i) in palette" :key="'c' + c.hex + i" :value="i">
+            {{ c.name || c.hex }}
+          </option>
+        </select>
+      </label>
+      <div class="toggles">
+        <label
+          :class="['icon-toggle', { active: showComp }]"
+          :title="showComp ? 'Disable Complementary' : 'Enable Complementary'"
+        >
+          <input
+            type="checkbox"
+            v-model="showComp"
+            class="visually-hidden"
+            :disabled="false"
+            aria-hidden="true"
+          />
+          <button type="button" class="icon-btn" :aria-pressed="showComp" @click="onToggleComp">
+            <Icon name="contrast" />
+          </button>
+        </label>
+        <label
+          :class="['icon-toggle', { active: showAnalog }]"
+          :title="showAnalog ? 'Disable Analogous' : 'Enable Analogous'"
+        >
+          <input
+            type="checkbox"
+            v-model="showAnalog"
+            class="visually-hidden"
+            :disabled="false"
+            aria-hidden="true"
+          />
+          <button type="button" class="icon-btn" :aria-pressed="showAnalog" @click="onToggleAnalog">
+            <Icon name="relations" />
+          </button>
+        </label>
+        <label
+          :class="['icon-toggle', { active: showTriad }]"
+          :title="showTriad ? 'Disable Triadic' : 'Enable Triadic'"
+        >
+          <input
+            type="checkbox"
+            v-model="showTriad"
+            class="visually-hidden"
+            :disabled="false"
+            aria-hidden="true"
+          />
+          <button type="button" class="icon-btn" :aria-pressed="showTriad" @click="onToggleTriad">
+            <Icon name="shuffle" />
+          </button>
+        </label>
+        <!-- Degree ticks toggle moved to the end of the icon cluster -->
+        <label
+          :class="['icon-toggle', { active: showTicks }]"
+          :title="showTicks ? 'Hide degree ticks' : 'Show degree ticks'"
+        >
+          <input type="checkbox" v-model="showTicks" class="visually-hidden" aria-hidden="true" />
+          <button type="button" class="icon-btn" :aria-pressed="showTicks" @click="onToggleTicks">
+            <Icon name="target" />
+          </button>
+        </label>
+      </div>
+      <label><input type="checkbox" v-model="syncBC" /> Sync B/C with A</label>
+    </div>
+    <div v-if="viewMode === 'wheels'" class="wheels">
+      <div class="wheel" aria-label="Wheel A">
+        <svg
+          width="220"
+          height="220"
+          viewBox="0 0 220 220"
+          role="img"
+          @click="onWheelClick($event, 'A')"
+        >
+          <g transform="translate(110,110)">
+            <template v-for="i in 36" :key="i">
+              <path
+                :d="arcPath((i - 1) * 10, i * 10, 80, 100)"
+                :fill="`hsl(${(i - 1) * 10}, 80%, 50%)`"
+              />
+            </template>
+            <template v-if="showTicks">
+              <g v-for="i in 12" :key="'t' + i">
+                <line
+                  :x1="polarX(i * 30, 78)"
+                  :y1="polarY(i * 30, 78)"
+                  :x2="polarX(i * 30, 100)"
+                  :y2="polarY(i * 30, 100)"
+                  class="tick"
+                />
+                <text :x="polarX(i * 30, 70)" :y="polarY(i * 30, 70)" class="tick-txt">
+                  {{ i * 30 }}°
+                </text>
+              </g>
+            </template>
+            <circle :cx="polarX(hA, 90)" :cy="polarY(hA, 90)" r="6" class="pin" :fill="aHex">
+              <title>Source A {{ aHex }} ({{ Math.round(hA) }}°)</title>
+            </circle>
+            <g class="edges">
+              <line
+                v-for="(e, idx) in edgesA"
+                :key="'ea' + idx"
+                :x1="polarX(hA, 90)"
+                :y1="polarY(hA, 90)"
+                :x2="polarX(e.h, 90)"
+                :y2="polarY(e.h, 90)"
+                :class="['edge', e.cls]"
+              />
+            </g>
+            <circle
+              v-for="(t, idx) in targetsA"
+              :key="idx"
+              :cx="polarX(t.h, 90)"
+              :cy="polarY(t.h, 90)"
+              r="6"
+              class="pin sec"
+              :fill="hueToHexA(t.h)"
+            >
+              <title>{{ t.label }} — {{ hueToHexA(t.h) }} ({{ Math.round(t.h) }}°)</title>
+            </circle>
+          </g>
+        </svg>
+      </div>
+      <div class="wheel" aria-label="Wheel B">
+        <svg
+          width="220"
+          height="220"
+          viewBox="0 0 220 220"
+          role="img"
+          @click="onWheelClick($event, 'B')"
+        >
+          <g transform="translate(110,110)">
+            <template v-for="i in 36" :key="i">
+              <path
+                :d="arcPath((i - 1) * 10, i * 10, 80, 100)"
+                :fill="`hsl(${(i - 1) * 10}, 80%, 50%)`"
+              />
+            </template>
+            <template v-if="showTicks">
+              <g v-for="i in 12" :key="'tb' + i">
+                <line
+                  :x1="polarX(i * 30, 78)"
+                  :y1="polarY(i * 30, 78)"
+                  :x2="polarX(i * 30, 100)"
+                  :y2="polarY(i * 30, 100)"
+                  class="tick"
+                />
+                <text :x="polarX(i * 30, 70)" :y="polarY(i * 30, 70)" class="tick-txt">
+                  {{ i * 30 }}°
+                </text>
+              </g>
+            </template>
+            <circle :cx="polarX(hB, 90)" :cy="polarY(hB, 90)" r="6" class="pin" :fill="bHex">
+              <title>Source B {{ bHex }} ({{ Math.round(hB) }}°)</title>
+            </circle>
+            <g class="edges">
+              <line
+                v-for="(e, idx) in edgesB"
+                :key="'eb' + idx"
+                :x1="polarX(hB, 90)"
+                :y1="polarY(hB, 90)"
+                :x2="polarX(e.h, 90)"
+                :y2="polarY(e.h, 90)"
+                :class="['edge', e.cls]"
+              />
+            </g>
+            <circle
+              v-for="(t, idx) in targetsB"
+              :key="idx"
+              :cx="polarX(t.h, 90)"
+              :cy="polarY(t.h, 90)"
+              r="6"
+              class="pin sec"
+              :fill="hueToHexB(t.h)"
+            >
+              <title>{{ t.label }} — {{ hueToHexB(t.h) }} ({{ Math.round(t.h) }}°)</title>
+            </circle>
+          </g>
+        </svg>
+      </div>
+      <div class="wheel" aria-label="Wheel C">
+        <svg
+          width="220"
+          height="220"
+          viewBox="0 0 220 220"
+          role="img"
+          @click="onWheelClick($event, 'C')"
+        >
+          <g transform="translate(110,110)">
+            <template v-for="i in 36" :key="i">
+              <path
+                :d="arcPath((i - 1) * 10, i * 10, 80, 100)"
+                :fill="`hsl(${(i - 1) * 10}, 80%, 50%)`"
+              />
+            </template>
+            <template v-if="showTicks">
+              <g v-for="i in 12" :key="'tc' + i">
+                <line
+                  :x1="polarX(i * 30, 78)"
+                  :y1="polarY(i * 30, 78)"
+                  :x2="polarX(i * 30, 100)"
+                  :y2="polarY(i * 30, 100)"
+                  class="tick"
+                />
+                <text :x="polarX(i * 30, 70)" :y="polarY(i * 30, 70)" class="tick-txt">
+                  {{ i * 30 }}°
+                </text>
+              </g>
+            </template>
+            <circle :cx="polarX(hC, 90)" :cy="polarY(hC, 90)" r="6" class="pin" :fill="cHex">
+              <title>Source C {{ cHex }} ({{ Math.round(hC) }}°)</title>
+            </circle>
+            <g class="edges">
+              <line
+                v-for="(e, idx) in edgesC"
+                :key="'ec' + idx"
+                :x1="polarX(hC, 90)"
+                :y1="polarY(hC, 90)"
+                :x2="polarX(e.h, 90)"
+                :y2="polarY(e.h, 90)"
+                :class="['edge', e.cls]"
+              />
+            </g>
+            <circle
+              v-for="(t, idx) in targetsC"
+              :key="idx"
+              :cx="polarX(t.h, 90)"
+              :cy="polarY(t.h, 90)"
+              r="6"
+              class="pin sec"
+              :fill="hueToHexC(t.h)"
+            >
+              <title>{{ t.label }} — {{ hueToHexC(t.h) }} ({{ Math.round(t.h) }}°)</title>
+            </circle>
+          </g>
+        </svg>
+      </div>
+    </div>
+    <div class="row" v-if="viewMode === 'wheels' && palette.length">
+      <div class="card">
+        <h4>Complementary</h4>
+        <div class="swatches">
+          <div v-for="c in compA" :key="'a' + c" class="swl">
+            <span class="sw" :style="{ background: c }" :title="c"></span
+            ><span class="lb">{{ c }}</span>
+          </div>
+          <div v-for="c in compB" :key="'b' + c" class="swl">
+            <span class="sw" :style="{ background: c }" :title="c"></span
+            ><span class="lb">{{ c }}</span>
+          </div>
+          <div v-for="c in compC" :key="'c' + c" class="swl">
+            <span class="sw" :style="{ background: c }" :title="c"></span
+            ><span class="lb">{{ c }}</span>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <h4>Analogous</h4>
+        <div class="swatches">
+          <div v-for="c in analA" :key="'aa' + c" class="swl">
+            <span class="sw" :style="{ background: c }" :title="c"></span
+            ><span class="lb">{{ c }}</span>
+          </div>
+          <div v-for="c in analB" :key="'ab' + c" class="swl">
+            <span class="sw" :style="{ background: c }" :title="c"></span
+            ><span class="lb">{{ c }}</span>
+          </div>
+          <div v-for="c in analC" :key="'ac' + c" class="swl">
+            <span class="sw" :style="{ background: c }" :title="c"></span
+            ><span class="lb">{{ c }}</span>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <h4>Triadic</h4>
+        <div class="swatches">
+          <div v-for="c in triA" :key="'ta' + c" class="swl">
+            <span class="sw" :style="{ background: c }" :title="c"></span
+            ><span class="lb">{{ c }}</span>
+          </div>
+          <div v-for="c in triB" :key="'tb' + c" class="swl">
+            <span class="sw" :style="{ background: c }" :title="c"></span
+            ><span class="lb">{{ c }}</span>
+          </div>
+          <div v-for="c in triC" :key="'tc' + c" class="swl">
+            <span class="sw" :style="{ background: c }" :title="c"></span
+            ><span class="lb">{{ c }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <HarmonyChord v-else-if="viewMode === 'chord'" :palette="palette" />
+    <p class="help" v-if="showOverlays">
+      Connections illustrate hue relationships from each source to its complementary (180°),
+      analogous (±30°), and triadic (+120°,+240°) targets.
+    </p>
+    <p v-else class="empty">No colors available</p>
+  </section>
+</template>
+<script setup lang="ts">
+import { computed, ref, watch } from 'vue';
+import Icon from '../Icon.vue';
+import HarmonyChord from './HarmonyChord.vue';
+
+const props = defineProps<{ palette: { hex: string; name?: string }[] }>();
+const srcIndexA = ref(0);
+const srcIndexB = ref(1);
+const srcIndexC = ref(2);
+const syncBC = ref(false);
+const base = computed(() => props.palette[srcIndexA.value]?.hex ?? '#6f6dfa');
+const viewMode = ref<'wheels' | 'chord'>('wheels');
+const showOverlays = ref(false);
+
+function hexToHsl(hex: string) {
+  const m = hex.replace('#', '');
+  const r = parseInt(m.substring(0, 2), 16) / 255;
+  const g = parseInt(m.substring(2, 4), 16) / 255;
+  const b = parseInt(m.substring(4, 6), 16) / 255;
+  const max = Math.max(r, g, b),
+    min = Math.min(r, g, b);
+  let h = 0,
+    s = 0,
+    l = (max + min) / 2;
+  if (max !== min) {
+    const d = max - min;
+    s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+    switch (max) {
+      case r:
+        h = (g - b) / d + (g < b ? 6 : 0);
+        break;
+      case g:
+        h = (b - r) / d + 2;
+        break;
+      default:
+        h = (r - g) / d + 4;
+    }
+    h /= 6;
+  }
+  return { h: h * 360, s, l };
+}
+function hslToHex(h: number, s: number, l: number) {
+  const c = (1 - Math.abs(2 * l - 1)) * s;
+  const x = c * (1 - Math.abs(((h / 60) % 2) - 1));
+  const m = l - c / 2;
+  let [r, g, b] = [0, 0, 0];
+  if (h < 60) {
+    [r, g, b] = [c, x, 0];
+  } else if (h < 120) {
+    [r, g, b] = [x, c, 0];
+  } else if (h < 180) {
+    [r, g, b] = [0, c, x];
+  } else if (h < 240) {
+    [r, g, b] = [0, x, c];
+  } else if (h < 300) {
+    [r, g, b] = [x, 0, c];
+  } else {
+    [r, g, b] = [c, 0, x];
+  }
+  const to = (v: number) => ('0' + Math.round((v + m) * 255).toString(16)).slice(-2);
+  return `#${to(r)}${to(g)}${to(b)}`;
+}
+const analogous = computed(() => {
+  const { h, s, l } = hexToHsl(base.value);
+  return [hslToHex((h - 30 + 360) % 360, s, l), base.value, hslToHex((h + 30) % 360, s, l)];
+});
+const _comp = computed(() => {
+  const { h, s, l } = hexToHsl(base.value);
+  return [base.value, hslToHex((h + 180) % 360, s, l)];
+});
+const _triad = computed(() => {
+  const { h, s, l } = hexToHsl(base.value);
+  return [hslToHex(h, s, l), hslToHex((h + 120) % 360, s, l), hslToHex((h + 240) % 360, s, l)];
+});
+
+// Per-source variants
+const hA = computed(() => hexToHsl(props.palette[srcIndexA.value]?.hex ?? '#6f6dfa').h);
+const hB = computed(() => {
+  const idx = syncBC.value ? srcIndexA.value : srcIndexB.value;
+  return hexToHsl(props.palette[idx]?.hex ?? props.palette[srcIndexA.value]?.hex ?? '#6f6dfa').h;
+});
+const hC = computed(() => {
+  const idx = syncBC.value ? srcIndexA.value : srcIndexC.value;
+  return hexToHsl(props.palette[idx]?.hex ?? props.palette[srcIndexB.value]?.hex ?? '#6f6dfa').h;
+});
+type Target = { h: number; label: string };
+function buildTargets(h: number): Target[] {
+  if (!showOverlays.value) return [];
+  const items: Target[] = [];
+  if (showComp.value) items.push({ h: (h + 180) % 360, label: 'Complementary (180°)' });
+  if (showAnalog.value) {
+    items.push({ h: (h + 30) % 360, label: 'Analogous (+30°)' });
+    items.push({ h: (h - 30 + 360) % 360, label: 'Analogous (−30°)' });
+  }
+  if (showTriad.value) {
+    items.push({ h: (h + 120) % 360, label: 'Triadic (+120°)' });
+    items.push({ h: (h + 240) % 360, label: 'Triadic (+240°)' });
+  }
+  // de-dup by hue closeness
+  const out: Target[] = [];
+  for (const t of items) {
+    const exists = out.some(r => {
+      let d = Math.abs(r.h - t.h);
+      d = Math.min(d, 360 - d);
+      return d < 0.5;
+    });
+    if (!exists) out.push(t);
+  }
+  return out;
+}
+const targetsA = computed(() => buildTargets(hA.value));
+const targetsB = computed(() => buildTargets(hB.value));
+const targetsC = computed(() => buildTargets(hC.value));
+
+const compA = computed(() => {
+  const { s, l } = hexToHsl(props.palette[srcIndexA.value]?.hex ?? '#6f6dfa');
+  return [props.palette[srcIndexA.value]?.hex ?? '#6f6dfa', hslToHex((hA.value + 180) % 360, s, l)];
+});
+const compB = computed(() => {
+  const { s, l } = hexToHsl(
+    props.palette[syncBC.value ? srcIndexA.value : srcIndexB.value]?.hex ?? '#6f6dfa'
+  );
+  const hex = props.palette[syncBC.value ? srcIndexA.value : srcIndexB.value]?.hex ?? '#6f6dfa';
+  return [hex, hslToHex((hB.value + 180) % 360, s, l)];
+});
+const compC = computed(() => {
+  const { s, l } = hexToHsl(
+    props.palette[syncBC.value ? srcIndexA.value : srcIndexC.value]?.hex ?? '#6f6dfa'
+  );
+  const hex = props.palette[syncBC.value ? srcIndexA.value : srcIndexC.value]?.hex ?? '#6f6dfa';
+  return [hex, hslToHex((hC.value + 180) % 360, s, l)];
+});
+const analA = computed(() => {
+  const { s, l } = hexToHsl(props.palette[srcIndexA.value]?.hex ?? '#6f6dfa');
+  return [
+    hslToHex((hA.value - 30 + 360) % 360, s, l),
+    props.palette[srcIndexA.value]?.hex ?? '#6f6dfa',
+    hslToHex((hA.value + 30) % 360, s, l),
+  ];
+});
+const analB = computed(() => {
+  const idx = syncBC.value ? srcIndexA.value : srcIndexB.value;
+  const { s, l } = hexToHsl(props.palette[idx]?.hex ?? '#6f6dfa');
+  return [
+    hslToHex((hB.value - 30 + 360) % 360, s, l),
+    props.palette[idx]?.hex ?? '#6f6dfa',
+    hslToHex((hB.value + 30) % 360, s, l),
+  ];
+});
+const analC = computed(() => {
+  const idx = syncBC.value ? srcIndexA.value : srcIndexC.value;
+  const { s, l } = hexToHsl(props.palette[idx]?.hex ?? '#6f6dfa');
+  return [
+    hslToHex((hC.value - 30 + 360) % 360, s, l),
+    props.palette[idx]?.hex ?? '#6f6dfa',
+    hslToHex((hC.value + 30) % 360, s, l),
+  ];
+});
+const triA = computed(() => {
+  const { s, l } = hexToHsl(props.palette[srcIndexA.value]?.hex ?? '#6f6dfa');
+  return [
+    hslToHex(hA.value, s, l),
+    hslToHex((hA.value + 120) % 360, s, l),
+    hslToHex((hA.value + 240) % 360, s, l),
+  ];
+});
+const triB = computed(() => {
+  const idx = syncBC.value ? srcIndexA.value : srcIndexB.value;
+  const { s, l } = hexToHsl(props.palette[idx]?.hex ?? '#6f6dfa');
+  return [
+    hslToHex(hB.value, s, l),
+    hslToHex((hB.value + 120) % 360, s, l),
+    hslToHex((hB.value + 240) % 360, s, l),
+  ];
+});
+const triC = computed(() => {
+  const idx = syncBC.value ? srcIndexA.value : srcIndexC.value;
+  const { s, l } = hexToHsl(props.palette[idx]?.hex ?? '#6f6dfa');
+  return [
+    hslToHex(hC.value, s, l),
+    hslToHex((hC.value + 120) % 360, s, l),
+    hslToHex((hC.value + 240) % 360, s, l),
+  ];
+});
+
+// Icon toggle handlers ensure overlays are enabled when turning a relation on
+const onToggleComp = () => {
+  showComp.value = !showComp.value;
+  showOverlays.value = showComp.value || showAnalog.value || showTriad.value;
+};
+const onToggleAnalog = () => {
+  showAnalog.value = !showAnalog.value;
+  showOverlays.value = showComp.value || showAnalog.value || showTriad.value;
+};
+const onToggleTriad = () => {
+  showTriad.value = !showTriad.value;
+  showOverlays.value = showComp.value || showAnalog.value || showTriad.value;
+};
+const onToggleTicks = () => {
+  showTicks.value = !showTicks.value;
+};
+
+// Helpers for pin tooltips
+const aHex = computed(() => props.palette[srcIndexA.value]?.hex ?? '#6f6dfa');
+const bHex = computed(
+  () => props.palette[syncBC.value ? srcIndexA.value : srcIndexB.value]?.hex ?? '#6f6dfa'
+);
+const cHex = computed(
+  () => props.palette[syncBC.value ? srcIndexA.value : srcIndexC.value]?.hex ?? '#6f6dfa'
+);
+const hueToHexA = (h: number) => {
+  const { s, l } = hexToHsl(aHex.value);
+  return hslToHex(h, s, l);
+};
+const hueToHexB = (h: number) => {
+  const { s, l } = hexToHsl(bHex.value);
+  return hslToHex(h, s, l);
+};
+const hueToHexC = (h: number) => {
+  const { s, l } = hexToHsl(cHex.value);
+  return hslToHex(h, s, l);
+};
+
+// Clamp indices when palette changes
+watch(
+  () => props.palette.length,
+  n => {
+    if (!n) return;
+    srcIndexA.value = Math.min(srcIndexA.value, n - 1);
+    srcIndexB.value = Math.min(srcIndexB.value, n - 1);
+    srcIndexC.value = Math.min(srcIndexC.value, n - 1);
+  }
+);
+
+// Wheel helpers
+const baseHsl = computed(() => hexToHsl(base.value));
+const baseHue = computed(() => baseHsl.value.h);
+const _harmonyHues = computed(() => [
+  ...(showComp.value ? [(baseHue.value + 180) % 360] : []),
+  ...(showAnalog.value ? [(baseHue.value + 30) % 360, (baseHue.value - 30 + 360) % 360] : []),
+  ...(showTriad.value ? [(baseHue.value + 120) % 360, (baseHue.value + 240) % 360] : []),
+]);
+function polarX(h: number, r: number) {
+  const a = ((h - 90) * Math.PI) / 180;
+  return Math.cos(a) * r;
+}
+function polarY(h: number, r: number) {
+  const a = ((h - 90) * Math.PI) / 180;
+  return Math.sin(a) * r;
+}
+function arcPath(start: number, end: number, r0: number, r1: number) {
+  const a0 = ((start - 90) * Math.PI) / 180,
+    a1 = ((end - 90) * Math.PI) / 180;
+  const x0 = Math.cos(a0) * r0,
+    y0 = Math.sin(a0) * r0;
+  const x1 = Math.cos(a1) * r0,
+    y1 = Math.sin(a1) * r0;
+  const X0 = Math.cos(a0) * r1,
+    Y0 = Math.sin(a0) * r1;
+  const X1 = Math.cos(a1) * r1,
+    Y1 = Math.sin(a1) * r1;
+  const large = end - start > 180 ? 1 : 0;
+  return `M ${x0} ${y0} L ${X0} ${Y0} A ${r1} ${r1} 0 ${large} 1 ${X1} ${Y1} L ${x1} ${y1} A ${r0} ${r0} 0 ${large} 0 ${x0} ${y0} Z`;
+}
+// UI toggles and no-effect detection
+const showComp = ref(true);
+const showAnalog = ref(true);
+const showTriad = ref(true);
+const showTicks = ref(true);
+// Keep overlays flag in sync if toggles change elsewhere
+watch([showComp, showAnalog, showTriad], () => {
+  showOverlays.value = showComp.value || showAnalog.value || showTriad.value;
+});
+// Connecting edge builder per wheel
+type Edge = { h: number; cls: 'comp' | 'anal' | 'tri' };
+function buildEdges(baseHue: number): Edge[] {
+  const list: Edge[] = [];
+  if (!showOverlays.value) return list;
+  if (showComp.value) list.push({ h: (baseHue + 180) % 360, cls: 'comp' });
+  if (showAnalog.value)
+    list.push(
+      { h: (baseHue + 30) % 360, cls: 'anal' },
+      { h: (baseHue - 30 + 360) % 360, cls: 'anal' }
+    );
+  if (showTriad.value)
+    list.push({ h: (baseHue + 120) % 360, cls: 'tri' }, { h: (baseHue + 240) % 360, cls: 'tri' });
+  // deduplicate by hue while keeping the first class occurrence
+  const deduped: Edge[] = [];
+  for (const e of list) {
+    const exists = deduped.some(r => {
+      let d = Math.abs(r.h - e.h);
+      d = Math.min(d, 360 - d);
+      return d < 0.5;
+    });
+    if (!exists) deduped.push(e);
+  }
+  return deduped;
+}
+const edgesA = computed(() => buildEdges(hA.value));
+const edgesB = computed(() => buildEdges(hB.value));
+const edgesC = computed(() => buildEdges(hC.value));
+const _noEffect = computed(() => {
+  if (baseHsl.value.s * 100 < 8) return true; // near-neutral saturation
+  // analogous collapsing detection
+  const a = analogous.value;
+  const uniq = new Set(a.map(x => x.toLowerCase()));
+  return uniq.size <= 2 && !showComp.value && !showTriad.value;
+});
+
+// Click to pick nearest hue from wheel segments
+function onWheelClick(evt: MouseEvent, which: 'A' | 'B' | 'C') {
+  const svg = evt.currentTarget as SVGSVGElement | null;
+  if (!svg || !props.palette.length) return;
+  const rect = svg.getBoundingClientRect();
+  const cx = rect.left + rect.width / 2;
+  const cy = rect.top + rect.height / 2;
+  const dx = evt.clientX - cx;
+  const dy = evt.clientY - cy;
+  const ang = (Math.atan2(dy, dx) * 180) / Math.PI + 90; // reverse of polar helper
+  const hue = (ang + 360) % 360;
+  // find nearest palette color by hue distance
+  let best = 0;
+  let bestDist = 1e9;
+  for (let i = 0; i < props.palette.length; i++) {
+    const h = hexToHsl(props.palette[i].hex).h;
+    let d = Math.abs(h - hue);
+    d = Math.min(d, 360 - d);
+    if (d < bestDist) {
+      bestDist = d;
+      best = i;
+    }
+  }
+  if (which === 'A') srcIndexA.value = best;
+  else if (which === 'B') srcIndexB.value = best;
+  else srcIndexC.value = best;
+}
+</script>
+<style scoped lang="scss">
+.controls {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  margin: 0.25rem 0 0.5rem;
+  color: var(--dracula-comment);
+}
+.controls .icon-toggle {
+  display: inline-flex;
+  align-items: center;
+}
+.controls .icon-btn {
+  background: transparent;
+  border: none;
+  color: var(--dracula-comment);
+  cursor: pointer;
+  padding: 0.2rem;
+  border-radius: 6px;
+  line-height: 0;
+}
+.controls .icon-btn:focus-visible {
+  outline: 2px solid var(--dracula-foreground);
+  outline-offset: 2px;
+}
+.controls .icon-toggle.active .icon-btn {
+  color: var(--dracula-foreground);
+  box-shadow: inset 0 0 0 1px var(--surface-border);
+}
+.controls .icon-toggle.disabled .icon-btn {
+  opacity: 0.45;
+}
+.t {
+  margin: 0 0 0.5rem;
+}
+.wheels {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+  align-items: center;
+  justify-items: center;
+}
+.wheel {
+  display: flex;
+  justify-content: center;
+}
+.pin {
+  stroke: #fff;
+  stroke-width: 1.75;
+  filter: drop-shadow(0 0 1px rgba(0, 0, 0, 0.35));
+  transition:
+    stroke-width 0.12s ease,
+    filter 0.12s ease,
+    transform 0.12s ease;
+}
+.pin.sec {
+  opacity: 0.95;
+  transition:
+    stroke-width 0.12s ease,
+    filter 0.12s ease,
+    transform 0.12s ease;
+}
+.pin:hover,
+.pin.sec:hover {
+  stroke-width: 2.5;
+  filter: drop-shadow(0 0 2px rgba(0, 0, 0, 0.45));
+  transform: scale(1.08);
+}
+.edge {
+  stroke: var(--dracula-foreground);
+  stroke-opacity: 0.65;
+  stroke-width: 2.25;
+}
+.edge.comp {
+  stroke-opacity: 0.9;
+}
+.edge.anal {
+  stroke-dasharray: 3 2;
+}
+.edge.tri {
+  stroke-dasharray: 4 3;
+}
+.tick {
+  stroke: var(--surface-border);
+  stroke-width: 1;
+  opacity: 0.7;
+}
+.tick-txt {
+  font-size: 9px;
+  fill: var(--dracula-foreground);
+  text-anchor: middle;
+  dominant-baseline: middle;
+  opacity: 0.65;
+}
+.row {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+.card {
+  border: 1px solid var(--surface-border);
+  border-radius: 10px;
+  padding: 0.75rem;
+}
+.swatches {
+  display: flex;
+  gap: 0.4rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.sw {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 1px solid var(--surface-border);
+}
+.swl {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: var(--surface-primary);
+  border: 1px solid var(--surface-border);
+  padding: 0.2rem 0.4rem;
+  border-radius: 999px;
+}
+.lb {
+  font-size: 0.8rem;
+  opacity: 0.85;
+}
+.empty {
+  color: var(--dracula-comment);
+}
+.help {
+  color: var(--dracula-comment);
+  font-size: 0.85rem;
+  margin-top: 0.25rem;
+}
+.visually-hidden {
+  position: absolute !important;
+  height: 1px;
+  width: 1px;
+  overflow: hidden;
+  clip: rect(1px, 1px, 1px, 1px);
+  white-space: nowrap; /* added line */
+}
+@media (max-width: 900px) {
+  .row {
+    grid-template-columns: 1fr;
+  }
+  .wheels {
+    grid-template-columns: 1fr;
+  }
+}
+</style>

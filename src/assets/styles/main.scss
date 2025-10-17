@@ -1,3 +1,6 @@
+// Import analysis component mixins
+@use './analysis-mixins' as mixins;
+
 // Reset and base styles
 *,
 *::before,
@@ -210,4 +213,37 @@ button {
 
 .pulse {
   animation: pulse 2s infinite;
+}
+
+// Theme-specific enhancements
+.theme-alucard {
+  // Fine-tune sticky header border to blend with light scheme
+  .header {
+    border-bottom-color: rgba(108, 102, 75, 0.25);
+    box-shadow: 0 6px 12px rgba(108, 102, 75, 0.12);
+  }
+
+  // Selection with better light mode contrast
+  ::selection {
+    background: #b8b3d6;
+    color: #1f1f1f;
+  }
+
+  ::-moz-selection {
+    background: #b8b3d6;
+    color: #1f1f1f;
+  }
+
+  // Scrollbar for light theme
+  ::-webkit-scrollbar-track {
+    background: #fffbeb;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #cfcfde;
+
+    &:hover {
+      background: #a3144d;
+    }
+  }
 }

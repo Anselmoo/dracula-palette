@@ -55,3 +55,18 @@ export interface PaletteGenerationResult {
   totalColors: number;
   standards: PaletteStandard[];
 }
+
+export type PaletteSourceOrigin = 'preset' | 'manual' | 'custom' | 'input';
+
+export interface PaletteSourceColor {
+  hex: string;
+  name: string;
+  origin: PaletteSourceOrigin;
+  category?: DraculaColor['category'];
+}
+
+export interface PaletteAnalysisPayload {
+  palettes: GeneratedPalette[];
+  sources: PaletteSourceColor[];
+  standards: PaletteStandard[];
+}

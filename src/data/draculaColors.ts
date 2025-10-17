@@ -102,6 +102,108 @@ export const DRACULA_COLORS: DraculaColor[] = [
   },
 ];
 
+// Official Alucard (Light Theme) color palette with OKLCH values
+export const ALUCARD_COLORS: DraculaColor[] = [
+  // Background colors
+  {
+    name: 'Background',
+    hex: '#fffbeb',
+    rgb: [255, 251, 235],
+    oklch: [0.98, 0.02, 85],
+    description: 'Main background color (light)',
+    category: 'background',
+  },
+  {
+    name: 'Current Line',
+    hex: '#6c664b',
+    rgb: [108, 102, 75],
+    oklch: [0.45, 0.04, 75],
+    description: 'Current line highlight (light) - Official Dracula Spec',
+    category: 'background',
+  },
+  {
+    name: 'Selection',
+    hex: '#cfcfde',
+    rgb: [207, 207, 222],
+    oklch: [0.84, 0.02, 264],
+    description: 'Selection background (light)',
+    category: 'background',
+  },
+  {
+    name: 'Foreground',
+    hex: '#1f1f1f',
+    rgb: [31, 31, 31],
+    oklch: [0.17, 0.0, 0],
+    description: 'Main text color (light)',
+    category: 'foreground',
+  },
+  {
+    name: 'Comment',
+    hex: '#6c664b',
+    rgb: [108, 102, 75],
+    oklch: [0.45, 0.04, 75],
+    description: 'Comments and secondary text (light) - Official Dracula Spec',
+    category: 'foreground',
+  },
+  // Accent colors
+  {
+    name: 'Cyan',
+    hex: '#036a96',
+    rgb: [3, 106, 150],
+    oklch: [0.44, 0.09, 220],
+    description: 'Cyan accent color (light)',
+    category: 'accent',
+  },
+  {
+    name: 'Green',
+    hex: '#14710a',
+    rgb: [20, 113, 10],
+    oklch: [0.44, 0.12, 130],
+    description: 'Green accent color (light)',
+    category: 'accent',
+  },
+  {
+    name: 'Orange',
+    hex: '#a34d14',
+    rgb: [163, 77, 20],
+    oklch: [0.48, 0.11, 50],
+    description: 'Orange accent color (light)',
+    category: 'accent',
+  },
+  {
+    name: 'Pink',
+    hex: '#a3144d',
+    rgb: [163, 20, 77],
+    oklch: [0.42, 0.14, 355],
+    description: 'Pink accent color (light)',
+    category: 'accent',
+  },
+  {
+    name: 'Purple',
+    hex: '#644ac9',
+    rgb: [100, 74, 201],
+    oklch: [0.48, 0.14, 285],
+    description: 'Purple accent color (light)',
+    category: 'accent',
+  },
+  {
+    name: 'Red',
+    hex: '#cb3a2a',
+    rgb: [203, 58, 42],
+    oklch: [0.53, 0.15, 30],
+    description: 'Red accent color (light)',
+    category: 'accent',
+  },
+  {
+    name: 'Yellow',
+    hex: '#846e15',
+    rgb: [132, 110, 21],
+    oklch: [0.5, 0.1, 80],
+    description: 'Yellow accent color (light)',
+    category: 'accent',
+  },
+];
+
 // Generate tonal variants for each color using OKLCH
 export function generateColorVariants(baseColor: DraculaColor): DraculaColor['variants'] {
   const [baseLightness, baseChroma, baseHue] = baseColor.oklch;

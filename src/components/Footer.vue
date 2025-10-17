@@ -2,7 +2,7 @@
   <footer class="footer">
     <div class="footer-content">
       <p class="created-by">
-        Created with ♡ by
+        Created with love by
         <a href="https://github.com/Anselmoo" target="_blank" rel="noopener" class="author-link">
           Anselmoo
         </a>
@@ -39,8 +39,8 @@
 
 <style lang="scss" scoped>
 .footer {
-  background: var(--dracula-current-line);
-  border-top: 1px solid var(--dracula-selection);
+  background: var(--header-footer-bg);
+  border-top: 1px solid var(--header-footer-border);
   padding: 2rem 0;
   margin-top: 4rem;
 }
@@ -53,7 +53,7 @@
 }
 
 .created-by {
-  color: var(--dracula-comment);
+  color: var(--footer-text-color);
   margin-bottom: 1rem;
   font-size: 0.9rem;
 }
@@ -77,13 +77,13 @@
 }
 
 .footer-link {
-  color: var(--dracula-cyan);
+  color: var(--footer-link-color);
   text-decoration: none;
   font-size: 0.9rem;
   transition: color 0.3s ease;
 
   &:hover {
-    color: var(--dracula-green);
+    color: var(--footer-link-hover-color);
     text-decoration: underline;
   }
 }

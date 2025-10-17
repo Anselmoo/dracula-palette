@@ -172,3 +172,6 @@ Temporary Items
 
 # Backup files
 README_OLD.md
+.serena/.gitignore
+.serena/project.yml
+.serena/memories/

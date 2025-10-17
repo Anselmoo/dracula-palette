@@ -8,12 +8,20 @@
           v-model="inputValue"
           type="text"
           class="color-input"
-          placeholder="#ff79c6"
+          :placeholder="getFallbackColor()"
           :class="{ error: hasError }"
           @input="handleInput"
           @blur="handleBlur"
         />
-        <div class="color-preview" :style="{ backgroundColor: previewColor }" />
+        <input
+          ref="colorPicker"
+          type="color"
+          class="color-picker"
+          id="native-color-picker"
+          :value="pickerValue"
+          @input="onPick"
+          :aria-label="`Pick color, current ${inputValue}`"
+        />
       </div>
       <p v-if="hasError" class="error-message">
         Invalid color format. Please enter a valid CSS color (hex, rgb, hsl, or color name).
@@ -21,9 +29,9 @@
       <div class="format-examples">
         <p class="examples-title">Supported formats:</p>
         <div class="examples-grid">
-          <span class="example">#ff79c6</span>
-          <span class="example">rgb(255, 121, 198)</span>
-          <span class="example">hsl(326, 100%, 74%)</span>
+          <span class="example">{{ exampleHex }}</span>
+          <span class="example">{{ exampleRgb }}</span>
+          <span class="example">{{ exampleHsl }}</span>
           <span class="example">pink</span>
         </div>
       </div>
@@ -34,6 +42,7 @@
 <script setup lang="ts">
 import { ref, computed, watch } from 'vue';
 import { isValidColor, normalizeColorToHex } from '../utils/colorMatcher';
+import { useTheme } from '../composables/useTheme';
 
 interface Props {
   modelValue: string;
@@ -47,14 +56,50 @@ interface Emits {
 const props = defineProps<Props>();
 const emit = defineEmits<Emits>();
 
+const { currentColors } = useTheme();
+
+// Get theme-aware fallback color (Pink from current palette)
+const getFallbackColor = () => {
+  const pinkColor = currentColors.value.find(c => c.name === 'Pink');
+  return pinkColor?.hex || '#ff79c6';
+};
+
 const inputValue = ref(props.modelValue);
 const hasError = ref(false);
+const colorPicker = ref<HTMLInputElement | null>(null);
+const pickerValue = computed(() =>
+  hasError.value ? '#000000' : inputValue.value || getFallbackColor()
+);
 
 const previewColor = computed(() => {
   if (hasError.value) {
     return 'transparent';
   }
-  return inputValue.value || '#ff79c6';
+  return inputValue.value || getFallbackColor();
+});
+
+// Get example formats for the current theme's pink color
+const exampleHex = computed(() => getFallbackColor());
+const exampleRgb = computed(() => {
+  const pinkColor = currentColors.value.find(c => c.name === 'Pink');
+  if (pinkColor?.rgb) {
+    const [r, g, b] = pinkColor.rgb;
+    return `rgb(${r}, ${g}, ${b})`;
+  }
+  return 'rgb(255, 121, 198)'; // fallback
+});
+const exampleHsl = computed(() => {
+  // For Dracula pink: hsl(326, 100%, 74%)
+  // For Alucard pink: hsl(338, 78%, 36%)
+  const pinkColor = currentColors.value.find(c => c.name === 'Pink');
+  const hex = pinkColor?.hex || '#ff79c6';
+  // Simple conversion for the known pink colors
+  if (hex === '#ff79c6') {
+    return 'hsl(326, 100%, 74%)';
+  } else if (hex === '#a3144d') {
+    return 'hsl(338, 78%, 36%)';
+  }
+  return 'hsl(326, 100%, 74%)'; // fallback
 });
 
 const handleInput = () => {
@@ -82,12 +127,35 @@ const handleBlur = () => {
   }
 };
 
+function onPick(e: Event) {
+  const value = (e.target as HTMLInputElement).value;
+  if (isValidColor(value)) {
+    hasError.value = false;
+    const normalizedColor = normalizeColorToHex(value);
+    inputValue.value = normalizedColor;
+    emit('update:modelValue', normalizedColor);
+    emit('color-change', normalizedColor);
+  }
+}
+
 watch(
   () => props.modelValue,
   newValue => {
     inputValue.value = newValue;
   }
 );
+
+// Expose to satisfy some analyzers that don't link template usage to script-setup vars
+defineExpose({
+  inputValue,
+  hasError,
+  colorPicker,
+  pickerValue,
+  previewColor,
+  handleInput,
+  handleBlur,
+  onPick,
+});
 </script>
 
 <style lang="scss" scoped>
@@ -121,8 +189,8 @@ watch(
   flex: 1;
   padding: 1rem 1.5rem;
   font-size: 1.1rem;
-  background: var(--dracula-current-line);
-  border: 2px solid var(--dracula-selection);
+  background: var(--surface-primary);
+  border: 2px solid var(--surface-border);
   border-radius: 8px;
   color: var(--dracula-foreground);
   transition: all 0.3s ease;
@@ -143,13 +211,46 @@ watch(
   }
 }
 
-.color-preview {
+.color-picker {
   width: 50px;
   height: 50px;
   border-radius: 8px;
   border: 2px solid var(--dracula-selection);
   transition: all 0.3s ease;
   flex-shrink: 0;
+  cursor: pointer;
+  padding: 0;
+  overflow: hidden;
+
+  &::-webkit-color-swatch-wrapper {
+    padding: 0;
+  }
+
+  &::-webkit-color-swatch {
+    border: none;
+    border-radius: 6px;
+  }
+
+  &::-moz-color-swatch {
+    border: none;
+    border-radius: 6px;
+  }
+
+  &:hover {
+    transform: scale(1.05);
+    border-color: var(--dracula-pink);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  }
+
+  &:focus {
+    outline: none;
+    border-color: var(--dracula-pink);
+    box-shadow: 0 0 0 3px rgba(255, 121, 198, 0.3);
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
 }
 
 .error-message {
@@ -178,13 +279,13 @@ watch(
 }
 
 .example {
-  background: var(--dracula-current-line);
+  background: var(--surface-primary);
   color: var(--dracula-cyan);
   padding: 0.5rem 1rem;
   border-radius: 4px;
   font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
   font-size: 0.85rem;
-  border: 1px solid var(--dracula-selection);
+  border: 1px solid var(--surface-border);
 }
 
 @media (max-width: 768px) {
@@ -193,7 +294,7 @@ watch(
     gap: 1rem;
   }
 
-  .color-preview {
+  .color-picker {
     width: 100%;
     height: 40px;
   }
