@@ -370,7 +370,13 @@ const additionalColors = ref<AdditionalColor[]>([
 
 const customColorPlaceholder = (index: number) => {
   const colors = officialColors.value;
-  const samples = [colors.pink.hex, colors.green.hex, colors.purple.hex, colors.cyan.hex, colors.red.hex];
+  const samples = [
+    colors.pink.hex,
+    colors.green.hex,
+    colors.purple.hex,
+    colors.cyan.hex,
+    colors.red.hex,
+  ];
   return samples[index] ?? '#ffffff';
 };
 

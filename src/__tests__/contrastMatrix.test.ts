@@ -13,19 +13,19 @@ describe('ContrastMatrix Theme Awareness', () => {
     });
 
     const vm = wrapper.vm as any;
-    
+
     // Access the computed property for the heatmap color scale
     const colorScale = vm.heatmapColorScale;
-    
+
     // Verify the color scale exists and is a function
     expect(colorScale).toBeDefined();
     expect(typeof colorScale).toBe('function');
-    
+
     // Get colors for different ratio values
     const lowRatioColor = colorScale(1);
     const midRatioColor = colorScale(4.5);
     const highRatioColor = colorScale(7);
-    
+
     // These should return color objects (chroma-js scale)
     expect(lowRatioColor).toBeDefined();
     expect(midRatioColor).toBeDefined();
@@ -41,11 +41,11 @@ describe('ContrastMatrix Theme Awareness', () => {
     });
 
     const vm = wrapper.vm as any;
-    
+
     // Should use fallback backgrounds and accents from current theme
     const backgrounds = vm.backgroundList;
     const accents = vm.accentList;
-    
+
     expect(backgrounds).toBeDefined();
     expect(accents).toBeDefined();
     expect(Array.isArray(backgrounds)).toBe(true);
@@ -56,7 +56,7 @@ describe('ContrastMatrix Theme Awareness', () => {
     const draculaRed = DRACULA_COLORS.find(c => c.name === 'Red');
     const draculaYellow = DRACULA_COLORS.find(c => c.name === 'Yellow');
     const draculaGreen = DRACULA_COLORS.find(c => c.name === 'Green');
-    
+
     const alucardRed = ALUCARD_COLORS.find(c => c.name === 'Red');
     const alucardYellow = ALUCARD_COLORS.find(c => c.name === 'Yellow');
     const alucardGreen = ALUCARD_COLORS.find(c => c.name === 'Green');

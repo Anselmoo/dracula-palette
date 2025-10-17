@@ -110,7 +110,7 @@ describe('PaletteGenerator Theme Awareness', () => {
     });
 
     const vm = wrapper.vm as any;
-    
+
     // Test that customColorPlaceholder returns theme-aware colors
     const placeholder0 = vm.customColorPlaceholder(0);
     const placeholder1 = vm.customColorPlaceholder(1);

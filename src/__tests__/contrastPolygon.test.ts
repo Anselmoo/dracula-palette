@@ -35,16 +35,16 @@ describe('ContrastPolygon Theme Awareness', () => {
     });
 
     const vm = wrapper.vm as any;
-    
+
     // Access the themeColors computed property
     const themeColors = vm.themeColors;
-    
+
     expect(themeColors).toBeDefined();
     expect(themeColors.green).toBeDefined();
     expect(themeColors.yellow).toBeDefined();
     expect(themeColors.orange).toBeDefined();
     expect(themeColors.red).toBeDefined();
-    
+
     // Verify they are valid hex colors
     expect(themeColors.green).toMatch(/^#[0-9a-fA-F]{6}$/);
     expect(themeColors.yellow).toMatch(/^#[0-9a-fA-F]{6}$/);
@@ -66,13 +66,13 @@ describe('ContrastPolygon Theme Awareness', () => {
 
     const vm = wrapper.vm as any;
     const themeColors = vm.themeColors;
-    
+
     // Test edgeColor function with different ratios
     const colorForAAA = vm.edgeColor(7); // AAA level
     const colorForAA = vm.edgeColor(4.5); // AA level
     const colorForAALarge = vm.edgeColor(3); // AA Large level
     const colorForFail = vm.edgeColor(1); // Fail level
-    
+
     // Verify colors match the theme colors for each level
     expect(colorForAAA).toBe(themeColors.green);
     expect(colorForAA).toBe(themeColors.yellow);
@@ -97,7 +97,7 @@ describe('ContrastPolygon Theme Awareness', () => {
     const minRatioSelect = wrapper.find('select[aria-label="Minimum contrast ratio"]');
     const hideFailing = wrapper.find('input[type="checkbox"]');
     const resetButton = wrapper.find('.btn-reset');
-    
+
     expect(minRatioSelect.exists()).toBe(true);
     expect(hideFailing.exists()).toBe(true);
     expect(resetButton.exists()).toBe(true);
@@ -108,7 +108,7 @@ describe('ContrastPolygon Theme Awareness', () => {
     const draculaOrange = DRACULA_COLORS.find(c => c.name === 'Orange');
     const draculaYellow = DRACULA_COLORS.find(c => c.name === 'Yellow');
     const draculaGreen = DRACULA_COLORS.find(c => c.name === 'Green');
-    
+
     const alucardRed = ALUCARD_COLORS.find(c => c.name === 'Red');
     const alucardOrange = ALUCARD_COLORS.find(c => c.name === 'Orange');
     const alucardYellow = ALUCARD_COLORS.find(c => c.name === 'Yellow');
