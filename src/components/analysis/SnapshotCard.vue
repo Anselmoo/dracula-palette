@@ -20,12 +20,12 @@
             :class="{ 'chip-hidden': !isColorVisible(index) }"
             :style="{ background: s.hex }"
             :title="s.name"
-            @click="revealNextColor(index)"
-            @keydown.enter="revealNextColor(index)"
-            @keydown.space.prevent="revealNextColor(index)"
+            @click="showNextColor(index)"
+            @keydown.enter="showNextColor(index)"
+            @keydown.space.prevent="showNextColor(index)"
             role="button"
-            tabindex="0"
-            :aria-label="`${s.name} color chip. Click to reveal ${isColorVisible(index) ? 'next color' : 'this color'}`"
+            :tabindex="isColorVisible(index) ? 0 : -1"
+            :aria-label="`${s.name} color chip${isColorVisible(index) && visibleCount < sources.length ? '. Click to reveal next color' : ''}`"
             >{{ s.name }}</span
           >
         </div>
@@ -100,8 +100,8 @@ const isColorVisible = (index: number): boolean => {
   return index < visibleCount.value;
 };
 
-// Reveal the next color when a visible chip is clicked
-const revealNextColor = (clickedIndex: number): void => {
+// Show the next color when a visible chip is clicked
+const showNextColor = (clickedIndex: number): void => {
   // Only process clicks on visible chips
   if (isColorVisible(clickedIndex) && visibleCount.value < props.sources.length) {
     visibleCount.value += 1;
