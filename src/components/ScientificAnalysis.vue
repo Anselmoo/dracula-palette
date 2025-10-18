@@ -164,7 +164,6 @@
         :aria-labelledby="'tab-relations'"
         :id="'panel-relations'"
       >
-        <CycleMap :palette="selectedPalette" />
         <RelationshipIcons class="mt" :palette="selectedPalette" />
       </section>
 
@@ -329,7 +328,6 @@ import AdvancedGradientExplore from './analysis/AdvancedGradientExplore.vue';
 import AccessibilityPanel from './analysis/AccessibilityPanel.vue';
 import HarmonyPanel from './analysis/HarmonyPanel.vue';
 import RelationshipIcons from './analysis/RelationshipIcons.vue';
-import CycleMap from './analysis/CycleMap.vue';
 import ContrastPolygon from './analysis/ContrastPolygon.vue';
 import MatrixAdvanced from './analysis/MatrixAdvanced.vue';
 import ContrastTriangle from './analysis/ContrastTriangle.vue';
