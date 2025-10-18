@@ -13,20 +13,20 @@
       <div class="cell" v-if="sources.length">
         <span class="label">Sources</span>
         <div class="chips">
-          <span
+          <button
             v-for="(s, index) in sources"
             :key="s.hex"
+            type="button"
             class="chip chip-interactive"
             :class="{ 'chip-hidden': !isColorVisible(index) }"
             :style="{ background: s.hex }"
             :title="s.name"
-            @click="showNextColor(index)"
-            @keydown.enter="showNextColor(index)"
-            @keydown.space.prevent="showNextColor(index)"
-            role="button"
+            @click="revealColor(index)"
+            @keydown.enter="revealColor(index)"
+            @keydown.space.prevent="revealColor(index)"
+            :aria-label="isColorVisible(index) ? `${s.name} color chip. Click to reveal next color` : `${s.name} color chip (hidden)`"
             :tabindex="isColorVisible(index) ? 0 : -1"
-            :aria-label="`${s.name} color chip${isColorVisible(index) && visibleCount < sources.length ? '. Click to reveal next color' : ''}`"
-            >{{ s.name }}</span
+            >{{ s.name }}</button
           >
         </div>
       </div>
@@ -83,14 +83,14 @@ const props = withDefaults(
   }
 );
 
-// Track the number of visible colors (initially 1)
+// Track the number of visible colors (start with 1 color visible)
 const visibleCount = ref(1);
 
 // Watch for changes in sources to reset visible count
 watch(
   () => props.sources,
   () => {
-    visibleCount.value = Math.min(1, props.sources.length);
+    visibleCount.value = 1;
   },
   { immediate: true }
 );
@@ -100,9 +100,9 @@ const isColorVisible = (index: number): boolean => {
   return index < visibleCount.value;
 };
 
-// Show the next color when a visible chip is clicked
-const showNextColor = (clickedIndex: number): void => {
-  // Only process clicks on visible chips
+// Reveal the next color when a visible chip is clicked
+const revealColor = (clickedIndex: number): void => {
+  // Only proceed if the clicked chip is currently visible and there are more colors to reveal
   if (isColorVisible(clickedIndex) && visibleCount.value < props.sources.length) {
     visibleCount.value += 1;
   }
@@ -152,32 +152,33 @@ const showNextColor = (clickedIndex: number): void => {
   color: var(--dracula-foreground);
   border: 1px solid var(--surface-border);
   font-size: 0.8rem;
-}
-.chip-interactive {
-  cursor: pointer;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   transform-origin: center;
 }
-.chip-interactive:not(.chip-hidden):hover {
-  transform: scale(1.05);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+.chip-interactive {
+  cursor: pointer;
 }
-.chip-interactive:not(.chip-hidden):active {
+.chip-interactive:hover {
+  transform: scale(1.05);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+.chip-interactive:active {
   transform: scale(0.98);
 }
-.chip-interactive:not(.chip-hidden):focus-visible {
+.chip-interactive:focus-visible {
   outline: 2px solid var(--dracula-cyan);
   outline-offset: 2px;
 }
 .chip-hidden {
-  opacity: 0;
-  transform: scale(0.8);
-  max-width: 0;
-  padding: 0;
-  margin: 0;
-  border: 0;
+  opacity: 0.3;
+  filter: grayscale(80%);
+  max-width: 80px;
   overflow: hidden;
-  pointer-events: none;
+  cursor: pointer;
+}
+.chip-hidden:hover {
+  opacity: 0.5;
+  filter: grayscale(60%);
 }
 .metrics {
   display: flex;
