@@ -7,14 +7,20 @@
     <div class="grid">
       <div class="card">
         <h4>Lightness distribution</h4>
-        <div class="bars">
-          <span
-            v-for="(l, i) in lightnesses"
-            :key="i"
-            class="bar"
-            :style="{ height: (l * 100).toFixed(0) + '%', background: palette[i]?.hex || '#888' }"
-            :title="(l * 100).toFixed(0) + '% L'"
-          ></span>
+        <div class="bars-wrapper">
+          <div class="bars" :class="{ 'bars--scrollable': isScrollable }">
+            <span
+              v-for="(l, i) in lightnesses"
+              :key="i"
+              class="bar"
+              :style="{ 
+                height: (l * 100).toFixed(0) + '%', 
+                background: palette[i]?.hex || '#888',
+                width: barWidth
+              }"
+              :title="(l * 100).toFixed(0) + '% L'"
+            ></span>
+          </div>
         </div>
         <div class="legend"><span>dark</span><span>light</span></div>
       </div>
@@ -88,6 +94,42 @@ function hexToHsl(hex: string) {
 const palette = computed(() => props.palette ?? []);
 const lightnesses = computed(() => palette.value.map(p => hexToHsl(p.hex).l));
 
+// Adaptive bar width and scrollability
+const barWidth = computed(() => {
+  const count = palette.value.length;
+  if (count === 0) return '14px';
+  
+  // Container width - use a more reasonable estimate for the card width
+  // Typical card width after padding is ~400-600px depending on viewport
+  const containerWidth = 500;
+  const gapPx = 4;
+  const totalGapWidth = Math.max(0, count - 1) * gapPx;
+  const availableWidth = containerWidth - totalGapWidth;
+  const calculatedWidth = availableWidth / count;
+  
+  // Set minimum width of 8px for very large palettes to ensure readability
+  const minWidth = 8;
+  const maxWidth = 14;
+  
+  if (calculatedWidth < minWidth) {
+    return `${minWidth}px`;
+  }
+  if (calculatedWidth > maxWidth) {
+    return `${maxWidth}px`;
+  }
+  return `${Math.floor(calculatedWidth)}px`;
+});
+
+// Enable scrolling when bars would overflow
+const isScrollable = computed(() => {
+  const count = palette.value.length;
+  const minWidth = 8;
+  const gapPx = 4;
+  const totalWidth = count * minWidth + (count - 1) * gapPx;
+  // Enable scrolling when total width exceeds container width
+  return totalWidth > 500;
+});
+
 // Heuristic: compare ordering to ideal monotonic ramp; compute Kendall-like score
 const driftScore = computed(() => {
   const L = lightnesses.value;
@@ -149,16 +191,48 @@ function cellTitle(fg: string, bg: string) {
   border-radius: 10px;
   padding: 0.75rem;
 }
+.bars-wrapper {
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding-bottom: 0.5rem;
+  /* Ensure scrollbar is visible and styled */
+  scrollbar-width: thin;
+  scrollbar-color: var(--surface-border) transparent;
+}
+.bars-wrapper::-webkit-scrollbar {
+  height: 8px;
+}
+.bars-wrapper::-webkit-scrollbar-track {
+  background: transparent;
+}
+.bars-wrapper::-webkit-scrollbar-thumb {
+  background: var(--surface-border);
+  border-radius: 4px;
+}
+.bars-wrapper::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-color);
+}
 .bars {
   display: flex;
   gap: 0.25rem;
   align-items: flex-end;
   height: 120px;
+  min-width: min-content;
+  width: 100%;
+}
+.bars--scrollable {
+  width: max-content;
+  min-width: min-content;
 }
 .bar {
-  width: 14px;
+  flex-shrink: 0;
   border-radius: 3px;
   border: 1px solid var(--surface-border);
+  transition: transform 0.15s ease;
+}
+.bar:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.1);
 }
 .legend {
   display: flex;
