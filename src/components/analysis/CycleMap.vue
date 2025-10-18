@@ -211,12 +211,15 @@ function arcPath(i: number) {
   return `M ${x0} ${y0} A ${rOuter} ${rOuter} 0 ${large} 1 ${x1} ${y1} L ${x2} ${y2} A ${rInner} ${rInner} 0 ${large} 0 ${x3} ${y3} Z`;
 }
 
+// Calculate triangle vertex indices to approximate 120° spacing (even thirds)
+// Related to issue: https://github.com/Anselmoo/dracula-palette/issues/124
+// Using Math.round instead of Math.floor for better approximation when n is not divisible by 3
 const trianglePoints = computed(() => {
   const n = ordered.value.length;
   if (n < 3) return '';
   const idxA = 0;
-  const idxB = pattern.value === 'triad' ? Math.floor(n / 3) : Math.floor(n * 0.33);
-  const idxC = pattern.value === 'triad' ? Math.floor((2 * n) / 3) : Math.floor(n * 0.66);
+  const idxB = pattern.value === 'triad' ? Math.round(n / 3) : Math.round(n * 0.33);
+  const idxC = pattern.value === 'triad' ? Math.round((2 * n) / 3) : Math.round(n * 0.66);
   const r = 70;
   const angle = (i: number) => (2 * Math.PI * i) / n;
   const p = (i: number) => `${r * Math.cos(angle(i))},${r * Math.sin(angle(i))}`;
@@ -227,8 +230,8 @@ const triangleVertices = computed(() => {
   const n = ordered.value.length;
   if (n < 3) return [];
   const idxA = 0;
-  const idxB = pattern.value === 'triad' ? Math.floor(n / 3) : Math.floor(n * 0.33);
-  const idxC = pattern.value === 'triad' ? Math.floor((2 * n) / 3) : Math.floor(n * 0.66);
+  const idxB = pattern.value === 'triad' ? Math.round(n / 3) : Math.round(n * 0.33);
+  const idxC = pattern.value === 'triad' ? Math.round((2 * n) / 3) : Math.round(n * 0.66);
   const r = 70;
   const angle = (i: number) => (2 * Math.PI * i) / n;
   return [idxA, idxB, idxC].map(idx => ({
