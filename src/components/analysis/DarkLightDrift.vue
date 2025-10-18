@@ -190,11 +190,14 @@ function cellTitle(fg: string, bg: string) {
   border: 1px solid var(--surface-border);
   border-radius: 10px;
   padding: 0.75rem;
+  min-width: 0; /* Allow card to shrink in grid */
+  overflow: hidden; /* Prevent content from overflowing */
 }
 .bars-wrapper {
   overflow-x: auto;
   overflow-y: hidden;
   padding-bottom: 0.5rem;
+  max-width: 100%; /* Ensure wrapper doesn't overflow card */
   /* Ensure scrollbar is visible and styled */
   scrollbar-width: thin;
   scrollbar-color: var(--surface-border) transparent;
