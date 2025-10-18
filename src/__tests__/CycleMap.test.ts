@@ -46,6 +46,15 @@ describe('CycleMap Triangle Calculations', () => {
     return { diffAB, diffBC, diffCA };
   }
 
+  /**
+   * Calculate variance from ideal 120° spacing for triangle vertices
+   */
+  function calculateVarianceFromIdeal(diffs: { diffAB: number; diffBC: number; diffCA: number }) {
+    return Math.pow(diffs.diffAB - 120, 2) + 
+           Math.pow(diffs.diffBC - 120, 2) + 
+           Math.pow(diffs.diffCA - 120, 2);
+  }
+
   describe('Triad Pattern (even thirds)', () => {
     it('should have approximately 120° spacing for n=12 (divisible by 3)', () => {
       const n = 12;
@@ -95,12 +104,8 @@ describe('CycleMap Triangle Calculations', () => {
       expect(diffsFixed.diffCA).toBeCloseTo(108, 5);
 
       // Check that fixed version has better distribution (more balanced)
-      const varianceOld = Math.pow(diffsOld.diffAB - 120, 2) + 
-                          Math.pow(diffsOld.diffBC - 120, 2) + 
-                          Math.pow(diffsOld.diffCA - 120, 2);
-      const varianceFixed = Math.pow(diffsFixed.diffAB - 120, 2) + 
-                            Math.pow(diffsFixed.diffBC - 120, 2) + 
-                            Math.pow(diffsFixed.diffCA - 120, 2);
+      const varianceOld = calculateVarianceFromIdeal(diffsOld);
+      const varianceFixed = calculateVarianceFromIdeal(diffsFixed);
       
       expect(varianceFixed).toBeLessThanOrEqual(varianceOld);
     });
@@ -123,12 +128,8 @@ describe('CycleMap Triangle Calculations', () => {
       expect(indicesFixed).toEqual({ idxA: 0, idxB: 4, idxC: 7 });
 
       // Calculate variance from ideal 120° for both versions
-      const varianceOld = Math.pow(diffsOld.diffAB - 120, 2) + 
-                          Math.pow(diffsOld.diffBC - 120, 2) + 
-                          Math.pow(diffsOld.diffCA - 120, 2);
-      const varianceFixed = Math.pow(diffsFixed.diffAB - 120, 2) + 
-                            Math.pow(diffsFixed.diffBC - 120, 2) + 
-                            Math.pow(diffsFixed.diffCA - 120, 2);
+      const varianceOld = calculateVarianceFromIdeal(diffsOld);
+      const varianceFixed = calculateVarianceFromIdeal(diffsFixed);
       
       expect(varianceFixed).toBeLessThanOrEqual(varianceOld);
     });
@@ -148,12 +149,8 @@ describe('CycleMap Triangle Calculations', () => {
       expect(indicesFixed).toEqual({ idxA: 0, idxB: 4, idxC: 9 });
 
       // Check better distribution
-      const varianceOld = Math.pow(diffsOld.diffAB - 120, 2) + 
-                          Math.pow(diffsOld.diffBC - 120, 2) + 
-                          Math.pow(diffsOld.diffCA - 120, 2);
-      const varianceFixed = Math.pow(diffsFixed.diffAB - 120, 2) + 
-                            Math.pow(diffsFixed.diffBC - 120, 2) + 
-                            Math.pow(diffsFixed.diffCA - 120, 2);
+      const varianceOld = calculateVarianceFromIdeal(diffsOld);
+      const varianceFixed = calculateVarianceFromIdeal(diffsFixed);
       
       expect(varianceFixed).toBeLessThan(varianceOld);
     });
@@ -216,12 +213,8 @@ describe('CycleMap Triangle Calculations', () => {
       expect(indicesFixed).toEqual({ idxA: 0, idxB: 3, idxC: 7 });
 
       // Check better distribution
-      const varianceOld = Math.pow(diffsOld.diffAB - 120, 2) + 
-                          Math.pow(diffsOld.diffBC - 120, 2) + 
-                          Math.pow(diffsOld.diffCA - 120, 2);
-      const varianceFixed = Math.pow(diffsFixed.diffAB - 120, 2) + 
-                            Math.pow(diffsFixed.diffBC - 120, 2) + 
-                            Math.pow(diffsFixed.diffCA - 120, 2);
+      const varianceOld = calculateVarianceFromIdeal(diffsOld);
+      const varianceFixed = calculateVarianceFromIdeal(diffsFixed);
       
       expect(varianceFixed).toBeLessThanOrEqual(varianceOld);
     });
@@ -269,6 +262,7 @@ describe('CycleMap Triangle Calculations', () => {
      * Test that the fixed version has lower overall variance across multiple palette sizes
      */
     it('should have lower total variance across common palette sizes', () => {
+      // Test sizes chosen to cover cases not divisible by 3, which are most affected by the bug
       const testSizes = [4, 5, 7, 8, 10, 11, 13, 14, 16, 17, 19, 20, 22];
       let totalVarianceOld = 0;
       let totalVarianceFixed = 0;
@@ -283,15 +277,8 @@ describe('CycleMap Triangle Calculations', () => {
         const diffsOld = calculateAngleDiffs(anglesOld);
         const diffsFixed = calculateAngleDiffs(anglesFixed);
 
-        const varianceOld = Math.pow(diffsOld.diffAB - 120, 2) + 
-                            Math.pow(diffsOld.diffBC - 120, 2) + 
-                            Math.pow(diffsOld.diffCA - 120, 2);
-        const varianceFixed = Math.pow(diffsFixed.diffAB - 120, 2) + 
-                              Math.pow(diffsFixed.diffBC - 120, 2) + 
-                              Math.pow(diffsFixed.diffCA - 120, 2);
-
-        totalVarianceOld += varianceOld;
-        totalVarianceFixed += varianceFixed;
+        totalVarianceOld += calculateVarianceFromIdeal(diffsOld);
+        totalVarianceFixed += calculateVarianceFromIdeal(diffsFixed);
       });
 
       // The fixed version should have significantly lower total variance
