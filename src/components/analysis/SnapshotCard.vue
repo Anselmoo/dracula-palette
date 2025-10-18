@@ -13,13 +13,20 @@
       <div class="cell" v-if="sources.length">
         <span class="label">Sources</span>
         <div class="chips">
-          <span
-            v-for="s in sources"
+          <button
+            v-for="(s, index) in sources"
             :key="s.hex"
-            class="chip"
+            type="button"
+            class="chip chip-interactive"
+            :class="{ 'chip-hidden': !isColorVisible(index) }"
             :style="{ background: s.hex }"
             :title="s.name"
-            >{{ s.name }}</span
+            @click="revealColor(index)"
+            @keydown.enter="revealColor(index)"
+            @keydown.space.prevent="revealColor(index)"
+            :aria-label="isColorVisible(index) ? `${s.name} color chip. Click to reveal next color` : `${s.name} color chip (hidden)`"
+            :tabindex="isColorVisible(index) ? 0 : -1"
+            >{{ s.name }}</button
           >
         </div>
       </div>
@@ -51,6 +58,7 @@
   </section>
 </template>
 <script setup lang="ts">
+import { ref, watch } from 'vue';
 import type { PaletteStandard, PaletteSourceColor } from '../../types/palette';
 import Icon from '../Icon.vue';
 
@@ -61,7 +69,7 @@ interface Insights {
   totalColors: number;
 }
 
-withDefaults(
+const props = withDefaults(
   defineProps<{
     standards: PaletteStandard[];
     sources: PaletteSourceColor[];
@@ -74,6 +82,31 @@ withDefaults(
     swatches: () => [],
   }
 );
+
+// Track the number of visible colors (start with 1 color visible)
+const visibleCount = ref(1);
+
+// Watch for changes in sources to reset visible count
+watch(
+  () => props.sources,
+  () => {
+    visibleCount.value = 1;
+  },
+  { immediate: true }
+);
+
+// Check if a color at given index should be visible
+const isColorVisible = (index: number): boolean => {
+  return index < visibleCount.value;
+};
+
+// Reveal the next color when a visible chip is clicked
+const revealColor = (clickedIndex: number): void => {
+  // Only proceed if the clicked chip is currently visible and there are more colors to reveal
+  if (isColorVisible(clickedIndex) && visibleCount.value < props.sources.length) {
+    visibleCount.value += 1;
+  }
+};
 </script>
 <style scoped lang="scss">
 .snapshot {
@@ -119,6 +152,33 @@ withDefaults(
   color: var(--dracula-foreground);
   border: 1px solid var(--surface-border);
   font-size: 0.8rem;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-origin: center;
+}
+.chip-interactive {
+  cursor: pointer;
+}
+.chip-interactive:hover {
+  transform: scale(1.05);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+.chip-interactive:active {
+  transform: scale(0.98);
+}
+.chip-interactive:focus-visible {
+  outline: 2px solid var(--dracula-cyan);
+  outline-offset: 2px;
+}
+.chip-hidden {
+  opacity: 0.3;
+  filter: grayscale(80%);
+  max-width: 80px;
+  overflow: hidden;
+  cursor: pointer;
+}
+.chip-hidden:hover {
+  opacity: 0.5;
+  filter: grayscale(60%);
 }
 .metrics {
   display: flex;
