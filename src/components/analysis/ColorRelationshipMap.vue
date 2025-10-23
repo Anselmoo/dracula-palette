@@ -358,6 +358,11 @@ const selectedPair = computed(() => {
   overflow: hidden;
   text-overflow: ellipsis;
   max-width: 100%;
+
+  .theme-alucard & {
+    background: rgba(255, 255, 255, 0.9);
+    color: var(--dracula-foreground);
+  }
 }
 
 .relationship-map__cell {
@@ -387,16 +392,31 @@ const selectedPair = computed(() => {
   &--aaa {
     background: rgba(42, 157, 143, 0.2);
     border-color: rgba(42, 157, 143, 0.5);
+
+    .theme-alucard & {
+      background: rgba(20, 113, 10, 0.15);
+      border-color: rgba(20, 113, 10, 0.4);
+    }
   }
 
   &--aa {
     background: rgba(233, 196, 106, 0.2);
     border-color: rgba(233, 196, 106, 0.5);
+
+    .theme-alucard & {
+      background: rgba(163, 77, 20, 0.12);
+      border-color: rgba(163, 77, 20, 0.35);
+    }
   }
 
   &--fail {
     background: rgba(231, 111, 81, 0.2);
     border-color: rgba(231, 111, 81, 0.5);
+
+    .theme-alucard & {
+      background: rgba(189, 21, 41, 0.12);
+      border-color: rgba(189, 21, 41, 0.35);
+    }
   }
 
   &--selected {
@@ -427,16 +447,31 @@ const selectedPair = computed(() => {
   .relationship-map__cell--aaa & {
     background: rgba(42, 157, 143, 0.8);
     color: white;
+
+    .theme-alucard & {
+      background: rgba(20, 113, 10, 0.85);
+      color: white;
+    }
   }
   
   .relationship-map__cell--aa & {
     background: rgba(233, 196, 106, 0.8);
     color: #282a36;
+
+    .theme-alucard & {
+      background: rgba(163, 77, 20, 0.85);
+      color: white;
+    }
   }
   
   .relationship-map__cell--fail & {
     background: rgba(231, 111, 81, 0.8);
     color: white;
+
+    .theme-alucard & {
+      background: rgba(189, 21, 41, 0.85);
+      color: white;
+    }
   }
 }
 
@@ -519,12 +554,24 @@ const selectedPair = computed(() => {
     background: rgba(42, 157, 143, 0.2);
     color: #2a9d8f;
     border-color: #2a9d8f;
+
+    .theme-alucard & {
+      background: rgba(20, 113, 10, 0.15);
+      color: #14710a;
+      border-color: #14710a;
+    }
   }
 
   &.fail {
     background: rgba(231, 111, 81, 0.2);
     color: #e76f51;
     border-color: #e76f51;
+
+    .theme-alucard & {
+      background: rgba(189, 21, 41, 0.15);
+      color: #bd1529;
+      border-color: #bd1529;
+    }
   }
 }
 
@@ -554,14 +601,26 @@ const selectedPair = computed(() => {
 
   &--aaa {
     background: rgba(42, 157, 143, 0.5);
+
+    .theme-alucard & {
+      background: rgba(20, 113, 10, 0.4);
+    }
   }
 
   &--aa {
     background: rgba(233, 196, 106, 0.5);
+
+    .theme-alucard & {
+      background: rgba(163, 77, 20, 0.35);
+    }
   }
 
   &--fail {
     background: rgba(231, 111, 81, 0.5);
+
+    .theme-alucard & {
+      background: rgba(189, 21, 41, 0.35);
+    }
   }
 }
 </style>
