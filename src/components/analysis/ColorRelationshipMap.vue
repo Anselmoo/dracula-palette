@@ -71,9 +71,7 @@
             <span class="relationship-map__ratio">{{
               getContrastRatio(rowIndex, colIndex).toFixed(2)
             }}</span>
-            <span class="relationship-map__rating">{{
-              getRating(rowIndex, colIndex)
-            }}</span>
+            <span class="relationship-map__rating">{{ getRating(rowIndex, colIndex) }}</span>
           </template>
           <template v-else>
             <span class="relationship-map__self">—</span>
@@ -94,10 +92,7 @@
             class="relationship-map__detail-swatch"
             :style="{ backgroundColor: selectedPair.color1.hex }"
           >
-            <span
-              class="relationship-map__detail-text"
-              :style="{ color: selectedPair.color2.hex }"
-            >
+            <span class="relationship-map__detail-text" :style="{ color: selectedPair.color2.hex }">
               Sample Text
             </span>
           </div>
@@ -105,10 +100,7 @@
             class="relationship-map__detail-swatch"
             :style="{ backgroundColor: selectedPair.color2.hex }"
           >
-            <span
-              class="relationship-map__detail-text"
-              :style="{ color: selectedPair.color1.hex }"
-            >
+            <span class="relationship-map__detail-text" :style="{ color: selectedPair.color1.hex }">
               Sample Text
             </span>
           </div>
@@ -199,7 +191,7 @@ function getRating(i: number, j: number): string {
 
 function getCellClass(i: number, j: number): string {
   if (i === j) return 'relationship-map__cell--self';
-  
+
   const rating = getRating(i, j);
   const isSelected =
     selectedPairIndices.value &&
@@ -209,13 +201,13 @@ function getCellClass(i: number, j: number): string {
   const classes = [`relationship-map__cell--${rating.toLowerCase()}`];
   if (isSelected) classes.push('relationship-map__cell--selected');
   if (showOnlyPassing.value && rating === 'fail') classes.push('relationship-map__cell--hidden');
-  
+
   return classes.join(' ');
 }
 
 function selectPair(i: number, j: number) {
   if (i === j) return;
-  
+
   // Toggle selection
   if (
     selectedPairIndices.value &&
@@ -230,10 +222,10 @@ function selectPair(i: number, j: number) {
 
 const selectedPair = computed(() => {
   if (!selectedPairIndices.value) return null;
-  
+
   const [i, j] = selectedPairIndices.value;
   const ratio = getContrastRatio(i, j);
-  
+
   return {
     color1: colors.value[i],
     color2: colors.value[j],
@@ -265,7 +257,7 @@ const selectedPair = computed(() => {
 .relationship-map__link {
   color: var(--dracula-cyan);
   text-decoration: underline;
-  
+
   &:hover {
     color: var(--dracula-purple);
   }
@@ -285,7 +277,7 @@ const selectedPair = computed(() => {
   font-size: 0.9rem;
   color: var(--dracula-comment);
   cursor: pointer;
-  
+
   input[type='checkbox'] {
     cursor: pointer;
   }
@@ -443,7 +435,7 @@ const selectedPair = computed(() => {
   padding: 0.1rem 0.3rem;
   border-radius: 3px;
   margin-top: 0.2rem;
-  
+
   .relationship-map__cell--aaa & {
     background: rgba(42, 157, 143, 0.8);
     color: white;
@@ -453,7 +445,7 @@ const selectedPair = computed(() => {
       color: white;
     }
   }
-  
+
   .relationship-map__cell--aa & {
     background: rgba(233, 196, 106, 0.8);
     color: #282a36;
@@ -463,7 +455,7 @@ const selectedPair = computed(() => {
       color: white;
     }
   }
-  
+
   .relationship-map__cell--fail & {
     background: rgba(231, 111, 81, 0.8);
     color: white;

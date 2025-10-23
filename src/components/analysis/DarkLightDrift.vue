@@ -13,10 +13,10 @@
               v-for="(l, i) in lightnesses"
               :key="i"
               class="bar"
-              :style="{ 
-                height: (l * 100).toFixed(0) + '%', 
+              :style="{
+                height: (l * 100).toFixed(0) + '%',
                 background: palette[i]?.hex || '#888',
-                width: barWidth
+                width: barWidth,
               }"
               :title="(l * 100).toFixed(0) + '% L'"
             ></span>
@@ -32,9 +32,9 @@
       <div class="card">
         <h4>Readability samples</h4>
         <div class="matrix-wrapper">
-          <div 
-            class="matrix" 
-            role="table" 
+          <div
+            class="matrix"
+            role="table"
             aria-label="Contrast samples"
             :style="{ '--sample-cols': sampleCount }"
           >
@@ -105,7 +105,7 @@ const lightnesses = computed(() => palette.value.map(p => hexToHsl(p.hex).l));
 const barWidth = computed(() => {
   const count = palette.value.length;
   if (count === 0) return '14px';
-  
+
   // Container width - use a more reasonable estimate for the card width
   // Typical card width after padding is ~400-600px depending on viewport
   const containerWidth = 500;
@@ -113,11 +113,11 @@ const barWidth = computed(() => {
   const totalGapWidth = Math.max(0, count - 1) * gapPx;
   const availableWidth = containerWidth - totalGapWidth;
   const calculatedWidth = availableWidth / count;
-  
+
   // Set minimum width of 8px for very large palettes to ensure readability
   const minWidth = 8;
   const maxWidth = 14;
-  
+
   if (calculatedWidth < minWidth) {
     return `${minWidth}px`;
   }
@@ -166,10 +166,10 @@ const sampleCount = computed(() => {
   return 3; // Small palettes: show 3x3 grid
 });
 
-const foregrounds = computed(() => 
+const foregrounds = computed(() =>
   sortedByL.value.slice(0, Math.min(sampleCount.value, sortedByL.value.length))
 );
-const backgrounds = computed(() => 
+const backgrounds = computed(() =>
   sortedByL.value.slice(-Math.min(sampleCount.value, sortedByL.value.length))
 );
 
