@@ -31,39 +31,46 @@
       </div>
       <div class="card">
         <h4>Readability samples</h4>
-        <div class="matrix" role="table" aria-label="Contrast samples">
-          <div class="row head" role="row">
-            <div class="cell ghost" role="columnheader" aria-hidden="true"></div>
-            <div
-              v-for="(fg, i) in foregrounds"
-              :key="'h' + i"
-              class="cell headcell"
-              role="columnheader"
-            >
-              <span class="chip" :style="{ background: fg.hex }"></span>
-              <span class="hex">{{ fg.hex }}</span>
-            </div>
-          </div>
-          <div v-for="(bg, ri) in backgrounds" :key="'r' + ri" class="row" role="row">
-            <div class="cell side" role="rowheader">
-              <span class="chip" :style="{ background: bg.hex }"></span>
-              <span class="hex">{{ bg.hex }}</span>
-            </div>
-            <div
-              v-for="(fg, ci) in foregrounds"
-              :key="'c' + ri + '-' + ci"
-              class="cell"
-              role="cell"
-            >
+        <div class="matrix-wrapper">
+          <div 
+            class="matrix" 
+            role="table" 
+            aria-label="Contrast samples"
+            :style="{ '--sample-cols': sampleCount }"
+          >
+            <div class="row head" role="row">
+              <div class="cell ghost" role="columnheader" aria-hidden="true"></div>
               <div
-                class="sample"
-                :style="{ color: fg.hex, background: bg.hex }"
-                :title="cellTitle(fg.hex, bg.hex)"
+                v-for="(fg, i) in foregrounds"
+                :key="'h' + i"
+                class="cell headcell"
+                role="columnheader"
               >
-                <span class="txt">Aa</span>
-                <span class="badge" :class="ratingClass(fg.hex, bg.hex)">{{
-                  ratingLabel(fg.hex, bg.hex)
-                }}</span>
+                <span class="chip" :style="{ background: fg.hex }"></span>
+                <span class="hex">{{ fg.hex }}</span>
+              </div>
+            </div>
+            <div v-for="(bg, ri) in backgrounds" :key="'r' + ri" class="row" role="row">
+              <div class="cell side" role="rowheader">
+                <span class="chip" :style="{ background: bg.hex }"></span>
+                <span class="hex">{{ bg.hex }}</span>
+              </div>
+              <div
+                v-for="(fg, ci) in foregrounds"
+                :key="'c' + ri + '-' + ci"
+                class="cell"
+                role="cell"
+              >
+                <div
+                  class="sample"
+                  :style="{ color: fg.hex, background: bg.hex }"
+                  :title="cellTitle(fg.hex, bg.hex)"
+                >
+                  <span class="txt">Aa</span>
+                  <span class="badge" :class="ratingClass(fg.hex, bg.hex)">{{
+                    ratingLabel(fg.hex, bg.hex)
+                  }}</span>
+                </div>
               </div>
             </div>
           </div>
@@ -146,12 +153,25 @@ const driftScore = computed(() => {
   return 1 - norm; // 1 = well-ordered from dark->light
 });
 
-// Simple matrix: pick darkest 3 as foregrounds and lightest 3 as backgrounds
+// Adaptive matrix: show more samples for larger palettes
 const sortedByL = computed(() =>
   [...palette.value].sort((a, b) => hexToHsl(a.hex).l - hexToHsl(b.hex).l)
 );
-const foregrounds = computed(() => sortedByL.value.slice(0, Math.min(3, sortedByL.value.length)));
-const backgrounds = computed(() => sortedByL.value.slice(-Math.min(3, sortedByL.value.length)));
+
+// Scale sample count based on palette size (3-5 samples)
+const sampleCount = computed(() => {
+  const count = palette.value.length;
+  if (count >= 15) return 5; // Large palettes: show 5x5 grid
+  if (count >= 10) return 4; // Medium palettes: show 4x4 grid
+  return 3; // Small palettes: show 3x3 grid
+});
+
+const foregrounds = computed(() => 
+  sortedByL.value.slice(0, Math.min(sampleCount.value, sortedByL.value.length))
+);
+const backgrounds = computed(() => 
+  sortedByL.value.slice(-Math.min(sampleCount.value, sortedByL.value.length))
+);
 
 function ratingLabel(fg: string, bg: string) {
   const ratio = contrastRatio(fg, bg);
@@ -252,13 +272,36 @@ function cellTitle(fg: string, bg: string) {
   opacity: 0.8;
 }
 /* Matrix styles */
+.matrix-wrapper {
+  overflow: auto;
+  max-height: 400px;
+  padding-bottom: 0.5rem;
+  /* Custom scrollbar styling */
+  scrollbar-width: thin;
+  scrollbar-color: var(--surface-border) transparent;
+}
+.matrix-wrapper::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+.matrix-wrapper::-webkit-scrollbar-track {
+  background: transparent;
+}
+.matrix-wrapper::-webkit-scrollbar-thumb {
+  background: var(--surface-border);
+  border-radius: 4px;
+}
+.matrix-wrapper::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-color);
+}
 .matrix {
   display: grid;
   gap: 0.25rem;
+  min-width: min-content;
 }
 .row {
   display: grid;
-  grid-template-columns: 1fr repeat(3, 1fr);
+  grid-template-columns: 1fr repeat(var(--sample-cols, 3), 1fr);
   gap: 0.25rem;
   align-items: stretch;
 }
