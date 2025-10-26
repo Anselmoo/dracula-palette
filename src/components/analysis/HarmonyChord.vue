@@ -129,17 +129,17 @@ function render() {
       grad
         .append('stop')
         .attr('offset', '0%')
-        .attr('stop-color', colors.value[c.source.index])
+        .attr('stop-color', colors.value[c.target.index])
         .attr('stop-opacity', 0.9);
       grad
         .append('stop')
         .attr('offset', '50%')
-        .attr('stop-color', colors.value[c.target.index])
+        .attr('stop-color', colors.value[c.source.index])
         .attr('stop-opacity', 0.95);
       grad
         .append('stop')
         .attr('offset', '100%')
-        .attr('stop-color', colors.value[c.target.index])
+        .attr('stop-color', colors.value[c.source.index])
         .attr('stop-opacity', 0.9);
     });
 
