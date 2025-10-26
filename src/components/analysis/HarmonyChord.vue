@@ -67,9 +67,9 @@ function harmonyScore(h1: number, h2: number) {
   return Math.max(6, 36 - d / 7);
 }
 
-const names = computed(() => props.palette.map(p => p.name || p.hex));
-const colors = computed(() => props.palette.map(p => p.hex));
-const hues = computed(() => props.palette.map(p => hexToHsl(p.hex).h));
+const names = computed(() => props.palette.map(p => p.name || p.hex).reverse());
+const colors = computed(() => props.palette.map(p => p.hex).reverse());
+const hues = computed(() => props.palette.map(p => hexToHsl(p.hex).h).reverse());
 
 function buildMatrix(): number[][] {
   const n = props.palette.length;
@@ -129,17 +129,17 @@ function render() {
       grad
         .append('stop')
         .attr('offset', '0%')
-        .attr('stop-color', colors.value[c.source.index])
+        .attr('stop-color', colors.value[c.target.index])
         .attr('stop-opacity', 0.9);
       grad
         .append('stop')
         .attr('offset', '50%')
-        .attr('stop-color', colors.value[c.target.index])
+        .attr('stop-color', colors.value[c.source.index])
         .attr('stop-opacity', 0.95);
       grad
         .append('stop')
         .attr('offset', '100%')
-        .attr('stop-color', colors.value[c.target.index])
+        .attr('stop-color', colors.value[c.source.index])
         .attr('stop-opacity', 0.9);
     });
 
