@@ -2,15 +2,21 @@
   <section class="genetic">
     <h3 class="t"><Icon name="dna" /><span>Genetic Mixer</span></h3>
     <div class="controls">
-      <label
-        >Target ratio <input type="number" v-model.number="target" min="2" max="12" step="0.1"
-      /></label>
-      <label
-        >Generations <input type="number" v-model.number="gens" min="10" max="500" step="10"
-      /></label>
-      <label>Seed <input type="range" v-model.number="seed" min="0" max="999" step="1" /></label>
-      <label
-        >Filter
+      <label>
+        <span>Target ratio</span>
+        <input type="number" v-model.number="target" min="2" max="12" step="0.1" />
+      </label>
+      <label>
+        <span>Generations</span>
+        <input type="number" v-model.number="gens" min="10" max="500" step="10" />
+      </label>
+      <label>
+        <span>Seed</span>
+        <input type="range" v-model.number="seed" min="0" max="999" step="1" />
+        <span class="value-display">{{ seed }}</span>
+      </label>
+      <label>
+        <span>Filter</span>
         <select v-model="filter">
           <option value="none">None</option>
           <option value="aa">AA (4.5:1)</option>
@@ -18,7 +24,7 @@
           <option value="aaa">AAA (7.0:1)</option>
         </select>
       </label>
-      <button class="btn" type="button" @click="recompute">Recompute</button>
+      <button class="btn-recompute" type="button" @click="recompute">Recompute</button>
     </div>
     <div class="row" v-if="best">
       <div class="card">
@@ -198,27 +204,41 @@ function badgeClass(r: number) {
 }
 </script>
 <style scoped lang="scss">
+@use '@/assets/styles/analysis-mixins' as mixins;
+
 .t {
-  margin: 0 0 0.5rem;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
+  @include mixins.analysis-heading;
 }
 .controls {
-  display: flex;
-  gap: 1rem;
-  align-items: center;
-  margin-bottom: 0.75rem;
+  @include mixins.analysis-controls;
 }
-.btn {
-  appearance: none;
-  background: var(--surface-primary);
-  color: var(--dracula-foreground);
-  border: 1px solid var(--surface-border);
-  border-radius: 8px;
-  padding: 0.25rem 0.6rem;
-  font-size: 0.85rem;
+.value-display {
+  min-width: 40px;
+  text-align: center;
+  font-weight: 600;
+  color: var(--dracula-purple);
+}
+.btn-recompute {
+  padding: 0.4rem 0.8rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+  background: var(--dracula-purple);
+  color: var(--dracula-background);
+  border: none;
+  border-radius: var(--radius-md);
   cursor: pointer;
+  transition:
+    background 0.2s ease,
+    transform 0.1s ease;
+
+  &:hover {
+    background: var(--dracula-pink);
+    transform: translateY(-1px);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
 }
 .row {
   display: grid;

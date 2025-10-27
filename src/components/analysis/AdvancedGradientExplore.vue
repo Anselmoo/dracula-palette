@@ -6,26 +6,26 @@
     </h3>
 
     <div class="controls">
-      <label class="toggle-animate">
+      <label>
         <input type="checkbox" v-model="animate" />
-        <span class="lbl">Animate</span>
+        <span>Animate</span>
       </label>
-      <label class="toggle-grain">
+      <label>
         <input type="checkbox" v-model="grain" />
-        <span class="lbl">Film Grain</span>
+        <span>Film Grain</span>
       </label>
-      <label class="control-angle">
-        <span class="lbl">Angle</span>
+      <label>
+        <span>Angle</span>
         <input type="range" min="0" max="360" v-model.number="angle" />
-        <span class="lbl angle-value">{{ angle }}°</span>
+        <span class="value-display">{{ angle }}°</span>
       </label>
-      <label class="control-stops">
-        <span class="lbl">Color Stops</span>
+      <label>
+        <span>Color Stops</span>
         <input type="range" min="2" max="6" v-model.number="colorStops" />
-        <span class="lbl stops-value">{{ colorStops }}</span>
+        <span class="value-display">{{ colorStops }}</span>
       </label>
-      <label class="control-blend">
-        <span class="lbl">Blend Mode</span>
+      <label>
+        <span>Blend Mode</span>
         <select v-model="blendMode">
           <option value="normal">Normal</option>
           <option value="multiply">Multiply</option>
@@ -270,66 +270,25 @@ watch([activePreset, animate, grain, angle, colorStops, blendMode], () => update
 </script>
 
 <style scoped lang="scss">
+@use '@/assets/styles/analysis-mixins' as mixins;
+
 .gradient-explore {
   margin-top: 1rem;
 }
 .t {
-  margin: 0 0 1rem;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  color: var(--dracula-foreground);
-  font-size: 1.1rem;
+  @include mixins.analysis-heading;
 }
 .controls {
-  display: flex;
-  gap: 1.5rem;
-  margin-bottom: 1rem;
-  align-items: center;
-  flex-wrap: wrap;
+  @include mixins.analysis-controls;
 }
-.lbl {
-  font-size: 0.9rem;
-  color: var(--dracula-foreground);
-  margin-left: 0.5rem;
-}
-.toggle-animate,
-.toggle-grain {
-  display: flex;
-  align-items: center;
-  gap: 0.3rem;
-  cursor: pointer;
-}
-.control-angle,
-.control-stops,
-.control-blend {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-.control-angle input[type='range'],
-.control-stops input[type='range'] {
-  width: 120px;
-}
-.control-blend select {
-  padding: 0.25rem 0.5rem;
-  background: var(--surface-primary);
-  color: var(--dracula-foreground);
-  border: 1px solid var(--surface-border);
-  border-radius: 6px;
-  cursor: pointer;
-}
-.angle-value,
-.stops-value {
+.value-display {
   min-width: 40px;
   text-align: center;
   font-weight: 600;
   color: var(--dracula-purple);
 }
-input[type='checkbox'] {
-  cursor: pointer;
-}
 input[type='range'] {
+  width: 120px;
   cursor: pointer;
 }
 .preset-grid {

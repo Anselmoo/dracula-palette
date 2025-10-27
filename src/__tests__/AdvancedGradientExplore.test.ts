@@ -35,11 +35,10 @@ describe('AdvancedGradientExplore', () => {
     });
 
     it('should render all control inputs', () => {
-      expect(wrapper.find('.toggle-animate input[type="checkbox"]').exists()).toBe(true);
-      expect(wrapper.find('.toggle-grain input[type="checkbox"]').exists()).toBe(true);
-      expect(wrapper.find('.control-angle input[type="range"]').exists()).toBe(true);
-      expect(wrapper.find('.control-stops input[type="range"]').exists()).toBe(true);
-      expect(wrapper.find('.control-blend select').exists()).toBe(true);
+      const controls = wrapper.find('.controls');
+      expect(controls.findAll('input[type="checkbox"]').length).toBe(2);
+      expect(controls.findAll('input[type="range"]').length).toBe(2);
+      expect(controls.find('select').exists()).toBe(true);
     });
 
     it('should render all 18 preset buttons', () => {
@@ -118,7 +117,8 @@ describe('AdvancedGradientExplore', () => {
 
   describe('Checkbox Controls', () => {
     it('should toggle animate checkbox', async () => {
-      const animateCheckbox = wrapper.find('.toggle-animate input[type="checkbox"]');
+      const checkboxes = wrapper.findAll('.controls input[type="checkbox"]');
+      const animateCheckbox = checkboxes[0]; // First checkbox is animate
       const initialValue = (animateCheckbox.element as HTMLInputElement).checked;
 
       await animateCheckbox.setValue(!initialValue);
@@ -126,7 +126,8 @@ describe('AdvancedGradientExplore', () => {
     });
 
     it('should toggle grain checkbox', async () => {
-      const grainCheckbox = wrapper.find('.toggle-grain input[type="checkbox"]');
+      const checkboxes = wrapper.findAll('.controls input[type="checkbox"]');
+      const grainCheckbox = checkboxes[1]; // Second checkbox is grain
       const initialValue = (grainCheckbox.element as HTMLInputElement).checked;
 
       await grainCheckbox.setValue(!initialValue);
@@ -134,57 +135,65 @@ describe('AdvancedGradientExplore', () => {
     });
 
     it('should have animate checked by default', () => {
-      const animateCheckbox = wrapper.find('.toggle-animate input[type="checkbox"]');
+      const checkboxes = wrapper.findAll('.controls input[type="checkbox"]');
+      const animateCheckbox = checkboxes[0]; // First checkbox is animate
       expect((animateCheckbox.element as HTMLInputElement).checked).toBe(true);
     });
 
     it('should have grain unchecked by default', () => {
-      const grainCheckbox = wrapper.find('.toggle-grain input[type="checkbox"]');
+      const checkboxes = wrapper.findAll('.controls input[type="checkbox"]');
+      const grainCheckbox = checkboxes[1]; // Second checkbox is grain
       expect((grainCheckbox.element as HTMLInputElement).checked).toBe(false);
     });
   });
 
   describe('Range Controls', () => {
     it('should update angle value when range slider changes', async () => {
-      const angleSlider = wrapper.find('.control-angle input[type="range"]');
+      const rangeInputs = wrapper.findAll('.controls input[type="range"]');
+      const angleSlider = rangeInputs[0]; // First range is angle
       await angleSlider.setValue('180');
       expect((angleSlider.element as HTMLInputElement).value).toBe('180');
-      expect(wrapper.find('.angle-value').text()).toBe('180°');
+      expect(wrapper.findAll('.value-display')[0].text()).toBe('180°');
     });
 
     it('should have angle range from 0 to 360', () => {
-      const angleSlider = wrapper.find('.control-angle input[type="range"]');
+      const rangeInputs = wrapper.findAll('.controls input[type="range"]');
+      const angleSlider = rangeInputs[0]; // First range is angle
       expect(angleSlider.attributes('min')).toBe('0');
       expect(angleSlider.attributes('max')).toBe('360');
     });
 
     it('should have default angle of 135', () => {
-      const angleSlider = wrapper.find('.control-angle input[type="range"]');
+      const rangeInputs = wrapper.findAll('.controls input[type="range"]');
+      const angleSlider = rangeInputs[0]; // First range is angle
       expect((angleSlider.element as HTMLInputElement).value).toBe('135');
     });
 
     it('should update color stops value when range slider changes', async () => {
-      const stopsSlider = wrapper.find('.control-stops input[type="range"]');
+      const rangeInputs = wrapper.findAll('.controls input[type="range"]');
+      const stopsSlider = rangeInputs[1]; // Second range is color stops
       await stopsSlider.setValue('6');
       expect((stopsSlider.element as HTMLInputElement).value).toBe('6');
-      expect(wrapper.find('.stops-value').text()).toBe('6');
+      expect(wrapper.findAll('.value-display')[1].text()).toBe('6');
     });
 
     it('should have color stops range from 2 to 6', () => {
-      const stopsSlider = wrapper.find('.control-stops input[type="range"]');
+      const rangeInputs = wrapper.findAll('.controls input[type="range"]');
+      const stopsSlider = rangeInputs[1]; // Second range is color stops
       expect(stopsSlider.attributes('min')).toBe('2');
       expect(stopsSlider.attributes('max')).toBe('6');
     });
 
     it('should have default color stops of 4', () => {
-      const stopsSlider = wrapper.find('.control-stops input[type="range"]');
+      const rangeInputs = wrapper.findAll('.controls input[type="range"]');
+      const stopsSlider = rangeInputs[1]; // Second range is color stops
       expect((stopsSlider.element as HTMLInputElement).value).toBe('4');
     });
   });
 
   describe('Blend Mode Select', () => {
     it('should have all blend mode options', () => {
-      const select = wrapper.find('.control-blend select');
+      const select = wrapper.find('.controls select');
       const options = select.findAll('option');
       expect(options.length).toBe(4);
 
@@ -196,13 +205,13 @@ describe('AdvancedGradientExplore', () => {
     });
 
     it('should change blend mode when option is selected', async () => {
-      const select = wrapper.find('.control-blend select');
+      const select = wrapper.find('.controls select');
       await select.setValue('multiply');
       expect((select.element as unknown as { value: string }).value).toBe('multiply');
     });
 
     it('should have normal as default blend mode', () => {
-      const select = wrapper.find('.control-blend select');
+      const select = wrapper.find('.controls select');
       expect((select.element as unknown as { value: string }).value).toBe('normal');
     });
   });
@@ -267,11 +276,16 @@ describe('AdvancedGradientExplore', () => {
     });
 
     it('should have labeled controls', () => {
-      expect(wrapper.find('.toggle-animate .lbl').text()).toBe('Animate');
-      expect(wrapper.find('.toggle-grain .lbl').text()).toBe('Film Grain');
-      expect(wrapper.find('.control-angle .lbl').text()).toContain('Angle');
-      expect(wrapper.find('.control-stops .lbl').text()).toContain('Color Stops');
-      expect(wrapper.find('.control-blend .lbl').text()).toBe('Blend Mode');
+      const labels = wrapper.findAll('.controls label');
+      expect(labels.length).toBeGreaterThan(0);
+      
+      // Check that labels contain text
+      const labelTexts = labels.map(l => l.text());
+      expect(labelTexts.some(t => t.includes('Animate'))).toBe(true);
+      expect(labelTexts.some(t => t.includes('Film Grain'))).toBe(true);
+      expect(labelTexts.some(t => t.includes('Angle'))).toBe(true);
+      expect(labelTexts.some(t => t.includes('Color Stops'))).toBe(true);
+      expect(labelTexts.some(t => t.includes('Blend Mode'))).toBe(true);
     });
 
     it('should have focusable buttons', () => {
@@ -284,16 +298,19 @@ describe('AdvancedGradientExplore', () => {
 
   describe('Interaction Flow', () => {
     it('should allow multiple control changes in sequence', async () => {
+      const rangeInputs = wrapper.findAll('.controls input[type="range"]');
+      const checkboxes = wrapper.findAll('.controls input[type="checkbox"]');
+      
       // Change angle
-      const angleSlider = wrapper.find('.control-angle input[type="range"]');
+      const angleSlider = rangeInputs[0];
       await angleSlider.setValue('270');
 
       // Change color stops
-      const stopsSlider = wrapper.find('.control-stops input[type="range"]');
+      const stopsSlider = rangeInputs[1];
       await stopsSlider.setValue('3');
 
       // Toggle animate
-      const animateCheckbox = wrapper.find('.toggle-animate input[type="checkbox"]');
+      const animateCheckbox = checkboxes[0];
       await animateCheckbox.setValue(false);
 
       // Change preset
@@ -311,8 +328,9 @@ describe('AdvancedGradientExplore', () => {
       const preview = wrapper.find('.main-preview');
       const _initialHTML = preview.html();
 
+      const rangeInputs = wrapper.findAll('.controls input[type="range"]');
       // Change angle
-      const angleSlider = wrapper.find('.control-angle input[type="range"]');
+      const angleSlider = rangeInputs[0];
       await angleSlider.setValue('270');
 
       // Preview should update
@@ -341,7 +359,8 @@ describe('AdvancedGradientExplore', () => {
     });
 
     it('should handle extreme angle values', async () => {
-      const angleSlider = wrapper.find('.control-angle input[type="range"]');
+      const rangeInputs = wrapper.findAll('.controls input[type="range"]');
+      const angleSlider = rangeInputs[0];
 
       await angleSlider.setValue('0');
       expect((angleSlider.element as HTMLInputElement).value).toBe('0');
@@ -351,7 +370,8 @@ describe('AdvancedGradientExplore', () => {
     });
 
     it('should handle minimum and maximum color stops', async () => {
-      const stopsSlider = wrapper.find('.control-stops input[type="range"]');
+      const rangeInputs = wrapper.findAll('.controls input[type="range"]');
+      const stopsSlider = rangeInputs[1];
 
       await stopsSlider.setValue('2');
       expect((stopsSlider.element as HTMLInputElement).value).toBe('2');

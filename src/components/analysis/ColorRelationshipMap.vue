@@ -18,13 +18,13 @@
     </p>
 
     <div class="relationship-map__controls">
-      <label class="relationship-map__control">
+      <label>
         <input type="checkbox" v-model="largeText" />
-        Large text mode (AA: 3:1, AAA: 4.5:1)
+        <span>Large text mode (AA: 3:1, AAA: 4.5:1)</span>
       </label>
-      <label class="relationship-map__control">
+      <label>
         <input type="checkbox" v-model="showOnlyPassing" />
-        Show only passing pairs
+        <span>Show only passing pairs</span>
       </label>
     </div>
 
@@ -264,23 +264,7 @@ const selectedPair = computed(() => {
 }
 
 .relationship-map__controls {
-  display: flex;
-  gap: 1rem;
-  margin-bottom: 1rem;
-  flex-wrap: wrap;
-}
-
-.relationship-map__control {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-size: 0.9rem;
-  color: var(--dracula-comment);
-  cursor: pointer;
-
-  input[type='checkbox'] {
-    cursor: pointer;
-  }
+  @include mixins.analysis-controls;
 }
 
 .relationship-map__empty {
