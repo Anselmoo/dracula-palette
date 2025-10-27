@@ -287,10 +287,6 @@ watch([activePreset, animate, grain, angle, colorStops, blendMode], () => update
   font-weight: 600;
   color: var(--dracula-purple);
 }
-input[type='range'] {
-  width: 120px;
-  cursor: pointer;
-}
 .preset-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
