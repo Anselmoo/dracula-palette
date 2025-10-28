@@ -192,6 +192,38 @@ export function generateFigmaTokens(palette: GeneratedPalette): string {
   );
 }
 
+/**
+ * Sanitizes a palette name for use in filenames by:
+ * - Converting to lowercase
+ * - Replacing spaces with hyphens
+ * - Replacing bracketed suffixes with hyphenated versions (e.g., "(Accessible)" -> "-accessible")
+ * - Removing any remaining special characters that aren't alphanumeric or hyphens
+ *
+ * @param name - The palette name to sanitize
+ * @returns A filename-safe version of the name
+ *
+ * @example
+ * sanitizeFilename("Material Pink") // "material-pink"
+ * sanitizeFilename("Material Pink (Accessible)") // "material-pink-accessible"
+ * sanitizeFilename("OKLCH Red (Accessible)") // "oklch-red-accessible"
+ */
+export function sanitizeFilename(name: string): string {
+  return (
+    name
+      .toLowerCase()
+      // Replace bracketed text with hyphenated version
+      .replace(/\s*\(([^)]+)\)/g, (_match, content) => `-${content.toLowerCase()}`)
+      // Replace spaces with hyphens
+      .replace(/\s+/g, '-')
+      // Remove any remaining special characters except hyphens and alphanumeric
+      .replace(/[^a-z0-9-]/g, '')
+      // Replace multiple consecutive hyphens with a single hyphen
+      .replace(/-+/g, '-')
+      // Remove leading or trailing hyphens
+      .replace(/^-+|-+$/g, '')
+  );
+}
+
 export function downloadFile(filename: string, content: string, mimeType: string = 'text/plain') {
   const blob = new Blob([content], { type: mimeType });
   const url = URL.createObjectURL(blob);

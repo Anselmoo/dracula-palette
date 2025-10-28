@@ -1,5 +1,10 @@
 import { describe, it, expect } from 'vitest';
-import { formatColor, generateJSONExport, getColorFormatOptions } from '../utils/exportUtils';
+import {
+  formatColor,
+  generateJSONExport,
+  getColorFormatOptions,
+  sanitizeFilename,
+} from '../utils/exportUtils';
 import type { GeneratedPalette } from '../types/palette';
 
 describe('Export Utils', () => {
@@ -176,6 +181,58 @@ describe('Export Utils', () => {
 
       expect(labOption).toBeDefined();
       expect(labOption!.description).toMatch(/lab\(\d+ \d+ \d+\)/);
+    });
+  });
+
+  describe('sanitizeFilename', () => {
+    it('should convert to lowercase and replace spaces with hyphens', () => {
+      expect(sanitizeFilename('Material Pink')).toBe('material-pink');
+      expect(sanitizeFilename('OKLCH Red')).toBe('oklch-red');
+      expect(sanitizeFilename('HSLuv Green')).toBe('hsluv-green');
+    });
+
+    it('should replace bracketed suffixes with hyphenated versions', () => {
+      expect(sanitizeFilename('Material Pink (Accessible)')).toBe('material-pink-accessible');
+      expect(sanitizeFilename('OKLCH Red (Accessible)')).toBe('oklch-red-accessible');
+      expect(sanitizeFilename('Color Harmony Cyan (Accessible)')).toBe(
+        'color-harmony-cyan-accessible'
+      );
+    });
+
+    it('should handle multiple spaces correctly', () => {
+      expect(sanitizeFilename('Material  Design  3  Pink')).toBe('material-design-3-pink');
+    });
+
+    it('should remove special characters except hyphens', () => {
+      expect(sanitizeFilename('Material@Pink#123')).toBe('materialpink123');
+      expect(sanitizeFilename('Color/Harmony\\Palette')).toBe('colorharmonypalette');
+    });
+
+    it('should handle multiple consecutive hyphens', () => {
+      expect(sanitizeFilename('Material---Pink')).toBe('material-pink');
+      expect(sanitizeFilename('Material - - Pink')).toBe('material-pink');
+    });
+
+    it('should remove leading and trailing hyphens', () => {
+      expect(sanitizeFilename('-Material Pink-')).toBe('material-pink');
+      expect(sanitizeFilename('---Material Pink---')).toBe('material-pink');
+    });
+
+    it('should handle complex bracket content', () => {
+      expect(sanitizeFilename('Pink (Accessible WCAG AA)')).toBe('pink-accessible-wcag-aa');
+      expect(sanitizeFilename('Red (Light Mode)')).toBe('red-light-mode');
+    });
+
+    it('should handle empty or whitespace-only input', () => {
+      expect(sanitizeFilename('')).toBe('');
+      expect(sanitizeFilename('   ')).toBe('');
+    });
+
+    it('should handle real-world palette names', () => {
+      expect(sanitizeFilename('Material Pink')).toBe('material-pink');
+      expect(sanitizeFilename('HSLuv Pink (Accessible)')).toBe('hsluv-pink-accessible');
+      expect(sanitizeFilename('CAM16 Red')).toBe('cam16-red');
+      expect(sanitizeFilename('Color Harmony Orange')).toBe('color-harmony-orange');
     });
   });
 });
