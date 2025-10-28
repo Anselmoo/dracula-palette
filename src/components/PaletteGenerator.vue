@@ -294,6 +294,7 @@ import {
   generateCSSVariables,
   generateSCSSVariables,
   downloadFile,
+  sanitizeFilename,
 } from '../utils/exportUtils';
 import { hexToRgb } from '../utils/contrast';
 import ColorExportModal from './ColorExportModal.vue';
@@ -704,17 +705,17 @@ const copyTooltip = (color: { name: string; hex: string; usage: string; lightnes
 
 const exportPalette = (palette: GeneratedPalette) => {
   const css = generateCSSVariables(palette);
-  downloadFile(`${palette.name.toLowerCase().replace(/\s+/g, '-')}.css`, css);
+  downloadFile(`${sanitizeFilename(palette.name)}.css`, css);
 };
 
 const exportJSON = (palette: GeneratedPalette) => {
   const json = generateJSONExport(palette);
-  downloadFile(`${palette.name.toLowerCase().replace(/\s+/g, '-')}.json`, json);
+  downloadFile(`${sanitizeFilename(palette.name)}.json`, json);
 };
 
 const exportSCSS = (palette: GeneratedPalette) => {
   const scss = generateSCSSVariables(palette);
-  downloadFile(`${palette.name.toLowerCase().replace(/\s+/g, '-')}.scss`, scss);
+  downloadFile(`${sanitizeFilename(palette.name)}.scss`, scss);
 };
 
 const makeAccessible = (palette: GeneratedPalette) => {
