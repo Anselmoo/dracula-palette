@@ -78,10 +78,10 @@ export function getColorFormatOptions(hex: string): {
 }
 
 export function generateCSSVariables(palette: GeneratedPalette): string {
-  const paletteName = palette.name.toLowerCase().replace(/\s+/g, '-');
+  const paletteName = sanitizeFilename(palette.name);
   const cssVars = palette.colors
     .map(color => {
-      const colorName = color.name.toLowerCase().replace(/\s+/g, '-');
+      const colorName = sanitizeFilename(color.name);
       return `  --${paletteName}-${colorName}: ${color.hex};`;
     })
     .join('\n');
@@ -90,28 +90,28 @@ export function generateCSSVariables(palette: GeneratedPalette): string {
 }
 
 export function generateSCSSVariables(palette: GeneratedPalette): string {
-  const paletteName = palette.name.toLowerCase().replace(/\s+/g, '-');
+  const paletteName = sanitizeFilename(palette.name);
   const scssVars = palette.colors
     .map(color => {
-      const colorName = color.name.toLowerCase().replace(/\s+/g, '-');
+      const colorName = sanitizeFilename(color.name);
       return `$${paletteName}-${colorName}: ${color.hex};`;
     })
     .join('\n');
 
   return `// ${palette.name} Palette\n${scssVars}\n\n// Usage mixin\n@mixin ${paletteName}-colors {\n${palette.colors
     .map(color => {
-      const colorName = color.name.toLowerCase().replace(/\s+/g, '-');
+      const colorName = sanitizeFilename(color.name);
       return `  --${paletteName}-${colorName}: #{$${paletteName}-${colorName}};`;
     })
     .join('\n')}\n}`;
 }
 
 export function generateTailwindConfig(palette: GeneratedPalette): string {
-  const paletteName = palette.name.toLowerCase().replace(/\s+/g, '-');
+  const paletteName = sanitizeFilename(palette.name);
   const tailwindColors: { [key: string]: string } = {};
 
   palette.colors.forEach(color => {
-    const colorName = color.name.toLowerCase().replace(/\s+/g, '-');
+    const colorName = sanitizeFilename(color.name);
     tailwindColors[colorName] = color.hex;
   });
 
@@ -171,11 +171,11 @@ export function generateJSONExport(palette: GeneratedPalette): string {
 }
 
 export function generateFigmaTokens(palette: GeneratedPalette): string {
-  const paletteName = palette.name.toLowerCase().replace(/\s+/g, '-');
+  const paletteName = sanitizeFilename(palette.name);
   const tokens: { [key: string]: { value: string; type: string; description?: string } } = {};
 
   palette.colors.forEach(color => {
-    const colorName = color.name.toLowerCase().replace(/\s+/g, '-');
+    const colorName = sanitizeFilename(color.name);
     tokens[`${paletteName}-${colorName}`] = {
       value: color.hex,
       type: 'color',
