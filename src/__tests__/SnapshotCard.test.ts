@@ -106,7 +106,20 @@ describe('SnapshotCard Interactive Color Reveal', () => {
   describe('Accessibility', () => {
     it('should have proper ARIA labels for color chips', () => {
       const firstChip = wrapper.find('.color-chip');
+      expect(firstChip.attributes('aria-label')).toContain('Red');
       expect(firstChip.attributes('aria-label')).toContain('Click to reveal next color');
+    });
+
+    it('should update ARIA labels when all colors are visible', async () => {
+      // Reveal all colors
+      for (let i = 0; i < mockSources.length - 1; i++) {
+        const firstChip = wrapper.find('.color-chip');
+        await firstChip.trigger('click');
+      }
+
+      const firstChip = wrapper.find('.color-chip');
+      expect(firstChip.attributes('aria-label')).toBe('Red');
+      expect(firstChip.attributes('aria-label')).not.toContain('Click to reveal');
     });
 
     it('should be keyboard accessible with tabindex', () => {

@@ -23,7 +23,7 @@
             :title="s.name"
             @click="revealNextSource"
             role="button"
-            :aria-label="`${s.name} - Click to reveal next color`"
+            :aria-label="`${s.name}${visibleSourcesCount < sources.length ? ' - Click to reveal next color' : ''}`"
             tabindex="0"
             @keydown.enter="revealNextSource"
             @keydown.space.prevent="revealNextSource"
@@ -64,7 +64,7 @@
         :title="c"
         @click="revealNextSwatch"
         role="button"
-        :aria-label="`Color ${c} - Click to reveal next color`"
+        :aria-label="`Color ${c}${visibleSwatchesCount < swatches.length ? ' - Click to reveal next color' : ''}`"
         tabindex="0"
         @keydown.enter="revealNextSwatch"
         @keydown.space.prevent="revealNextSwatch"
@@ -99,8 +99,8 @@ const props = withDefaults(
 );
 
 // State for interactive reveal - start with showing only 1 color
-const visibleSourcesCount = ref(1);
-const visibleSwatchesCount = ref(1);
+const visibleSourcesCount = ref(Math.min(1, props.sources.length));
+const visibleSwatchesCount = ref(Math.min(1, props.swatches.length));
 
 // Click handlers to reveal next color
 const revealNextSource = () => {
