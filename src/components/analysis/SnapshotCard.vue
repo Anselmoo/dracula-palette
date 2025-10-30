@@ -14,11 +14,19 @@
         <span class="label">Sources</span>
         <div class="chips">
           <span
-            v-for="s in sources"
+            v-for="(s, index) in sources"
             :key="s.hex"
-            class="chip"
+            v-show="index < visibleSourcesCount"
+            class="chip color-chip"
+            :class="{ 'reveal-animation': index === visibleSourcesCount - 1 && visibleSourcesCount > 1 }"
             :style="{ background: s.hex }"
             :title="s.name"
+            @click="revealNextSource"
+            role="button"
+            :aria-label="`${s.name} - Click to reveal next color`"
+            tabindex="0"
+            @keydown.enter="revealNextSource"
+            @keydown.space.prevent="revealNextSource"
             >{{ s.name }}</span
           >
         </div>
@@ -46,11 +54,26 @@
       </div>
     </div>
     <div class="swatches" v-if="swatches?.length">
-      <span v-for="c in swatches" :key="c" class="sw" :style="{ background: c }" :title="c" />
+      <span
+        v-for="(c, index) in swatches"
+        :key="c"
+        v-show="index < visibleSwatchesCount"
+        class="sw clickable-swatch"
+        :class="{ 'reveal-animation': index === visibleSwatchesCount - 1 && visibleSwatchesCount > 1 }"
+        :style="{ background: c }"
+        :title="c"
+        @click="revealNextSwatch"
+        role="button"
+        :aria-label="`Color ${c} - Click to reveal next color`"
+        tabindex="0"
+        @keydown.enter="revealNextSwatch"
+        @keydown.space.prevent="revealNextSwatch"
+      />
     </div>
   </section>
 </template>
 <script setup lang="ts">
+import { ref } from 'vue';
 import type { PaletteStandard, PaletteSourceColor } from '../../types/palette';
 import Icon from '../Icon.vue';
 
@@ -61,7 +84,7 @@ interface Insights {
   totalColors: number;
 }
 
-withDefaults(
+const props = withDefaults(
   defineProps<{
     standards: PaletteStandard[];
     sources: PaletteSourceColor[];
@@ -74,6 +97,23 @@ withDefaults(
     swatches: () => [],
   }
 );
+
+// State for interactive reveal - start with showing only 1 color
+const visibleSourcesCount = ref(1);
+const visibleSwatchesCount = ref(1);
+
+// Click handlers to reveal next color
+const revealNextSource = () => {
+  if (visibleSourcesCount.value < props.sources.length) {
+    visibleSourcesCount.value++;
+  }
+};
+
+const revealNextSwatch = () => {
+  if (visibleSwatchesCount.value < props.swatches.length) {
+    visibleSwatchesCount.value++;
+  }
+};
 </script>
 <style scoped lang="scss">
 .snapshot {
@@ -120,6 +160,18 @@ withDefaults(
   border: 1px solid var(--surface-border);
   font-size: 0.8rem;
 }
+.color-chip {
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  &:hover {
+    transform: scale(1.05);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  }
+  &:focus {
+    outline: 2px solid var(--dracula-purple);
+    outline-offset: 2px;
+  }
+}
 .metrics {
   display: flex;
   flex-wrap: wrap;
@@ -153,6 +205,31 @@ withDefaults(
   border-radius: 6px;
   border: 1px solid var(--surface-border);
   display: inline-block;
+}
+.clickable-swatch {
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  &:hover {
+    transform: scale(1.15);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  }
+  &:focus {
+    outline: 2px solid var(--dracula-purple);
+    outline-offset: 2px;
+  }
+}
+.reveal-animation {
+  animation: revealColor 0.3s ease-out;
+}
+@keyframes revealColor {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 @media (max-width: 900px) {
   .grid {
