@@ -73,7 +73,7 @@
   </section>
 </template>
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 import type { PaletteStandard, PaletteSourceColor } from '../../types/palette';
 import Icon from '../Icon.vue';
 
@@ -101,6 +101,21 @@ const props = withDefaults(
 // State for interactive reveal - start with showing only 1 color
 const visibleSourcesCount = ref(Math.min(1, props.sources.length));
 const visibleSwatchesCount = ref(Math.min(1, props.swatches.length));
+
+// Reset counts when props change
+watch(
+  () => props.sources,
+  (newSources) => {
+    visibleSourcesCount.value = Math.min(1, newSources.length);
+  }
+);
+
+watch(
+  () => props.swatches,
+  (newSwatches) => {
+    visibleSwatchesCount.value = Math.min(1, newSwatches.length);
+  }
+);
 
 // Click handlers to reveal next color
 const revealNextSource = () => {

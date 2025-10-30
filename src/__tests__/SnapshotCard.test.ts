@@ -191,5 +191,27 @@ describe('SnapshotCard Interactive Color Reveal', () => {
       const section = wrapper.find('.snapshot');
       expect(section.attributes('aria-label')).toBe('Palette Snapshot');
     });
+
+    it('should reset to show only 1 color when props change', async () => {
+      // Reveal multiple colors
+      const firstChip = wrapper.find('.color-chip');
+      await firstChip.trigger('click');
+      await firstChip.trigger('click');
+
+      let visibleChips = wrapper.findAll('.color-chip').filter(chip => chip.isVisible());
+      expect(visibleChips.length).toBeGreaterThan(1);
+
+      // Update props with new sources
+      const newSources: PaletteSourceColor[] = [
+        { name: 'Blue', hex: '#0000ff' },
+        { name: 'Yellow', hex: '#ffff00' },
+      ];
+
+      await wrapper.setProps({ sources: newSources });
+
+      // Should reset to showing only 1
+      visibleChips = wrapper.findAll('.color-chip').filter(chip => chip.isVisible());
+      expect(visibleChips.length).toBe(1);
+    });
   });
 });
