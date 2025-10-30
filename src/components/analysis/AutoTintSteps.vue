@@ -85,6 +85,8 @@ const tints = computed(() => {
 });
 </script>
 <style scoped lang="scss">
+@use '@/assets/styles/analysis-mixins' as mixins;
+
 .t {
   margin: 0 0 0.5rem;
 }
@@ -93,6 +95,10 @@ const tints = computed(() => {
   gap: 1rem;
   align-items: center;
   margin-bottom: 0.5rem;
+
+  input[type='range'] {
+    @include mixins.analysis-range;
+  }
 }
 .row {
   display: grid;
