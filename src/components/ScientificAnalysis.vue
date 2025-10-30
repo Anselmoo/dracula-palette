@@ -715,6 +715,8 @@ const selectedCount = computed(() => selectedSet.value.size);
 </script>
 
 <style lang="scss" scoped>
+@use '@/assets/styles/analysis-mixins' as mixins;
+
 .sci-analysis {
   margin-top: 3rem;
   padding: 2rem;
@@ -858,18 +860,7 @@ const selectedCount = computed(() => selectedSet.value.size);
   opacity: 0.8;
 }
 .btn {
-  appearance: none;
-  background: var(--surface-primary);
-  color: var(--dracula-foreground);
-  border: 1px solid var(--surface-border);
-  border-radius: 8px;
-  padding: 0.35rem 0.6rem;
-  font-size: 0.9rem;
-  cursor: pointer;
-}
-.btn:disabled {
-  opacity: 0.5;
-  cursor: default;
+  @include mixins.analysis-button-small;
 }
 .selector__grid {
   display: grid;
@@ -877,23 +868,18 @@ const selectedCount = computed(() => selectedSet.value.size);
   gap: 0.5rem;
 }
 .chip {
+  @include mixins.analysis-button-base;
   display: flex;
   align-items: center;
   gap: 0.5rem;
   padding: 0.35rem 0.5rem;
-  border-radius: 8px;
-  border: 1px solid var(--surface-border);
-  background: var(--surface-primary);
-  color: var(--dracula-foreground);
-  cursor: pointer;
   text-align: left;
-}
-.chip:hover {
-  box-shadow: 0 4px 10px var(--surface-shadow);
-}
-.chip.active {
-  outline: 2px solid var(--dracula-purple);
-  outline-offset: 0;
+  font-size: 0.85rem;
+
+  &.active {
+    border-color: var(--dracula-purple);
+    background: var(--dracula-purple-10);
+  }
 }
 .sw {
   width: 16px;

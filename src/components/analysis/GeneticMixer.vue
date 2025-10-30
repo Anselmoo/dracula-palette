@@ -211,6 +211,19 @@ function badgeClass(r: number) {
 }
 .controls {
   @include mixins.analysis-controls;
+
+  input[type='number'],
+  input[type='range'] {
+    @include mixins.analysis-input;
+  }
+
+  input[type='range'] {
+    @include mixins.analysis-range;
+  }
+
+  select {
+    @include mixins.analysis-select;
+  }
 }
 .value-display {
   min-width: 40px;
@@ -219,26 +232,7 @@ function badgeClass(r: number) {
   color: var(--dracula-purple);
 }
 .btn-recompute {
-  padding: 0.4rem 0.8rem;
-  font-size: 0.9rem;
-  font-weight: 500;
-  background: var(--dracula-purple);
-  color: var(--dracula-background);
-  border: none;
-  border-radius: var(--radius-md);
-  cursor: pointer;
-  transition:
-    background 0.2s ease,
-    transform 0.1s ease;
-
-  &:hover {
-    background: var(--dracula-pink);
-    transform: translateY(-1px);
-  }
-
-  &:active {
-    transform: translateY(0);
-  }
+  @include mixins.analysis-button-primary;
 }
 .row {
   display: grid;

@@ -229,23 +229,7 @@ function resetFilters() {
     }
 
     select {
-      padding: 0.4rem 0.8rem;
-      font-size: 0.95rem;
-      background: var(--analysis-input-bg);
-      color: var(--dracula-foreground);
-      border: 1px solid var(--surface-border);
-      border-radius: var(--radius-sm);
-      cursor: pointer;
-      transition: border-color 0.2s ease;
-
-      &:hover {
-        border-color: var(--dracula-purple);
-      }
-
-      &:focus {
-        outline: 2px solid var(--dracula-purple);
-        outline-offset: 2px;
-      }
+      @include mixins.analysis-select;
     }
 
     label {
@@ -255,8 +239,7 @@ function resetFilters() {
       cursor: pointer;
 
       input[type='checkbox'] {
-        cursor: pointer;
-        accent-color: var(--dracula-purple);
+        @include mixins.analysis-checkbox;
       }
 
       span:not(.label-text) {
@@ -266,26 +249,7 @@ function resetFilters() {
     }
 
     .btn-reset {
-      padding: 0.4rem 0.8rem;
-      font-size: 0.9rem;
-      font-weight: 500;
-      background: var(--dracula-purple);
-      color: var(--dracula-background);
-      border: none;
-      border-radius: var(--radius-md);
-      cursor: pointer;
-      transition:
-        background 0.2s ease,
-        transform 0.1s ease;
-
-      &:hover {
-        background: var(--dracula-pink);
-        transform: translateY(-1px);
-      }
-
-      &:active {
-        transform: translateY(0);
-      }
+      @include mixins.analysis-button-primary;
     }
   }
 

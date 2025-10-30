@@ -120,6 +120,201 @@
 }
 
 // =============================================================================
+// Buttons - Unified button styles for all analysis tools
+// =============================================================================
+
+@mixin analysis-button-base {
+  appearance: none;
+  background: var(--surface-primary);
+  color: var(--dracula-foreground);
+  border: 1px solid var(--surface-border);
+  border-radius: var(--radius-md);
+  padding: 0.4rem 0.8rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition:
+    background var(--transition-fast),
+    border-color var(--transition-fast),
+    transform var(--transition-fast),
+    box-shadow var(--transition-fast);
+
+  &:hover:not(:disabled) {
+    background: var(--surface-secondary);
+    border-color: var(--dracula-purple);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px var(--surface-shadow);
+  }
+
+  &:active:not(:disabled) {
+    transform: translateY(0);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--dracula-purple);
+    outline-offset: 2px;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    transition: none;
+    transform: none !important;
+  }
+}
+
+@mixin analysis-button-primary {
+  @include analysis-button-base;
+  background: var(--dracula-purple);
+  color: var(--dracula-background);
+  border: none;
+
+  &:hover:not(:disabled) {
+    background: var(--dracula-pink);
+    transform: translateY(-1px);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    transform: none !important;
+  }
+}
+
+@mixin analysis-button-secondary {
+  @include analysis-button-base;
+  background: transparent;
+  border-color: var(--dracula-purple);
+
+  &:hover:not(:disabled) {
+    background: var(--dracula-purple-10);
+    border-color: var(--dracula-pink);
+  }
+}
+
+@mixin analysis-button-small {
+  padding: 0.25rem 0.5rem;
+  font-size: 0.85rem;
+  border-radius: var(--radius-sm);
+}
+
+@mixin analysis-button-icon {
+  @include analysis-button-base;
+  padding: 0.35rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+
+  &:hover:not(:disabled) {
+    background: var(--surface-secondary);
+    border-color: transparent;
+  }
+
+  &[aria-pressed='true'] {
+    background: var(--dracula-purple-10);
+    color: var(--dracula-purple);
+  }
+}
+
+// =============================================================================
+// Form Inputs - Unified input styles
+// =============================================================================
+
+@mixin analysis-input {
+  padding: var(--spacing-xs) var(--spacing-sm);
+  background: var(--analysis-input-bg);
+  border: 1px solid var(--analysis-input-border);
+  border-radius: var(--radius-sm);
+  color: var(--dracula-foreground);
+  font-size: 0.9rem;
+  transition:
+    border-color var(--transition-fast),
+    box-shadow var(--transition-fast);
+
+  &:focus {
+    outline: none;
+    border-color: var(--dracula-purple);
+    box-shadow: 0 0 0 3px var(--dracula-purple-10);
+  }
+
+  &:hover:not(:disabled):not(:focus) {
+    border-color: var(--analysis-input-border-hover);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+@mixin analysis-select {
+  @include analysis-input;
+  cursor: pointer;
+}
+
+@mixin analysis-checkbox {
+  accent-color: var(--dracula-purple);
+  cursor: pointer;
+  width: 18px;
+  height: 18px;
+  
+  &:focus-visible {
+    outline: 2px solid var(--dracula-purple);
+    outline-offset: 2px;
+  }
+}
+
+@mixin analysis-range {
+  @include analysis-input;
+  cursor: pointer;
+  
+  // Webkit (Chrome, Safari, Edge)
+  &::-webkit-slider-thumb {
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: var(--dracula-purple);
+    cursor: pointer;
+    transition: background var(--transition-fast);
+
+    &:hover {
+      background: var(--dracula-pink);
+    }
+  }
+
+  &::-webkit-slider-runnable-track {
+    height: 4px;
+    border-radius: 2px;
+    background: var(--surface-border);
+  }
+
+  // Firefox
+  &::-moz-range-thumb {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: var(--dracula-purple);
+    border: none;
+    cursor: pointer;
+    transition: background var(--transition-fast);
+
+    &:hover {
+      background: var(--dracula-pink);
+    }
+  }
+
+  &::-moz-range-track {
+    height: 4px;
+    border-radius: 2px;
+    background: var(--surface-border);
+  }
+}
+
+// =============================================================================
 // Cards - Individual items within panels
 // =============================================================================
 

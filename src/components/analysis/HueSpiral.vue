@@ -110,6 +110,8 @@ const points = computed(() => {
 });
 </script>
 <style scoped lang="scss">
+@use '@/assets/styles/analysis-mixins' as mixins;
+
 .t {
   margin: 0 0 0.5rem;
 }
@@ -134,13 +136,6 @@ const points = computed(() => {
   justify-content: center;
 }
 .btn {
-  appearance: none;
-  background: var(--surface-primary);
-  color: var(--dracula-foreground);
-  border: 1px solid var(--surface-border);
-  border-radius: 8px;
-  padding: 0.25rem 0.5rem;
-  font-size: 0.85rem;
-  cursor: pointer;
+  @include mixins.analysis-button-small;
 }
 </style>
