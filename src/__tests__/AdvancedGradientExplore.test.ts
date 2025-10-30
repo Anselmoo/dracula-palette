@@ -278,7 +278,7 @@ describe('AdvancedGradientExplore', () => {
     it('should have labeled controls', () => {
       const labels = wrapper.findAll('.controls label');
       expect(labels.length).toBeGreaterThan(0);
-      
+
       // Check that labels contain text
       const labelTexts = labels.map(l => l.text());
       expect(labelTexts.some(t => t.includes('Animate'))).toBe(true);
@@ -300,7 +300,7 @@ describe('AdvancedGradientExplore', () => {
     it('should allow multiple control changes in sequence', async () => {
       const rangeInputs = wrapper.findAll('.controls input[type="range"]');
       const checkboxes = wrapper.findAll('.controls input[type="checkbox"]');
-      
+
       // Change angle
       const angleSlider = rangeInputs[0];
       await angleSlider.setValue('270');
