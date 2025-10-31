@@ -260,7 +260,7 @@
   cursor: pointer;
   width: 18px;
   height: 18px;
-  
+
   &:focus-visible {
     outline: 2px solid var(--dracula-purple);
     outline-offset: 2px;
@@ -270,7 +270,7 @@
 @mixin analysis-range {
   @include analysis-input;
   cursor: pointer;
-  
+
   // Webkit (Chrome, Safari, Edge)
   &::-webkit-slider-thumb {
     appearance: none;
