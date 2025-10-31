@@ -666,6 +666,8 @@ function onWheelClick(evt: MouseEvent, which: 'A' | 'B' | 'C') {
 }
 </script>
 <style scoped lang="scss">
+@use '@/assets/styles/analysis-mixins' as mixins;
+
 .controls {
   display: flex;
   gap: 1rem;
@@ -678,21 +680,13 @@ function onWheelClick(evt: MouseEvent, which: 'A' | 'B' | 'C') {
   align-items: center;
 }
 .controls .icon-btn {
-  background: transparent;
-  border: none;
-  color: var(--dracula-comment);
-  cursor: pointer;
+  @include mixins.analysis-button-icon;
   padding: 0.2rem;
-  border-radius: 6px;
   line-height: 0;
 }
-.controls .icon-btn:focus-visible {
-  outline: 2px solid var(--dracula-foreground);
-  outline-offset: 2px;
-}
 .controls .icon-toggle.active .icon-btn {
-  color: var(--dracula-foreground);
-  box-shadow: inset 0 0 0 1px var(--surface-border);
+  background: var(--dracula-purple-10);
+  color: var(--dracula-purple);
 }
 .controls .icon-toggle.disabled .icon-btn {
   opacity: 0.45;

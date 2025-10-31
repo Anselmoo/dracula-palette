@@ -280,6 +280,18 @@ watch([activePreset, animate, grain, angle, colorStops, blendMode], () => update
 }
 .controls {
   @include mixins.analysis-controls;
+
+  input[type='range'] {
+    @include mixins.analysis-range;
+  }
+
+  select {
+    @include mixins.analysis-select;
+  }
+
+  input[type='checkbox'] {
+    @include mixins.analysis-checkbox;
+  }
 }
 .value-display {
   min-width: 40px;
@@ -300,27 +312,19 @@ watch([activePreset, animate, grain, angle, colorStops, blendMode], () => update
   background: var(--surface-secondary);
 }
 .preset-btn {
+  @include mixins.analysis-button-base;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 0.6rem 0.5rem;
-  border: none;
-  background: var(--surface-primary);
-  color: var(--dracula-foreground);
-  border-radius: 6px;
-  cursor: pointer;
   font-size: 0.85rem;
-  transition: all 0.2s ease;
   text-align: center;
-}
-.preset-btn:hover {
-  background: var(--surface-border);
-  transform: translateY(-1px);
-}
-.preset-btn.active {
-  background: var(--dracula-purple);
-  color: white;
-  box-shadow: 0 0 0 2px var(--dracula-purple);
+
+  &.active {
+    background: var(--dracula-purple);
+    color: var(--dracula-background);
+    border-color: var(--dracula-purple);
+  }
 }
 .name {
   flex: 1;

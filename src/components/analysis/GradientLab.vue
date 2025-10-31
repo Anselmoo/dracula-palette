@@ -131,6 +131,8 @@ function overlayClassFor(k: Kind) {
 }
 </script>
 <style scoped lang="scss">
+@use '@/assets/styles/analysis-mixins' as mixins;
+
 .gradient-lab {
   margin-top: 0.5rem;
 }
@@ -147,6 +149,14 @@ function overlayClassFor(k: Kind) {
   flex-wrap: wrap;
   gap: 1rem;
   align-items: center;
+
+  select {
+    @include mixins.analysis-select;
+  }
+
+  input[type='range'] {
+    @include mixins.analysis-range;
+  }
 }
 .lbl {
   margin-right: 0.5rem;

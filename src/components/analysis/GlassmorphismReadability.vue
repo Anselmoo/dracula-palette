@@ -69,6 +69,8 @@ const paneStyle = computed(() => ({
 }));
 </script>
 <style scoped lang="scss">
+@use '@/assets/styles/analysis-mixins' as mixins;
+
 .t {
   margin: 0 0 0.5rem;
   display: flex;
@@ -80,6 +82,10 @@ const paneStyle = computed(() => ({
   gap: 1rem;
   align-items: center;
   margin-bottom: 0.75rem;
+
+  input[type='range'] {
+    @include mixins.analysis-range;
+  }
 }
 .grid {
   display: grid;
