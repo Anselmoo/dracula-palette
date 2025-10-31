@@ -68,6 +68,8 @@ const stepsColors = computed(() => {
 });
 </script>
 <style scoped lang="scss">
+@use '@/assets/styles/analysis-mixins' as mixins;
+
 .t {
   margin: 0 0 0.5rem;
 }
@@ -76,6 +78,10 @@ const stepsColors = computed(() => {
   gap: 1rem;
   align-items: center;
   margin-bottom: 0.5rem;
+
+  select {
+    @include mixins.analysis-select;
+  }
 }
 .steps {
   display: grid;

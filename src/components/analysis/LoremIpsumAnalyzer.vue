@@ -283,6 +283,8 @@ const avgWords = computed(() =>
 );
 </script>
 <style scoped lang="scss">
+@use '@/assets/styles/analysis-mixins' as mixins;
+
 .t {
   margin: 0 0 0.5rem;
   display: flex;
@@ -295,6 +297,14 @@ const avgWords = computed(() =>
   flex-wrap: wrap;
   align-items: center;
   margin-bottom: 0.5rem;
+
+  select {
+    @include mixins.analysis-select;
+  }
+
+  input[type='checkbox'] {
+    @include mixins.analysis-checkbox;
+  }
 }
 .color-controls {
   display: flex;
@@ -305,19 +315,16 @@ const avgWords = computed(() =>
   padding: 0.5rem;
   background: var(--surface-secondary);
   border-radius: 6px;
+
+  select {
+    @include mixins.analysis-select;
+  }
 }
 .color-controls label {
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
   font-size: 0.9rem;
-}
-.color-controls select {
-  padding: 0.25rem 0.5rem;
-  border-radius: 4px;
-  border: 1px solid var(--surface-border);
-  background: var(--surface-primary);
-  color: var(--text-primary);
 }
 .stats {
   display: flex;

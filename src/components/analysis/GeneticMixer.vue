@@ -211,6 +211,19 @@ function badgeClass(r: number) {
 }
 .controls {
   @include mixins.analysis-controls;
+
+  input[type='number'],
+  input[type='range'] {
+    @include mixins.analysis-input;
+  }
+
+  input[type='range'] {
+    @include mixins.analysis-range;
+  }
+
+  select {
+    @include mixins.analysis-select;
+  }
 }
 .value-display {
   min-width: 40px;
@@ -239,6 +252,7 @@ function badgeClass(r: number) {
   &:active {
     transform: translateY(0);
   }
+
 }
 .row {
   display: grid;

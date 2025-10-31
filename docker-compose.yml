@@ -24,7 +24,7 @@ services:
       start_period: 40s
 
   dev:
-    image: node:22-alpine
+    image: node:24-alpine
     working_dir: /app
     volumes:
       - .:/app
