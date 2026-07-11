@@ -175,3 +175,4 @@ README_OLD.md
 .serena/.gitignore
 .serena/project.yml
 .serena/memories/
+palette-snapshot-*.png
