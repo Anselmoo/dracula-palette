@@ -13,14 +13,31 @@
       <div class="cell" v-if="sources.length">
         <span class="label">Sources</span>
         <div class="chips">
-          <span
-            v-for="s in sources"
+          <button
+            v-for="(s, index) in displayedSources"
             :key="s.hex"
-            class="chip"
+            class="chip chip--interactive"
+            :class="{ 'chip--first': index === 0 }"
             :style="{ background: s.hex }"
             :title="s.name"
-            >{{ s.name }}</span
+            @click="toggleSourcesExpanded"
+            :aria-expanded="sourcesExpanded ? 'true' : 'false'"
+            :aria-label="
+              index === 0 && !sourcesExpanded && sources.length > 1
+                ? `${s.name}. Click to show ${sources.length - 1} more colors`
+                : s.name
+            "
+            >{{ s.name }}</button
           >
+          <button
+            v-if="!sourcesExpanded && sources.length > 1"
+            class="chip chip--show-more"
+            @click="toggleSourcesExpanded"
+            :aria-label="`Show ${sources.length - 1} more colors`"
+            title="Click to show all colors"
+          >
+            +{{ sources.length - 1 }}
+          </button>
         </div>
       </div>
       <div class="cell" v-if="insights">
@@ -51,6 +68,7 @@
   </section>
 </template>
 <script setup lang="ts">
+import { ref, computed } from 'vue';
 import type { PaletteStandard, PaletteSourceColor } from '../../types/palette';
 import Icon from '../Icon.vue';
 
@@ -61,7 +79,7 @@ interface Insights {
   totalColors: number;
 }
 
-withDefaults(
+const props = withDefaults(
   defineProps<{
     standards: PaletteStandard[];
     sources: PaletteSourceColor[];
@@ -74,6 +92,21 @@ withDefaults(
     swatches: () => [],
   }
 );
+
+// State for expandable sources
+const sourcesExpanded = ref(false);
+
+// Show only first source initially, all when expanded
+const displayedSources = computed(() => {
+  if (sourcesExpanded.value || props.sources.length <= 1) {
+    return props.sources;
+  }
+  return props.sources.slice(0, 1);
+});
+
+function toggleSourcesExpanded() {
+  sourcesExpanded.value = !sourcesExpanded.value;
+}
 </script>
 <style scoped lang="scss">
 .snapshot {
@@ -111,6 +144,7 @@ withDefaults(
   display: flex;
   flex-wrap: wrap;
   gap: 0.4rem;
+  align-items: center;
 }
 .chip {
   padding: 0.3rem 0.6rem;
@@ -119,7 +153,70 @@ withDefaults(
   color: var(--dracula-foreground);
   border: 1px solid var(--surface-border);
   font-size: 0.8rem;
+  transition: all 0.3s ease;
+
+  &--interactive {
+    cursor: pointer;
+    border: 2px solid var(--surface-border);
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      border-color: var(--dracula-purple);
+    }
+
+    &:focus {
+      outline: 2px solid var(--dracula-purple);
+      outline-offset: 2px;
+    }
+
+    &:active {
+      transform: translateY(0);
+    }
+  }
+
+  &--first {
+    animation: chip-appear 0.3s ease;
+  }
+
+  &--show-more {
+    background: var(--dracula-purple);
+    color: var(--dracula-foreground);
+    border: 2px solid var(--dracula-purple);
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    animation: chip-appear 0.3s ease;
+
+    &:hover {
+      background: var(--dracula-pink);
+      border-color: var(--dracula-pink);
+      transform: translateY(-2px) scale(1.05);
+      box-shadow: 0 4px 12px rgba(189, 147, 249, 0.4);
+    }
+
+    &:focus {
+      outline: 2px solid var(--dracula-pink);
+      outline-offset: 2px;
+    }
+
+    &:active {
+      transform: translateY(0) scale(0.98);
+    }
+  }
 }
+
+@keyframes chip-appear {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
 .metrics {
   display: flex;
   flex-wrap: wrap;
