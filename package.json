@@ -60,7 +60,7 @@
     "vue": "^3.4.0"
   },
   "devDependencies": {
-    "@tsconfig/node20": "^20.1.2",
+    "@tsconfig/node22": "^22.0.0",
     "@types/chroma-js": "^3.0.0",
     "@types/color": "^4.0.0",
     "@types/d3-chord": "^3.0.6",
